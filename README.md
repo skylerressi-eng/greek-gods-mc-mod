@@ -17,38 +17,38 @@ Every relic looks like its vanilla base item (Talaria = gold leather boots, Gobl
 ## Starter relics
 | Item | Primary power | Blessed ★ ability (key R) |
 |---|---|---|
-| **Aegis** | Blocked melee hits push the attacker back, with a (see config) chance to strike them with lightning. | **Divine Shockwave**: Every (see config)th blocked hit releases a shockwave that knocks back and smites hostile mobs within (see config) blocks. |
-| **Conch of the Deep** | Tidal Surge: a wave crashes (see config) blocks ahead, knocking enemies back and slowing them for (see config)s. You gain Water Breathing and Dolphin's Grace. | **Riptide Dash**: Launch forward like Riptide, even on dry land. |
-| **Helm of Darkness** | Sneak in place for (see config)s to vanish completely, armor and all, with Speed I, for (see config)s. | **Ambush**: While invisible, your first hit deals (see config)x damage and ends the invisibility. |
-| **Owl of Athena** | Reveal: everything within (see config) blocks glows for (see config)s and takes (see config) more damage from you. | **Battle Wisdom**: You and players within (see config) blocks gain Strength I and Resistance I for (see config)s. |
-| **Blade of Ares** | Fury: (see config) hits in a row grant Strength I. Kills grant Strength II for (see config)s. | **War Cry**: Mobs within (see config) blocks are weakened; you and nearby players gain Speed II for (see config)s. |
-| **Lyre of Apollo** | Right-click: you and allies within (see config) blocks get Regeneration II and Speed I for (see config)s, and are cleansed of Poison and Wither. | **Sunburst**: Sets hostile mobs within (see config) blocks ablaze and blinds enemies for (see config)s. |
-| **Silver Bow** | Arrows fly perfectly straight, deal (see config) more damage, and anything they hit glows for (see config)s. | **Volley**: Your next shot fires (see config) arrows in a spread for the cost of one (within (see config)s). |
+| **Aegis** | Blocked melee hits push the attacker back, with a 30% chance to strike them with lightning. | **Divine Shockwave**: Every 5th blocked hit releases a shockwave that knocks back and smites hostile mobs within 5 blocks. |
+| **Conch of the Deep** | Tidal Surge: a wave crashes 7 blocks ahead, knocking enemies back and slowing them for 3s. You gain Water Breathing and Dolphin's Grace. | **Riptide Dash**: Launch forward like Riptide, even on dry land. |
+| **Helm of Darkness** | Sneak in place for 2s to vanish completely, armor and all, with Speed I, for 8s. | **Ambush**: While invisible, your first hit deals 2x damage and ends the invisibility. |
+| **Owl of Athena** | Reveal: everything within 30 blocks glows for 10s and takes 15% more damage from you. | **Battle Wisdom**: You and allies within 10 blocks gain Strength I and Resistance I for 10s. |
+| **Blade of Ares** | Fury: 3 hits in a row grant Strength I. Kills grant Strength II for 8s. | **War Cry**: Mobs within 8 blocks are weakened; you and nearby allies gain Speed II for 10s. |
+| **Lyre of Apollo** | Right-click: you and allies within 8 blocks get Regeneration II and Speed I for 5s, and are cleansed of Poison and Wither. | **Sunburst**: Sets hostile mobs within 8 blocks ablaze and blinds enemies for 3s. |
+| **Silver Bow** | Arrows fly perfectly straight, deal 15% more damage, and anything they hit glows for 5s. | **Volley**: Your next shot fires 5 arrows in a spread for the cost of one (within 10s). |
 | **Talaria** | Permanent Speed I and a double jump while worn. | **Wings of Hermes**: Triple jump, and you never take fall damage. |
-| **Hammer of Hephaestus** | Hits set enemies ablaze for (see config)s, you're immune to fire while holding it, and mined ores come out smelted. | **Forge Fire**: Instantly smelts up to (see config) items from the stack in your offhand. |
-| **Sickle of Demeter** | Famine: hits cause Hunger and Slowness and drain (see config) food from players. Right-click crops to ripen a (see config)x(see config) area. | **Great Harvest**: Harvests and replants every ripe crop in a (see config)x(see config) area. |
-| **Goblet of Dionysus** | Drink: a random level II combat blessing for (see config)s ((see config) chance of a hangover instead). Never empties. | **Wild Party**: Players within (see config) blocks get a random blessing for (see config)s; mobs stagger drunkenly. |
-| **Mirror of Aphrodite** | Enchanting Gaze: the player you look at can't hurt you for (see config)s and is slowed. Nearby hostile mobs also leave you alone. | **Charm**: The mob you look at fights for you for (see config)s. Bosses and players resist. |
+| **Hammer of Hephaestus** | Hits set enemies ablaze for 4s, you're immune to fire while holding it, and mined ores come out smelted. | **Forge Fire**: Instantly smelts up to 16 items from the stack in your offhand. |
+| **Sickle of Demeter** | Famine: hits cause Hunger and Slowness and drain 2 food from players. Right-click crops to ripen a 5x5 area. | **Great Harvest**: Harvests and replants every ripe crop in a 9x9 area. |
+| **Goblet of Dionysus** | Drink: a random level II combat blessing for 30s (10% chance of a hangover instead). Never empties. | **Wild Party**: Allies within 8 blocks get a random blessing for 30s; enemies stagger drunkenly. |
+| **Mirror of Aphrodite** | Enchanting Gaze: the player you look at can't hurt you for 3s and is slowed. Nearby hostile mobs also leave you alone. | **Charm**: The mob you look at fights for you for 15s. Bosses and players resist. |
 
 ## Craftable god items
 | Item | Primary power | Blessed ★ ability (key R) |
 |---|---|---|
-| **Caduceus** | Right-click: blink up to (see config) blocks where you look (never through walls). | **Waypoint**: First press marks your spot; press again within (see config) minutes to return to it. |
-| **Spear of Athena** | A thrown spear that pierces up to (see config) enemies and always returns to you. | **Aegis Strike**: Your next throw lands with a shockwave that knocks back and slows enemies within (see config) blocks. |
+| **Caduceus** | Right-click: blink up to 10 blocks where you look (never through walls). | **Waypoint**: First press marks your spot; press again within 5 minutes to return to it. |
+| **Spear of Athena** | A thrown spear that pierces up to 3 enemies and always returns to you. | **Aegis Strike**: Your next throw lands with a shockwave that knocks back and slows enemies within 4 blocks. |
 | **Forge Hammer** | Mines a 3x3 area (sneak to mine a single block). | **Forge Mode**: Switch between 3x3 and 5x5 mining. |
-| **Harpe** | Perseus' blade: (see config) more damage against bosses. | **Hero's Leap**: Leap at the creature you look at (up to (see config) blocks) and strike it for double damage. |
-| **Thyrsus** | Hits make enemies stagger: Slowness II and dizziness for (see config)s. | **Vine Snare**: Roots every enemy within (see config) blocks in place for (see config)s. |
-| **Cornucopia** | Right-click: fully restores your hunger and saturation. | **Feast**: Fully feeds every player within (see config) blocks and grants Regeneration. |
+| **Harpe** | Perseus' blade: 50% more damage against bosses. | **Hero's Leap**: Leap at the creature you look at (up to 12 blocks) and strike it for double damage. |
+| **Thyrsus** | Hits make enemies stagger: Slowness II and dizziness for 5s. | **Vine Snare**: Roots every enemy within 6 blocks in place for 3s. |
+| **Cornucopia** | Right-click: fully restores your hunger and saturation. | **Feast**: Fully feeds every ally within 10 blocks and grants Regeneration. |
 
 ## Legendaries (boss rewards, one of each per server)
 | Item | Primary power | Blessed ★ ability (key R) |
 |---|---|---|
-| **Thunderbolt of Zeus** | Throw it: (see config) lightning strikes rain around the impact, then it returns to your hand. | **Skybreaker**: Launch about (see config) blocks into the sky and land in a ring of lightning. No fall damage. |
-| **Trident of Poseidon** | Release to Riptide anywhere, even on dry land, with a wave that throws enemies back. Sneak to throw: Channeling is always on. | **Earthshaker**: Every enemy within (see config) blocks is hurled into the air. |
-| **Bident of Hades** | Right-click: (see config) skeleton warriors rise to fight for you for (see config)s. | **Soul Harvest**: For (see config)s, everything you kill rises as a skeleton ally. |
-| **Head of Medusa** | Look at a creature and right-click: it turns to stone for (see config)s (shorter on players). Wear it on your head. | **Gorgon's Gaze**: Petrifies everything in a (see config)-block cone in front of you for (see config)s. |
-| **Golden Fleece** | While worn: constant Regeneration and immunity to fire. | **Undying**: Once every (see config) minutes, a killing blow leaves you standing instead. |
-| **Scythe of Kronos** | Right-click: time freezes for everything within (see config) blocks (Slowness IV, Mining Fatigue III) for (see config)s. | **Rewind**: Return to where you were (see config) seconds ago, with the health you had then. |
+| **Thunderbolt of Zeus** | Throw it: 5 lightning strikes rain around the impact, then it returns to your hand. | **Skybreaker**: Launch about 15 blocks into the sky and land in a ring of lightning. No fall damage. |
+| **Trident of Poseidon** | Release to Riptide anywhere, even on dry land, with a wave that throws enemies back. Sneak to throw: Channeling is always on. | **Earthshaker**: Every enemy within 10 blocks is hurled into the air. |
+| **Bident of Hades** | Right-click: 3 skeleton warriors rise to fight for you for 30s. | **Soul Harvest**: For 15s, everything you kill rises as a skeleton ally. |
+| **Head of Medusa** | Look at a creature and right-click: it turns to stone for 4s (shorter on players). Wear it on your head. | **Gorgon's Gaze**: Petrifies everything in a 10-block cone in front of you for 3s. |
+| **Golden Fleece** | While worn: constant Regeneration and immunity to fire. | **Undying**: Once every 10 minutes, a killing blow leaves you standing instead. |
+| **Scythe of Kronos** | Right-click: time freezes for everything within 15 blocks (Slowness IV, Mining Fatigue III) for 6s. | **Rewind**: Return to where you were 5 seconds ago, with the health you had then. |
 
 ## Other items
 | Item | What it does |

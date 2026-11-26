@@ -1,5 +1,6 @@
 package com.olympus.test;
 
+import net.minecraft.network.chat.Component;
 import com.olympus.Olympus;
 import com.olympus.ability.Cooldowns;
 import com.olympus.claim.ClaimManager;

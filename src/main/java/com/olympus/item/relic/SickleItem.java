@@ -33,7 +33,7 @@ import net.minecraft.world.phys.Vec3;
  */
 public class SickleItem extends net.minecraft.world.item.HoeItem implements GodItem {
 	public SickleItem(net.minecraft.world.item.ToolMaterial material, Properties properties) {
-		super(material, -4.0F, 0.0F, properties);
+		super(material, 2.0F, -2.6F, properties); // 7 damage: a real weapon, just under a netherite sword
 	}
 
 	@Override

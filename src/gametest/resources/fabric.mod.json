@@ -11,7 +11,8 @@
 		"fabric-client-gametest": [
 			"com.olympus.test.OlympusClientGameTest",
 			"com.olympus.test.JumpProbe",
-			"com.olympus.test.HelmProbe"
+			"com.olympus.test.HelmProbe",
+			"com.olympus.test.SurvivalPlaytest"
 		]
 	},
 	"depends": {
