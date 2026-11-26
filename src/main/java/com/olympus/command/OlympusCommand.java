@@ -41,12 +41,12 @@ public final class OlympusCommand {
 		dispatcher.register(Commands.literal("olympus")
 			.requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 			.then(Commands.literal("claim")
-				.then(Commands.argument("player", EntityArgument.player())
+				.then(Commands.argument("players", EntityArgument.players())
 					.then(Commands.argument("god", StringArgumentType.word())
 						.suggests((c, b) -> SharedSuggestionProvider.suggest(Arrays.stream(God.OLYMPIANS).map(God::id), b))
 						.executes(OlympusCommand::claim))))
 			.then(Commands.literal("give")
-				.then(Commands.argument("player", EntityArgument.player())
+				.then(Commands.argument("players", EntityArgument.players())
 					.then(Commands.argument("item", StringArgumentType.word())
 						.suggests((c, b) -> SharedSuggestionProvider.suggest(ModItems.ALL.stream().map(i -> BuiltInRegistries.ITEM.getKey(i).getPath()), b))
 						.executes(c -> give(c, 0))
@@ -60,27 +60,33 @@ public final class OlympusCommand {
 	}
 
 	private static int claim(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
-		ServerPlayer target = EntityArgument.getPlayer(c, "player");
+		var targets = EntityArgument.getPlayers(c, "players");
 		String godId = StringArgumentType.getString(c, "god");
 		God god = God.byId(godId).filter(g -> g != God.TITAN).orElseThrow(() -> UNKNOWN_GOD.create(godId));
-		ClaimManager.claim(target, god, true);
-		c.getSource().sendSuccess(() -> Component.translatable("olympus.command.claimed", target.getDisplayName(), god.displayName()), true);
-		return 1;
+		for (ServerPlayer target : targets) {
+			ClaimManager.claim(target, god, true);
+			c.getSource().sendSuccess(() -> Component.translatable("olympus.command.claimed", target.getDisplayName(), god.displayName()), true);
+		}
+		return targets.size();
 	}
 
 	private static int give(CommandContext<CommandSourceStack> c, int level) throws CommandSyntaxException {
-		ServerPlayer target = EntityArgument.getPlayer(c, "player");
+		var targets = EntityArgument.getPlayers(c, "players");
 		String name = StringArgumentType.getString(c, "item");
 		Item item = BuiltInRegistries.ITEM.getOptional(Identifier.fromNamespaceAndPath(Olympus.MOD_ID, name))
 			.filter(ModItems.ALL::contains)
 			.orElseThrow(() -> UNKNOWN_ITEM.create(name));
-		ItemStack stack = new ItemStack(item);
-		if (item instanceof GodItem) {
-			stack.set(ModComponents.UPGRADE_LEVEL, level);
+		for (ServerPlayer target : targets) {
+			ItemStack stack = new ItemStack(item);
+			if (item instanceof GodItem) {
+				stack.set(ModComponents.UPGRADE_LEVEL, level);
+			}
+			com.olympus.item.relic.AegisItem.applyEmblem(stack, target.level().registryAccess());
+			Component name2 = stack.getDisplayName();
+			ClaimManager.give(target, stack);
+			c.getSource().sendSuccess(() -> Component.translatable("olympus.command.gave", name2, target.getDisplayName()), true);
 		}
-		ClaimManager.give(target, stack);
-		c.getSource().sendSuccess(() -> Component.translatable("olympus.command.gave", stack.getDisplayName(), target.getDisplayName()), true);
-		return 1;
+		return targets.size();
 	}
 
 	private static int setLevel(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {

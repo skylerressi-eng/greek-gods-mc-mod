@@ -31,6 +31,8 @@ public class DivineParticle extends SingleQuadParticle {
 		public static final Style WISP = new Style(0.0f, 0.88f, 0.18f, 16, 8, 0.25f, true, true, false);
 	}
 
+	private static final double NEAR_FADE = 2.2;
+
 	private final SpriteSet sprites;
 	private final Style style;
 	private final float baseSize;
@@ -72,6 +74,13 @@ public class DivineParticle extends SingleQuadParticle {
 		float fade = life > 0.6f ? 1.0f - (life - 0.6f) / 0.4f : 1.0f;
 		if (style.flicker() && this.random.nextFloat() < 0.15f) {
 			fade *= 0.4f;
+		}
+		// Never block the player's view: particles fade out as they get close to the camera.
+		var camera = net.minecraft.client.Minecraft.getInstance().gameRenderer.getMainCamera().position();
+		double dx = this.x - camera.x, dy = this.y - camera.y, dz = this.z - camera.z;
+		double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+		if (dist < NEAR_FADE) {
+			fade *= (float) Math.max(0.0, (dist - 1.0) / (NEAR_FADE - 1.0));
 		}
 		this.setAlpha(Mth.clamp(fade, 0.0f, 1.0f));
 	}

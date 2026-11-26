@@ -66,7 +66,7 @@ public final class ClaimManager {
 		ServerLevel level = player.level();
 		Fx.sound(player, ModSounds.CLAIM, 1.0f, 1.0f);
 		Fx.sound(player, ModSounds.CLAIM_CHIME, 1.0f, 1.0f);
-		Fx.pillar(level, god.particle(), player.position(), 12.0, 60);
+		Fx.pillar(level, god.particle(), player.position().add(0, 2.4, 0), 10.0, 50); // starts above the head
 		Fx.helix(level, ModParticles.DIVINE_GLINT, player.position(), 1.0, 2.6, 60);
 		Fx.shockwave(level, god.particle(), player.position().add(0, 0.2, 0), 3.0);
 

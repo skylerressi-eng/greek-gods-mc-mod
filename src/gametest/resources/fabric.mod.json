@@ -7,6 +7,9 @@
 	"entrypoints": {
 		"fabric-gametest": [
 			"com.olympus.test.OlympusGameTests"
+		],
+		"fabric-client-gametest": [
+			"com.olympus.test.OlympusClientGameTest"
 		]
 	},
 	"depends": {
