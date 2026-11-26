@@ -60,8 +60,10 @@ public class OlympusConfig {
 	}
 
 	public static class Aegis {
-		public double lightningChance = 0.25;
-		public float lightningDamage = 6.0f;
+		public double lightningChance = 0.30;
+		public float lightningDamage = 5.0f;
+		/** Every blocked melee hit pushes the attacker back (PvP spacing). */
+		public double blockKnockback = 0.6;
 		/** Blessed: every Nth blocked hit releases a shockwave. */
 		public int shockwaveEveryBlocks = 5;
 		public double shockwaveRadius = 5.0;
@@ -70,8 +72,14 @@ public class OlympusConfig {
 	}
 
 	public static class Conch {
-		public int durationSeconds = 60;
-		public int cooldownSeconds = 180;
+		/** Tidal Surge: a wave in front of you that knocks enemies back and slows them. */
+		public double waveRange = 7.0;
+		public double waveKnockback = 1.4;
+		public float waveDamage = 3.0f;
+		public int waveSlownessSeconds = 3;
+		/** You also get Water Breathing + Dolphin's Grace for this long. */
+		public int durationSeconds = 30;
+		public int cooldownSeconds = 40;
 		public int riptideCooldownSeconds = 20;
 		public double riptideStrength = 2.5;
 	}
@@ -80,8 +88,10 @@ public class OlympusConfig {
 		public double sneakSeconds = 2.0;
 		/** Only trigger if the player stands still while sneaking (prevents accidental casts while bridging). */
 		public boolean requireStandingStill = true;
-		public int invisibilitySeconds = 10;
-		public int cooldownSeconds = 120;
+		public int invisibilitySeconds = 8;
+		public int cooldownSeconds = 90;
+		/** Speed I while vanished, so you can reposition. */
+		public boolean speedWhileHidden = true;
 		/** Blessed: damage multiplier of the first hit while invisible. */
 		public double ambushDamageMultiplier = 2.0;
 	}
@@ -89,13 +99,20 @@ public class OlympusConfig {
 	public static class Owl {
 		public double radius = 30.0;
 		public int glowSeconds = 10;
-		public int cooldownSeconds = 90;
+		public int cooldownSeconds = 75;
+		/** Revealed enemies take this much extra damage from the Owl's owner (0.15 = +15%). */
+		public double markedDamageBonus = 0.15;
 		public double battleWisdomRadius = 10.0;
 		public int battleWisdomSeconds = 10;
 		public int battleWisdomCooldownSeconds = 120;
 	}
 
 	public static class BladeOfAres {
+		/** Hits needed to build full Fury (Strength I). Stacks fade after furyDecaySeconds without a hit. */
+		public int furyHits = 3;
+		public int furyDecaySeconds = 5;
+		public int furyStrengthSeconds = 6;
+		/** Kills grant Strength II for this long. */
 		public int strengthSeconds = 8;
 		public double warCryRadius = 8.0;
 		public int warCrySeconds = 10;
@@ -106,7 +123,9 @@ public class OlympusConfig {
 		public double radius = 8.0;
 		public int regenSeconds = 5;
 		public int regenAmplifier = 1;
-		public int cooldownSeconds = 60;
+		public int cooldownSeconds = 50;
+		/** Allies also get Speed I and are cleansed of Poison and Wither. */
+		public boolean cleanse = true;
 		public double sunburstRadius = 8.0;
 		public int sunburstFireSeconds = 5;
 		public int sunburstBlindSeconds = 3;
@@ -114,6 +133,8 @@ public class OlympusConfig {
 	}
 
 	public static class SilverBow {
+		/** Silver arrows deal this much extra damage (0.15 = +15%). */
+		public double arrowDamageBonus = 0.15;
 		public int glowSeconds = 5;
 		/** Arrows fly without gravity for this long, then fall normally (prevents arrows flying forever). */
 		public int straightFlightSeconds = 5;
@@ -133,11 +154,19 @@ public class OlympusConfig {
 	public static class HammerOfHephaestus {
 		/** Grant the smelting XP for auto-smelted ores. */
 		public boolean grantSmeltingXp = true;
+		/** Melee hits set the target on fire (like Fire Aspect). */
+		public int igniteSeconds = 4;
+		/** Fire Resistance while the hammer is in your main hand. */
+		public boolean fireResistanceWhileHeld = true;
 		public int forgeFireMaxItems = 16;
 		public int forgeFireCooldownSeconds = 180;
 	}
 
 	public static class Sickle {
+		/** Famine: melee hits give Hunger and Slowness, and drain the target player's food. */
+		public int famineHungerSeconds = 5;
+		public int famineSlownessSeconds = 2;
+		public int famineFoodDrain = 2;
 		/** Radius around the target: 2 = 5x5. */
 		public int growRadius = 2;
 		public int cooldownSeconds = 30;
@@ -146,16 +175,16 @@ public class OlympusConfig {
 	}
 
 	public static class Goblet {
-		public int effectSeconds = 60;
+		public int effectSeconds = 30;
+		/** Effect level (0 = I, 1 = II). Combat effects at II make the Goblet a real fight drink. */
+		public int effectAmplifier = 1;
 		public double nauseaChance = 0.10;
-		public int nauseaSeconds = 10;
-		public int cooldownSeconds = 120;
+		public int nauseaSeconds = 6;
+		public int cooldownSeconds = 90;
 		/** Positive effects the Goblet can grant, as effect ids. */
 		public List<String> effectPool = new ArrayList<>(List.of(
-			"minecraft:speed", "minecraft:haste", "minecraft:strength", "minecraft:jump_boost",
-			"minecraft:regeneration", "minecraft:resistance", "minecraft:fire_resistance",
-			"minecraft:water_breathing", "minecraft:night_vision", "minecraft:health_boost",
-			"minecraft:absorption", "minecraft:luck", "minecraft:slow_falling", "minecraft:dolphins_grace"
+			"minecraft:speed", "minecraft:strength", "minecraft:jump_boost", "minecraft:regeneration",
+			"minecraft:resistance", "minecraft:absorption", "minecraft:fire_resistance", "minecraft:haste"
 		));
 		public double wildPartyRadius = 8.0;
 		public int wildPartySeconds = 30;
@@ -163,9 +192,13 @@ public class OlympusConfig {
 	}
 
 	public static class Mirror {
+		/** Enchanting Gaze: the player you look at can't hurt you and is slowed. */
+		public double gazeRange = 16.0;
+		public int playerCharmSeconds = 3;
+		/** Hostile mobs around you also stop targeting you. */
 		public double radius = 10.0;
 		public int pacifySeconds = 8;
-		public int cooldownSeconds = 90;
+		public int cooldownSeconds = 60;
 		public boolean animalsFallInLove = true;
 		public int charmSeconds = 15;
 		public int charmCooldownSeconds = 120;

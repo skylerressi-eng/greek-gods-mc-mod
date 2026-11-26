@@ -24,6 +24,12 @@ public abstract class LivingEntityMixin {
 	@Final
 	private Map<EquipmentSlot, ItemStack> lastEquipmentItems;
 
+	/** PvP damage modifiers (Owl mark, Silver Bow). */
+	@org.spongepowered.asm.mixin.injection.ModifyVariable(method = "hurtServer", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+	private float olympus$modifyDamage(float amount, ServerLevel level, net.minecraft.world.damagesource.DamageSource source) {
+		return com.olympus.handler.CombatHandler.modifyIncomingDamage((LivingEntity) (Object) this, source, amount);
+	}
+
 	/** Aegis: react to blocked melee hits. */
 	@Inject(method = "blockUsingItem", at = @At("HEAD"))
 	private void olympus$onBlock(ServerLevel level, LivingEntity attacker, CallbackInfo ci) {

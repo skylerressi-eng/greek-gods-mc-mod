@@ -53,6 +53,7 @@ public class Olympus implements ModInitializer {
 
 		AresHandler.register();
 		SilverBowHandler.register();
+		com.olympus.handler.CombatHandler.register();
 
 		CommandRegistrationCallback.EVENT.register((dispatcher, context, selection) -> OlympusCommand.register(dispatcher));
 
@@ -66,6 +67,7 @@ public class Olympus implements ModInitializer {
 			HelmHandler.forget(player);
 			TalariaHandler.forget(player.getUUID());
 			AresHandler.forget(player.getUUID());
+			com.olympus.handler.CombatHandler.forget(player.getUUID());
 		});
 		EntityTrackingEvents.START_TRACKING.register(HelmHandler::onStartTracking);
 
@@ -81,6 +83,7 @@ public class Olympus implements ModInitializer {
 		}
 		if (server.getTickCount() % 20 == 0) {
 			MirrorHandler.tick(server);
+			com.olympus.handler.CombatHandler.tick(server);
 			for (ServerPlayer player : server.getPlayerList().getPlayers()) {
 				syncCooldownOverlays(player);
 				ClaimManager.tryAutoClaim(player);

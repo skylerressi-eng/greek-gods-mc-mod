@@ -42,6 +42,11 @@ public class LyreItem extends CharmItem {
 		int ticks = upgrade.durationTicks(cfg().regenSeconds);
 		for (ServerPlayer ally : Targets.alliesAround(player, radius)) {
 			ally.addEffect(new MobEffectInstance(MobEffects.REGENERATION, ticks, cfg().regenAmplifier, false, true, true), player);
+			if (cfg().cleanse) {
+				ally.removeEffect(MobEffects.POISON);
+				ally.removeEffect(MobEffects.WITHER);
+				ally.addEffect(new MobEffectInstance(MobEffects.SPEED, ticks, 0, false, true, true), player);
+			}
 			Fx.helix(level, ModParticles.SUN_MOTE, ally.position(), 0.6, 2.2, 24);
 		}
 

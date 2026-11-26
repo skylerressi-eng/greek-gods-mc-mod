@@ -48,6 +48,7 @@ public class OwlItem extends CharmItem {
 		List<LivingEntity> targets = Targets.around(player, radius, e -> !(e instanceof Player) || Targets.canHarm(player, e));
 		for (LivingEntity target : targets) {
 			target.addEffect(new MobEffectInstance(MobEffects.GLOWING, ticks, 0, false, false, true), player);
+			com.olympus.handler.CombatHandler.markByOwl(target, player, ticks);
 			level.sendParticles(ModParticles.OWL_FEATHER, target.getX(), target.getEyeY() + 0.4, target.getZ(), 3, 0.2, 0.1, 0.2, 0.01);
 		}
 

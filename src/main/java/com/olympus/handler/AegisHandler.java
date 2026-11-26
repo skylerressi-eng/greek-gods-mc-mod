@@ -29,6 +29,10 @@ public final class AegisHandler {
 		// Small golden flash on every block, so the shield feels divine even when lightning doesn't fire.
 		level.sendParticles(ModParticles.DIVINE_GLINT, player.getX(), player.getY() + 1.1, player.getZ(), 6, 0.4, 0.3, 0.4, 0.05);
 
+		if (Targets.canHarm(player, attacker) && cfg.blockKnockback > 0) {
+			attacker.knockback(cfg.blockKnockback, player.getX() - attacker.getX(), player.getZ() - attacker.getZ());
+			attacker.hurtMarked = true;
+		}
 		if (!Targets.canHarm(player, attacker) || level.getRandom().nextDouble() >= cfg.lightningChance) {
 			return;
 		}

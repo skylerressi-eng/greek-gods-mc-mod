@@ -68,3 +68,9 @@ jar {
 		rename { "${it}_$projectName" }
 	}
 }
+
+// The client test harness flags mods that send packets directly (the Helm of Darkness does,
+// to hide armor). That's expected, so its network synchronizer is turned off for our tests.
+loom.runs.matching { it.name == "clientGameTest" }.configureEach {
+	vmArg "-Dfabric.client.gametest.disableNetworkSynchronizer=true"
+}

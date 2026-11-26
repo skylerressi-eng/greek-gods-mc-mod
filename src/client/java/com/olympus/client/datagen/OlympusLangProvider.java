@@ -59,40 +59,40 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 
 		// ─── Starter relics ───
 		relic(t, ModItems.AEGIS, "Aegis",
-			"Blocking a melee hit has a %s chance to strike the attacker with lightning.",
+			"Blocked melee hits push the attacker back, with a %s chance to strike them with lightning.",
 			"Divine Shockwave", "Every %sth blocked hit releases a shockwave that knocks back and smites hostile mobs within %s blocks.");
 		relic(t, ModItems.CONCH_OF_THE_DEEP, "Conch of the Deep",
-			"Right-click: Water Breathing and Dolphin's Grace for %ss.",
+			"Tidal Surge: a wave crashes %s blocks ahead, knocking enemies back and slowing them for %ss. You gain Water Breathing and Dolphin's Grace.",
 			"Riptide Dash", "Launch forward like Riptide, even on dry land.");
 		relic(t, ModItems.HELM_OF_DARKNESS, "Helm of Darkness",
-			"Sneak in place for %ss to become fully invisible, armor and all, for %ss.",
+			"Sneak in place for %ss to vanish completely, armor and all, with Speed I, for %ss.",
 			"Ambush", "While invisible, your first hit deals %sx damage and ends the invisibility.");
 		relic(t, ModItems.OWL_OF_ATHENA, "Owl of Athena",
-			"Right-click: every creature and player within %s blocks glows for %ss.",
+			"Reveal: everything within %s blocks glows for %ss and takes %s more damage from you.",
 			"Battle Wisdom", "You and players within %s blocks gain Strength I and Resistance I for %ss.");
 		relic(t, ModItems.BLADE_OF_ARES, "Blade of Ares",
-			"Each kill grants Strength I for %ss. Another kill during the fury raises it to Strength II.",
+			"Fury: %s hits in a row grant Strength I. Kills grant Strength II for %ss.",
 			"War Cry", "Mobs within %s blocks are weakened; you and nearby players gain Speed II for %ss.");
 		relic(t, ModItems.LYRE_OF_APOLLO, "Lyre of Apollo",
-			"Right-click: Regeneration II for you and every player within %s blocks for %ss.",
+			"Right-click: you and allies within %s blocks get Regeneration II and Speed I for %ss, and are cleansed of Poison and Wither.",
 			"Sunburst", "Sets hostile mobs within %s blocks ablaze and blinds enemies for %ss.");
 		relic(t, ModItems.SILVER_BOW, "Silver Bow",
-			"Arrows fly perfectly straight, and anything they hit glows for %ss.",
+			"Arrows fly perfectly straight, deal %s more damage, and anything they hit glows for %ss.",
 			"Volley", "Your next shot fires %s arrows in a spread for the cost of one (within %ss).");
 		relic(t, ModItems.TALARIA, "Talaria",
 			"Permanent Speed I and a double jump while worn.",
 			"Wings of Hermes", "Triple jump, and you never take fall damage.");
 		relic(t, ModItems.HAMMER_OF_HEPHAESTUS, "Hammer of Hephaestus",
-			"Ores you mine come out already smelted (Silk Touch keeps the ore).",
+			"Hits set enemies ablaze for %ss, you're immune to fire while holding it, and mined ores come out smelted.",
 			"Forge Fire", "Instantly smelts up to %s items from the stack in your offhand.");
 		relic(t, ModItems.SICKLE_OF_DEMETER, "Sickle of Demeter",
-			"Right-click crops: everything in a %sx%s area ripens instantly.",
+			"Famine: hits cause Hunger and Slowness and drain %s food from players. Right-click crops to ripen a %sx%s area.",
 			"Great Harvest", "Harvests and replants every ripe crop in a %sx%s area.");
 		relic(t, ModItems.GOBLET_OF_DIONYSUS, "Goblet of Dionysus",
-			"Drink: a random blessing for %ss, with a %s chance of a hangover instead. Never empties.",
+			"Drink: a random level II combat blessing for %ss (%s chance of a hangover instead). Never empties.",
 			"Wild Party", "Players within %s blocks get a random blessing for %ss; mobs stagger drunkenly.");
 		relic(t, ModItems.MIRROR_OF_APHRODITE, "Mirror of Aphrodite",
-			"Right-click: hostile mobs within %s blocks stop targeting you for %ss, and nearby animals fall in love.",
+			"Enchanting Gaze: the player you look at can't hurt you for %ss and is slowed. Nearby hostile mobs also leave you alone.",
 			"Charm", "The mob you look at fights for you for %ss. Bosses and players resist.");
 
 		// ─── Tooltips ───
@@ -118,6 +118,7 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 		t.add("olympus.message.helm_vanish", "You fade into the shadows of the Underworld…");
 		t.add("olympus.message.goblet_blessing", "Dionysus blesses you with %s!");
 		t.add("olympus.message.goblet_hangover", "Hic! Perhaps one cup too many…");
+		t.add("olympus.message.mirror_charmed", "You are enchanted by %s and cannot bring yourself to strike them!");
 		t.add("death.attack.olympus.divine_lightning", "%1$s was smitten by divine lightning");
 		t.add("death.attack.olympus.divine_lightning.player", "%1$s was smitten by %2$s's divine lightning");
 		t.add("death.attack.olympus.divine_lightning.item", "%1$s was smitten by %2$s wielding %3$s");

@@ -177,6 +177,42 @@ public class OlympusGameTests {
 		helper.succeed();
 	}
 
+	@GameTest
+	public void owlMarkAddsDamage(GameTestHelper helper) {
+		ServerPlayer owner = helper.makeMockServerPlayerInLevel();
+		Zombie zombie = helper.spawn(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+		com.olympus.handler.CombatHandler.markByOwl(zombie, owner, 200);
+		float out = com.olympus.handler.CombatHandler.modifyIncomingDamage(zombie, owner.damageSources().playerAttack(owner), 10f);
+		helper.assertTrue(Math.abs(out - 11.5f) < 0.01f, "Owl mark should add 15%, got " + out);
+		ServerPlayer stranger = helper.makeMockServerPlayerInLevel();
+		float other = com.olympus.handler.CombatHandler.modifyIncomingDamage(zombie, stranger.damageSources().playerAttack(stranger), 10f);
+		helper.assertTrue(other == 10f, "mark bonus must only apply to the Owl's owner");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void mirrorCharmStopsPlayerDamage(GameTestHelper helper) {
+		ServerPlayer charmer = helper.makeMockServerPlayerInLevel();
+		ServerPlayer attacker = helper.makeMockServerPlayerInLevel();
+		charmer.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+		attacker.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+		com.olympus.handler.CombatHandler.charm(attacker, charmer, 200);
+		float before = charmer.getHealth();
+		charmer.hurtServer(helper.getLevel(), attacker.damageSources().playerAttack(attacker), 5f);
+		helper.assertTrue(charmer.getHealth() == before, "charmed player still hurt the charmer");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void hammerSetsEnemiesOnFire(GameTestHelper helper) {
+		ServerPlayer smith = helper.makeMockServerPlayerInLevel();
+		smith.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(ModItems.HAMMER_OF_HEPHAESTUS));
+		Zombie zombie = helper.spawn(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+		zombie.hurtServer(helper.getLevel(), smith.damageSources().playerAttack(smith), 2f);
+		helper.assertTrue(zombie.getRemainingFireTicks() > 0, "Hammer hit did not ignite");
+		helper.succeed();
+	}
+
 	private static int countGodItems(ServerPlayer player) {
 		int n = 0;
 		for (int i = 0; i < player.getInventory().getContainerSize(); i++) {

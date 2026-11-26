@@ -99,7 +99,7 @@ public class GobletItem extends Item implements GodItem {
 				player.displayClientMessage(Component.translatable("olympus.message.goblet_hangover").withStyle(ChatFormatting.DARK_PURPLE), true);
 			} else {
 				Holder<MobEffect> effect = randomEffect(random);
-				player.addEffect(new MobEffectInstance(effect, upgrade.durationTicks(cfg().effectSeconds), 0, false, true, true));
+				player.addEffect(new MobEffectInstance(effect, upgrade.durationTicks(cfg().effectSeconds), cfg().effectAmplifier, false, true, true));
 				player.displayClientMessage(Component.translatable("olympus.message.goblet_blessing", effect.value().getDisplayName()).withStyle(God.DIONYSUS.style()), true);
 			}
 			Fx.burst(serverLevel, ModParticles.WINE_DROP, player.getEyePosition(), 25, 0.35, 0.05);

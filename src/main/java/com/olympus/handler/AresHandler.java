@@ -35,14 +35,9 @@ public final class AresHandler {
 				return;
 			}
 			int ticks = GodItem.level(blade).durationTicks(ConfigManager.get().bladeOfAres.strengthSeconds);
-			MobEffectInstance current = player.getEffect(MobEffects.STRENGTH);
 			long now = level.getGameTime();
-			boolean escalate = current != null && FURY_UNTIL.getOrDefault(player.getUUID(), 0L) > now;
-			int amplifier = escalate ? 1 : 0;
-			if (current != null && current.getAmplifier() > amplifier) {
-				return; // a stronger Strength (e.g. a potion) is already active; don't downgrade it
-			}
-			player.addEffect(new MobEffectInstance(MobEffects.STRENGTH, ticks, amplifier, false, true, true));
+			boolean escalate = true;
+			player.addEffect(new MobEffectInstance(MobEffects.STRENGTH, ticks, 1, false, true, true));
 			FURY_UNTIL.put(player.getUUID(), now + ticks);
 
 			var pos = killed.position().add(0, killed.getBbHeight() * 0.5, 0);

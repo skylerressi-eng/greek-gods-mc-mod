@@ -89,33 +89,33 @@ public final class GodTooltip {
 		if (item == ModItems.AEGIS) {
 			return new Object[][]{{pct(c.aegis.lightningChance)}, {c.aegis.shockwaveEveryBlocks, num(l.radius(c.aegis.shockwaveRadius))}};
 		} else if (item == ModItems.CONCH_OF_THE_DEEP) {
-			return new Object[][]{{num(l.durationTicks(c.conch.durationSeconds) / 20.0)}, {}};
+			return new Object[][]{{num(l.radius(c.conch.waveRange)), num(l.durationTicks(c.conch.waveSlownessSeconds) / 20.0)}, {}};
 		} else if (item == ModItems.HELM_OF_DARKNESS) {
 			return new Object[][]{{num(c.helmOfDarkness.sneakSeconds), num(l.durationTicks(c.helmOfDarkness.invisibilitySeconds) / 20.0)}, {num(c.helmOfDarkness.ambushDamageMultiplier)}};
 		} else if (item == ModItems.OWL_OF_ATHENA) {
-			return new Object[][]{{num(l.radius(c.owl.radius)), num(l.durationTicks(c.owl.glowSeconds) / 20.0)},
+			return new Object[][]{{num(l.radius(c.owl.radius)), num(l.durationTicks(c.owl.glowSeconds) / 20.0), pct(c.owl.markedDamageBonus)},
 				{num(l.radius(c.owl.battleWisdomRadius)), num(l.durationTicks(c.owl.battleWisdomSeconds) / 20.0)}};
 		} else if (item == ModItems.BLADE_OF_ARES) {
-			return new Object[][]{{num(l.durationTicks(c.bladeOfAres.strengthSeconds) / 20.0)},
+			return new Object[][]{{c.bladeOfAres.furyHits, num(l.durationTicks(c.bladeOfAres.strengthSeconds) / 20.0)},
 				{num(l.radius(c.bladeOfAres.warCryRadius)), num(l.durationTicks(c.bladeOfAres.warCrySeconds) / 20.0)}};
 		} else if (item == ModItems.LYRE_OF_APOLLO) {
 			return new Object[][]{{num(l.radius(c.lyre.radius)), num(l.durationTicks(c.lyre.regenSeconds) / 20.0)},
 				{num(l.radius(c.lyre.sunburstRadius)), num(l.durationTicks(c.lyre.sunburstBlindSeconds) / 20.0)}};
 		} else if (item == ModItems.SILVER_BOW) {
-			return new Object[][]{{num(c.silverBow.glowSeconds)}, {c.silverBow.volleyArrows, num(c.silverBow.volleyWindowSeconds)}};
+			return new Object[][]{{pct(c.silverBow.arrowDamageBonus), num(c.silverBow.glowSeconds)}, {c.silverBow.volleyArrows, num(c.silverBow.volleyWindowSeconds)}};
 		} else if (item == ModItems.TALARIA) {
 			return new Object[][]{{}, {}};
 		} else if (item == ModItems.HAMMER_OF_HEPHAESTUS) {
-			return new Object[][]{{}, {c.hammerOfHephaestus.forgeFireMaxItems}};
+			return new Object[][]{{num(c.hammerOfHephaestus.igniteSeconds)}, {c.hammerOfHephaestus.forgeFireMaxItems}};
 		} else if (item == ModItems.SICKLE_OF_DEMETER) {
 			int grow = l == UpgradeLevel.ASCENDED ? (int) Math.round(l.radius(c.sickle.growRadius)) : c.sickle.growRadius;
 			int harvest = (int) Math.round(l.radius(c.sickle.harvestRadius));
-			return new Object[][]{{grow * 2 + 1}, {harvest * 2 + 1}};
+			return new Object[][]{{c.sickle.famineFoodDrain, grow * 2 + 1, grow * 2 + 1}, {harvest * 2 + 1, harvest * 2 + 1}};
 		} else if (item == ModItems.GOBLET_OF_DIONYSUS) {
 			return new Object[][]{{num(l.durationTicks(c.goblet.effectSeconds) / 20.0), pct(c.goblet.nauseaChance)},
 				{num(l.radius(c.goblet.wildPartyRadius)), num(l.durationTicks(c.goblet.wildPartySeconds) / 20.0)}};
 		} else if (item == ModItems.MIRROR_OF_APHRODITE) {
-			return new Object[][]{{num(l.radius(c.mirror.radius)), num(l.durationTicks(c.mirror.pacifySeconds) / 20.0)},
+			return new Object[][]{{num(l.durationTicks(c.mirror.playerCharmSeconds) / 20.0)},
 				{num(l.durationTicks(c.mirror.charmSeconds) / 20.0)}};
 		}
 		return new Object[][]{{}, {}};

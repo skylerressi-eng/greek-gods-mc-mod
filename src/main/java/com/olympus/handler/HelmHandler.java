@@ -112,6 +112,9 @@ public final class HelmHandler {
 		UpgradeLevel upgrade = GodItem.level(helm);
 		int ticks = upgrade.durationTicks(ConfigManager.get().helmOfDarkness.invisibilitySeconds);
 		player.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, ticks, 0, false, false, true));
+		if (ConfigManager.get().helmOfDarkness.speedWhileHidden) {
+			player.addEffect(new MobEffectInstance(MobEffects.SPEED, ticks, 0, false, false, true));
+		}
 		HIDDEN_UNTIL.put(player.getUUID(), player.level().getGameTime() + ticks);
 		HIDDEN.add(player.getUUID());
 		sendEquipment(player, true);
