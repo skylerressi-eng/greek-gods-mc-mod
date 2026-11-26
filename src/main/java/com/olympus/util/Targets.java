@@ -72,7 +72,13 @@ public final class Targets {
 	/** Allied players near the caster, including the caster (for buffs). Enemies never get them. */
 	public static List<ServerPlayer> alliesAround(ServerPlayer caster, double radius) {
 		double r2 = radius * radius;
-		return caster.level().getEntitiesOfClass(ServerPlayer.class, caster.getBoundingBox().inflate(radius),
-			p -> p.isAlive() && !p.isSpectator() && p.distanceToSqr(caster) <= r2 && isAlly(caster, p));
+		// The caster always counts, even if the area search misses them.
+		List<ServerPlayer> allies = new java.util.ArrayList<>();
+		allies.add(caster);
+		for (ServerPlayer p : caster.level().getEntitiesOfClass(ServerPlayer.class, caster.getBoundingBox().inflate(radius),
+			p -> p != caster && p.isAlive() && !p.isSpectator() && p.distanceToSqr(caster) <= r2 && isAlly(caster, p))) {
+			allies.add(p);
+		}
+		return allies;
 	}
 }
