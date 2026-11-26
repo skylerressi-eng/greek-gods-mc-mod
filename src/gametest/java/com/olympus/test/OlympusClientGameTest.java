@@ -20,6 +20,7 @@ public class OlympusClientGameTest implements FabricClientGameTest {
 			world.getClientWorld().waitForChunksRender();
 			var server = world.getServer();
 			server.runCommand("gamemode survival @a");
+			server.runCommand("olympus reload");
 			server.runCommand("effect give @a minecraft:resistance infinite 4 true");
 			server.runCommand("time set day");
 			server.runCommand("summon zombie ~3 ~ ~");
@@ -31,7 +32,7 @@ public class OlympusClientGameTest implements FabricClientGameTest {
 				server.runCommand("clear @a");
 				for (int i = batch; i < Math.min(batch + 9, relics.size()); i++) {
 					String id = BuiltInRegistries.ITEM.getKey(relics.get(i)).getPath();
-					server.runCommand("olympus give @a " + id + " " + (i % 3));
+					server.runCommand("olympus give @a " + id + " " + (1 + i % 2));
 				}
 				server.runCommand("give @a minecraft:arrow 16");
 				server.runCommand("give @a minecraft:wheat_seeds 4");
@@ -42,6 +43,8 @@ public class OlympusClientGameTest implements FabricClientGameTest {
 					context.waitTicks(2);
 					context.getInput().holdKeyFor((Options o) -> o.keyUse, 40);
 					context.getInput().holdKeyFor((Options o) -> o.keyShift, 50);
+					context.getInput().pressKey(com.olympus.client.OlympusClient.DIVINE_POWER);
+					context.waitTicks(10);
 					context.getInput().pressKey((Options o) -> o.keyJump);
 					context.waitTicks(3);
 					context.getInput().pressKey((Options o) -> o.keyJump);

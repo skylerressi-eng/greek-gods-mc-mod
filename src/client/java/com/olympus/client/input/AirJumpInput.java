@@ -18,6 +18,8 @@ import net.minecraft.world.phys.Vec3;
 public final class AirJumpInput {
 	private static boolean wasJumpDown;
 	private static int jumpsUsed;
+	/** Ticks since leaving the ground. The press that starts a normal jump must not count as an air jump. */
+	private static int airTicks;
 
 	private AirJumpInput() {
 	}
@@ -34,6 +36,11 @@ public final class AirJumpInput {
 
 		if (player.onGround() || player.isInWater() || player.onClimbable()) {
 			jumpsUsed = 0;
+			airTicks = 0;
+			return;
+		}
+		airTicks++;
+		if (airTicks < 3) {
 			return;
 		}
 		ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);

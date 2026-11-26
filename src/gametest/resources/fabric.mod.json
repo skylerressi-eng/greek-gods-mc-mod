@@ -9,7 +9,8 @@
 			"com.olympus.test.OlympusGameTests"
 		],
 		"fabric-client-gametest": [
-			"com.olympus.test.OlympusClientGameTest"
+			"com.olympus.test.OlympusClientGameTest",
+			"com.olympus.test.JumpProbe"
 		]
 	},
 	"depends": {

@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "olympus:item/owl_of_athena"
+    "model": "minecraft:item/feather"
   }
 }

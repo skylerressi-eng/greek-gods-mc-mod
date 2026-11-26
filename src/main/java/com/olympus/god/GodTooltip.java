@@ -22,6 +22,21 @@ public final class GodTooltip {
 	}
 
 	public static void append(ItemStack stack, List<Component> lines) {
+		int at = Math.min(1, lines.size());
+		if (stack.is(ModItems.BLESSING_CORE)) {
+			lines.add(at, Component.translatable("olympus.hint.blessed_unlocks").withStyle(ChatFormatting.AQUA));
+			lines.add(at, Component.translatable("olympus.hint.blessing_core").withStyle(ChatFormatting.GRAY));
+			return;
+		}
+		if (stack.is(ModItems.ASCENSION_CORE)) {
+			lines.add(at, Component.translatable("olympus.hint.ascended_unlocks").withStyle(ChatFormatting.GOLD));
+			lines.add(at, Component.translatable("olympus.hint.ascension_core").withStyle(ChatFormatting.GRAY));
+			return;
+		}
+		if (stack.is(ModItems.GOD_SWAPPER)) {
+			lines.add(at, Component.translatable("olympus.hint.god_swapper").withStyle(ChatFormatting.GRAY));
+			return;
+		}
 		if (!(stack.getItem() instanceof GodItem godItem)) {
 			return;
 		}

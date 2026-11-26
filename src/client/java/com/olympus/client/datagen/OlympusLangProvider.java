@@ -123,6 +123,22 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 		t.add("death.attack.olympus.divine_lightning.player", "%1$s was smitten by %2$s's divine lightning");
 		t.add("death.attack.olympus.divine_lightning.item", "%1$s was smitten by %2$s wielding %3$s");
 
+		t.add("olympus.message.limit", "The gods allow you only %s relics");
+		t.add("olympus.message.needs_blessing", "%s must be Blessed ★ to use its Divine Power");
+		t.add("olympus.message.no_divine_power", "Hold or wear a Blessed god item to use Divine Power");
+		t.add("olympus.message.volley_ready", "Volley ready! Your next shot fires a spread of silver arrows");
+		t.add("olympus.message.forge_nothing", "Hold something smeltable in your offhand");
+		t.add("olympus.message.harvest_nothing", "No ripe crops nearby");
+		t.add("olympus.message.charm_nothing", "Look at a mob to charm it");
+		t.add("olympus.message.swapper_howto", "Hold the God Swapper in your main hand and your starter relic in your offhand, then hold right-click");
+		t.add("key.olympus.divine_power", "Divine Power");
+		t.add("key.category.olympus.relics", "Relics of Olympus");
+		t.add("olympus.hint.blessing_core", "Smithing table: Blessing Core + god item + Block of Olympian Bronze → Blessed ★");
+		t.add("olympus.hint.ascension_core", "Smithing table: Ascension Core + Blessed god item + Block of Olympian Bronze → Ascended ★★");
+		t.add("olympus.hint.god_swapper", "Hold in main hand, starter relic in offhand, hold right-click for 3s to reroll your god");
+		t.add("olympus.hint.blessed_unlocks", "Blessed ★: -25%% cooldowns, unlocks the Divine Power (R)");
+		t.add("olympus.hint.ascended_unlocks", "Ascended ★★: -50%% cooldowns, +25%% durations and radii");
+
 		// ─── Commands ───
 		t.add("olympus.command.unknown_god", "Unknown god: %s");
 		t.add("olympus.command.unknown_item", "Unknown Olympus item: %s");

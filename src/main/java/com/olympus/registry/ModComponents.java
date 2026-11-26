@@ -26,6 +26,7 @@ public final class ModComponents {
 	}
 
 	public static void init() {
+		net.minecraft.core.Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, Olympus.id("god_upgrade"), com.olympus.recipe.GodUpgradeRecipe.Serializer.INSTANCE);
 	}
 
 	public record StackCooldowns(long primaryReadyAt, long blessedReadyAt) {

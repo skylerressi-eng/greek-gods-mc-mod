@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "olympus:item/lyre_of_apollo"
+    "model": "minecraft:block/note_block"
   }
 }

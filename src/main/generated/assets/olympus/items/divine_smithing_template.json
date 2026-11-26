@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "olympus:item/divine_smithing_template"
+    "model": "minecraft:item/netherite_upgrade_smithing_template"
   }
 }

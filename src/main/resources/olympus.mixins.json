@@ -5,9 +5,14 @@
 	"mixins": [
 		"AbstractArrowMixin",
 		"BlockMixin",
+		"BundleContentsMixin",
+		"ItemEntityMixin",
 		"ItemMixin",
 		"LivingEntityMixin",
-		"MobMixin"
+		"MobMixin",
+		"ShulkerBoxBlockEntityMixin",
+		"ShulkerBoxSlotMixin",
+		"SlotMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

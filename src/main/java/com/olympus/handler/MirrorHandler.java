@@ -22,6 +22,57 @@ public final class MirrorHandler {
 	}
 
 	private static final Map<UUID, Pacify> PACIFIED = new ConcurrentHashMap<>();
+	/** Blessed Charm: mob → its temporary owner. The mob fights the owner's enemies. */
+	private static final Map<UUID, Pacify> CHARMED = new ConcurrentHashMap<>();
+
+	public static void charmAlly(Mob mob, ServerPlayer owner, int ticks) {
+		CHARMED.put(mob.getUUID(), new Pacify(owner.getUUID(), owner.level().getGameTime() + ticks, owner.level()));
+		pacify(mob, owner, ticks);
+	}
+
+	public static boolean isCharmedBy(Mob mob, net.minecraft.world.entity.Entity owner) {
+		Pacify p = CHARMED.get(mob.getUUID());
+		return p != null && owner != null && p.player().equals(owner.getUUID()) && mob.level().getGameTime() < p.until();
+	}
+
+	private static void tickCharmed(MinecraftServer server) {
+		Iterator<Map.Entry<UUID, Pacify>> it = CHARMED.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<UUID, Pacify> entry = it.next();
+			Pacify p = entry.getValue();
+			Entity entity = p.level().getEntity(entry.getKey());
+			ServerPlayer owner = server.getPlayerList().getPlayer(p.player());
+			if (!(entity instanceof Mob mob) || !mob.isAlive() || owner == null || p.level().getGameTime() >= p.until()) {
+				if (entity instanceof Mob mob && mob.isAlive()) {
+					mob.setTarget(null);
+				}
+				it.remove();
+				continue;
+			}
+			p.level().sendParticles(com.olympus.registry.ModParticles.ROSE_PETAL, mob.getX(), mob.getEyeY() + 0.5, mob.getZ(), 1, 0.2, 0.1, 0.2, 0);
+			LivingEntity current = mob.getTarget();
+			if (current != null && current.isAlive() && current != owner && !(current instanceof Mob m && isCharmedBy(m, owner))) {
+				continue;
+			}
+			// Fight whoever last hurt the owner, else the nearest hostile mob.
+			LivingEntity enemy = owner.getLastHurtByMob();
+			if (enemy == null || !enemy.isAlive() || enemy == mob || enemy.distanceToSqr(mob) > 24 * 24) {
+				enemy = null;
+				double best = 16 * 16;
+				for (LivingEntity candidate : p.level().getEntitiesOfClass(LivingEntity.class, mob.getBoundingBox().inflate(16),
+					e -> e != mob && e.isAlive() && e instanceof net.minecraft.world.entity.monster.Enemy && !(e instanceof Mob m && isCharmedBy(m, owner)))) {
+					double d = candidate.distanceToSqr(mob);
+					if (d < best) {
+						best = d;
+						enemy = candidate;
+					}
+				}
+			}
+			if (enemy != null) {
+				mob.setTarget(enemy);
+			}
+		}
+	}
 
 	private MirrorHandler() {
 	}
@@ -56,6 +107,7 @@ public final class MirrorHandler {
 
 	/** Runs once a second: keeps brain-driven mobs calm and forgets expired entries. */
 	public static void tick(MinecraftServer server) {
+		tickCharmed(server);
 		Iterator<Map.Entry<UUID, Pacify>> it = PACIFIED.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry<UUID, Pacify> entry = it.next();

@@ -60,7 +60,7 @@ public final class ModItems {
 		new Item.Properties().rarity(Rarity.EPIC).fireResistant().component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
 	public static final Item ASCENSION_CORE = register("ascension_core", Item::new,
 		new Item.Properties().rarity(Rarity.EPIC).fireResistant().component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
-	public static final Item GOD_SWAPPER = register("god_swapper", Item::new,
+	public static final Item GOD_SWAPPER = register("god_swapper", com.olympus.item.GodSwapperItem::new,
 		new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant().component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
 	public static final Item GORGONEION_BANNER_PATTERN = register("gorgoneion_banner_pattern", Item::new,
 		new Item.Properties().stacksTo(1).rarity(Rarity.RARE).component(DataComponents.PROVIDES_BANNER_PATTERNS, ModKeys.PATTERN_ITEM_GORGONEION));
@@ -87,7 +87,7 @@ public final class ModItems {
 		GodProperties.unbreakable(GodProperties.base()
 			.humanoidArmor(STARTER.armor, ArmorType.HELMET)
 			.component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.HEAD)
-				.setEquipSound(STARTER.armor.equipSound()).setAsset(equipmentAsset("helm_of_darkness")).build())));
+				.setEquipSound(STARTER.armor.equipSound()).setAsset(EquipmentAssets.NETHERITE).build())));
 
 	public static final Item OWL_OF_ATHENA = starter("owl_of_athena", OwlItem::new, GodProperties.base());
 
@@ -107,8 +107,11 @@ public final class ModItems {
 				Attributes.MOVEMENT_SPEED,
 				new AttributeModifier(Olympus.id("talaria_speed"), ConfigManager.get().talaria.speedBonus, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
 				EquipmentSlotGroup.FEET))
+			// Looks like leather boots (dyed gold); keeps the starter tier's armor stats.
+			.component(DataComponents.DYED_COLOR, new net.minecraft.world.item.component.DyedItemColor(0xD8B45A))
+			.component(DataComponents.TOOLTIP_DISPLAY, net.minecraft.world.item.component.TooltipDisplay.DEFAULT.withHidden(DataComponents.DYED_COLOR, true))
 			.component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.FEET)
-				.setEquipSound(STARTER.armor.equipSound()).setAsset(equipmentAsset("talaria")).build())));
+				.setEquipSound(net.minecraft.sounds.SoundEvents.ARMOR_EQUIP_LEATHER).setAsset(EquipmentAssets.LEATHER).build())));
 
 	public static final Item HAMMER_OF_HEPHAESTUS = starter("hammer_of_hephaestus",
 		p -> new SimpleRelicItem(p, God.HEPHAESTUS, true, () -> 0, () -> ConfigManager.get().hammerOfHephaestus.forgeFireCooldownSeconds),

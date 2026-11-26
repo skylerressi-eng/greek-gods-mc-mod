@@ -355,8 +355,11 @@ def main():
         "goblet_of_dionysus": goblet(),
         "mirror_of_aphrodite": mirror(),
     }
-    for name, img in items.items():
-        save(img, f"item/{name}.png")
+    # Items now use vanilla textures (see OlympusModelProvider). Pass --items to also write
+    # custom item art placeholders into textures/item/ for future use.
+    if "--items" in sys.argv:
+        for name, img in items.items():
+            save(img, f"item/{name}.png")
 
     save(bronze_block(), "block/olympian_bronze_block.png")
 
@@ -379,8 +382,6 @@ def main():
     for name, (kind, color) in particles.items():
         save(particle(kind, color), f"particle/{name}.png")
 
-    save(equipment(hexc("241830"), hexc("8a5cc9")), "entity/equipment/humanoid/helm_of_darkness.png")
-    save(equipment(hexc("a8743a"), hexc("f8f8f0")), "entity/equipment/humanoid/talaria.png")
 
     for design in ("gorgoneion", "thunderbolt"):
         save(pattern(design, False), f"entity/banner/{design}.png")

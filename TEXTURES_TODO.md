@@ -8,46 +8,14 @@ All paths are under `src/main/resources/assets/olympus/textures/`.
 
 Status: ☐ placeholder · ☑ final art
 
-## Items (16×16)
-
-| Status | File | Notes |
-|---|---|---|
-| ☐ | `item/olympian_bronze_ingot.png` | bronze-gold ingot |
-| ☐ | `item/divine_smithing_template.png` | smithing template, divine / lightning motif |
-| ☐ | `item/blessing_core.png` | cyan orb, one star |
-| ☐ | `item/ascension_core.png` | gold orb, two stars |
-| ☐ | `item/god_swapper.png` | yin-yang style coin of two gods |
-| ☐ | `item/gorgoneion_banner_pattern.png` | banner pattern paper |
-| ☐ | `item/thunderbolt_banner_pattern.png` | banner pattern paper |
-| ☐ | `item/conch_of_the_deep.png` | Poseidon's conch |
-| ☐ | `item/helm_of_darkness.png` | Hades' helm (inventory icon) |
-| ☐ | `item/owl_of_athena.png` | small owl |
-| ☐ | `item/blade_of_ares.png` | sword, drawn handheld (diagonal) |
-| ☐ | `item/lyre_of_apollo.png` | golden lyre |
-| ☐ | `item/silver_bow.png` | bow, idle |
-| ☐ | `item/silver_bow_pulling_0.png` | bow, pull stage 1 |
-| ☐ | `item/silver_bow_pulling_1.png` | bow, pull stage 2 |
-| ☐ | `item/silver_bow_pulling_2.png` | bow, pull stage 3 |
-| ☐ | `item/talaria.png` | winged sandals |
-| ☐ | `item/hammer_of_hephaestus.png` | smith's hammer, handheld |
-| ☐ | `item/sickle_of_demeter.png` | sickle, handheld |
-| ☐ | `item/goblet_of_dionysus.png` | golden goblet with wine |
-| ☐ | `item/mirror_of_aphrodite.png` | hand mirror |
-
-The **Aegis** has no item texture: it uses the vanilla shield model, and its look comes from its banner layers (gold base, orange gradient, Gorgoneion, orange border). To change the design, edit the two pattern masks below, or the layers in `ModItems.AEGIS`.
+## Items
+All items now use **vanilla Minecraft textures**: each relic looks like its base item (Talaria = gold-dyed leather boots, Goblet = a wine-red potion, Blade of Ares = netherite sword, and so on). The models are in `OlympusModelProvider`. To give an item custom art later, draw it at `item/<name>.png` and point its model at it there (`python3 tools/generate_textures.py --items` writes placeholder art to start from).
 
 ## Blocks (16×16)
 
 | Status | File |
 |---|---|
 | ☐ | `block/olympian_bronze_block.png` |
-
-## Worn armor (64×32, vanilla humanoid armor layout)
-
-| Status | File | Notes |
-|---|---|---|
-| ☐ | `entity/equipment/humanoid/helm_of_darkness.png` | only the head area is used |
-| ☐ | `entity/equipment/humanoid/talaria.png` | only the feet area is used; wings would need a custom model |
 
 ## Banner & shield patterns (64×64 white masks; the dye color tints them)
 

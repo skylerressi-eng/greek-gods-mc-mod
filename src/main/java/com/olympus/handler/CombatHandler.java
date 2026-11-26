@@ -86,6 +86,17 @@ public final class CombatHandler {
 			level.sendParticles(ModParticles.OWL_FEATHER, victim.getX(), victim.getEyeY(), victim.getZ(), 3, 0.2, 0.2, 0.2, 0.02);
 		}
 
+		// Helm of Darkness (Blessed): ambush from invisibility
+		if (source.getDirectEntity() instanceof ServerPlayer attacker && source.getEntity() == attacker && HelmHandler.isHidden(attacker)) {
+			ItemStack helm = attacker.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD);
+			if (helm.is(ModItems.HELM_OF_DARKNESS) && GodItem.level(helm).atLeast(com.olympus.god.UpgradeLevel.BLESSED)) {
+				result *= (float) cfg().helmOfDarkness.ambushDamageMultiplier;
+				level.sendParticles(ModParticles.SHADE, victim.getX(), victim.getEyeY(), victim.getZ(), 20, 0.3, 0.3, 0.3, 0.05);
+				Fx.sound(attacker, ModSounds.HELM_REAPPEAR, 1.2f, 0.6f);
+				HelmHandler.reveal(attacker);
+			}
+		}
+
 		// Silver Bow arrows
 		if (source.getDirectEntity() instanceof AbstractArrow arrow && arrow.getTags().contains(SilverBowItem.ARROW_TAG)) {
 			result *= (float) (1.0 + cfg().silverBow.arrowDamageBonus);
@@ -95,6 +106,13 @@ public final class CombatHandler {
 
 	/** ALLOW_DAMAGE: a player charmed by the Mirror can't hurt their charmer. */
 	private static boolean allowDamage(LivingEntity victim, DamageSource source, float amount) {
+		// Talaria (Blessed): no fall damage.
+		if (victim instanceof Player p && source.is(net.minecraft.tags.DamageTypeTags.IS_FALL)) {
+			ItemStack boots = p.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.FEET);
+			if (boots.is(ModItems.TALARIA) && GodItem.level(boots).atLeast(com.olympus.god.UpgradeLevel.BLESSED)) {
+				return false;
+			}
+		}
 		if (source.getEntity() instanceof Player attacker) {
 			Mark charm = CHARMED.get(attacker.getUUID());
 			if (charm != null && charm.by().equals(victim.getUUID()) && victim.level().getGameTime() < charm.until()) {

@@ -31,6 +31,18 @@ public final class OlympusNetwork {
 		}
 	}
 
+	/** C2S: the Divine Power key was pressed. The server decides which relic answers. */
+	public record DivinePowerPayload() implements CustomPacketPayload {
+		public static final Type<DivinePowerPayload> TYPE = new Type<>(Olympus.id("divine_power"));
+		public static final DivinePowerPayload INSTANCE = new DivinePowerPayload();
+		public static final StreamCodec<RegistryFriendlyByteBuf, DivinePowerPayload> CODEC = StreamCodec.unit(INSTANCE);
+
+		@Override
+		public Type<? extends CustomPacketPayload> type() {
+			return TYPE;
+		}
+	}
+
 	/**
 	 * S2C: the server's config, so tooltips, HUD and movement prediction show the server's
 	 * numbers rather than the client's local file. Sent on join and on /olympus reload.
@@ -51,7 +63,9 @@ public final class OlympusNetwork {
 		PayloadTypeRegistry.playC2S().register(AirJumpPayload.TYPE, AirJumpPayload.CODEC);
 		PayloadTypeRegistry.playS2C().register(ConfigSyncPayload.TYPE, ConfigSyncPayload.CODEC);
 
+		PayloadTypeRegistry.playC2S().register(DivinePowerPayload.TYPE, DivinePowerPayload.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(AirJumpPayload.TYPE, (payload, context) -> TalariaHandler.onAirJump(context.player()));
+		ServerPlayNetworking.registerGlobalReceiver(DivinePowerPayload.TYPE, (payload, context) -> com.olympus.ability.DivinePower.onKey(context.player()));
 	}
 
 	public static void syncConfig(ServerPlayer player) {

@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "olympus:item/god_swapper"
+    "model": "minecraft:item/ender_eye"
   }
 }

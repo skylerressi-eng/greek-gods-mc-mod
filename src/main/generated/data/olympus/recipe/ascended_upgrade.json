@@ -1,0 +1,8 @@
+{
+  "type": "olympus:god_upgrade",
+  "addition": "olympus:olympian_bronze_block",
+  "base": "#olympus:god_items",
+  "from_level": 1,
+  "template": "olympus:ascension_core",
+  "to_level": 2
+}

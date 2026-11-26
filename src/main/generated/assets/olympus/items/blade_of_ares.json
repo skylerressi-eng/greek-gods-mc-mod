@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "olympus:item/blade_of_ares"
+    "model": "minecraft:item/netherite_sword"
   }
 }

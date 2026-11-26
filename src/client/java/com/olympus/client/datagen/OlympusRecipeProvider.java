@@ -64,6 +64,10 @@ public class OlympusRecipeProvider extends FabricRecipeProvider {
 					.unlockedBy(getHasName(Items.TOTEM_OF_UNDYING), has(Items.TOTEM_OF_UNDYING))
 					.save(output);
 
+				// Upgrades (smithing table): core + god item + Block of Olympian Bronze
+				upgrade("blessed_upgrade", ModItems.BLESSING_CORE, 0, 1);
+				upgrade("ascended_upgrade", ModItems.ASCENSION_CORE, 1, 2);
+
 				shapeless(RecipeCategory.MISC, ModItems.GORGONEION_BANNER_PATTERN)
 					.requires(Items.PAPER).requires(Items.GOLD_BLOCK).requires(Items.SPIDER_EYE)
 					.unlockedBy(getHasName(Items.GOLD_BLOCK), has(Items.GOLD_BLOCK))
@@ -72,6 +76,15 @@ public class OlympusRecipeProvider extends FabricRecipeProvider {
 					.requires(Items.PAPER).requires(Items.GOLD_BLOCK).requires(Items.LIGHTNING_ROD)
 					.unlockedBy(getHasName(Items.GOLD_BLOCK), has(Items.GOLD_BLOCK))
 					.save(output);
+			}
+
+			private void upgrade(String name, net.minecraft.world.item.Item core, int from, int to) {
+				var recipe = new com.olympus.recipe.GodUpgradeRecipe(
+					net.minecraft.world.item.crafting.Ingredient.of(core),
+					tag(com.olympus.registry.ModKeys.GOD_ITEMS),
+					net.minecraft.world.item.crafting.Ingredient.of(ModItems.OLYMPIAN_BRONZE_BLOCK),
+					from, to);
+				output.accept(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.RECIPE, com.olympus.Olympus.id(name)), recipe, null);
 			}
 		};
 	}

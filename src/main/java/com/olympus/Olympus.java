@@ -68,6 +68,8 @@ public class Olympus implements ModInitializer {
 			TalariaHandler.forget(player.getUUID());
 			AresHandler.forget(player.getUUID());
 			com.olympus.handler.CombatHandler.forget(player.getUUID());
+			com.olympus.ability.DivinePower.forget(player.getUUID());
+			com.olympus.limit.GodItemLimit.forget(player.getUUID());
 		});
 		EntityTrackingEvents.START_TRACKING.register(HelmHandler::onStartTracking);
 
@@ -86,6 +88,7 @@ public class Olympus implements ModInitializer {
 			com.olympus.handler.CombatHandler.tick(server);
 			for (ServerPlayer player : server.getPlayerList().getPlayers()) {
 				syncCooldownOverlays(player);
+				com.olympus.limit.GodItemLimit.sweep(player);
 				ClaimManager.tryAutoClaim(player);
 			}
 		}

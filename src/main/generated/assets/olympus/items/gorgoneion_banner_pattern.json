@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "olympus:item/gorgoneion_banner_pattern"
+    "model": "minecraft:item/skull_banner_pattern"
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "olympus:item/olympian_bronze_ingot"
+    "model": "minecraft:item/copper_ingot"
   }
 }

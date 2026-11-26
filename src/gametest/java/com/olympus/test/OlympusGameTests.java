@@ -213,6 +213,101 @@ public class OlympusGameTests {
 		helper.succeed();
 	}
 
+	@GameTest
+	public void smithingUpgradesKeepEnchantments(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		ItemStack blade = new ItemStack(ModItems.BLADE_OF_ARES);
+		var sharpness = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(net.minecraft.world.item.enchantment.Enchantments.SHARPNESS);
+		blade.enchant(sharpness, 5);
+		var input = new net.minecraft.world.item.crafting.SmithingRecipeInput(new ItemStack(ModItems.BLESSING_CORE), blade, new ItemStack(ModItems.OLYMPIAN_BRONZE_BLOCK));
+		var match = level.recipeAccess().getRecipeFor(net.minecraft.world.item.crafting.RecipeType.SMITHING, input, level);
+		helper.assertTrue(match.isPresent(), "no smithing recipe for Blessing Core + Blade");
+		ItemStack blessed = match.get().value().assemble(input, level.registryAccess());
+		helper.assertTrue(GodItem.level(blessed) == com.olympus.god.UpgradeLevel.BLESSED, "not Blessed after smithing");
+		helper.assertTrue(net.minecraft.world.item.enchantment.EnchantmentHelper.getItemEnchantmentLevel(sharpness, blessed) == 5, "lost Sharpness");
+		// Ascension needs a Blessed item; a Mortal one must not match.
+		var wrong = new net.minecraft.world.item.crafting.SmithingRecipeInput(new ItemStack(ModItems.ASCENSION_CORE), new ItemStack(ModItems.BLADE_OF_ARES), new ItemStack(ModItems.OLYMPIAN_BRONZE_BLOCK));
+		helper.assertTrue(level.recipeAccess().getRecipeFor(net.minecraft.world.item.crafting.RecipeType.SMITHING, wrong, level).isEmpty(), "Mortal item could be Ascended");
+		var ascend = new net.minecraft.world.item.crafting.SmithingRecipeInput(new ItemStack(ModItems.ASCENSION_CORE), blessed, new ItemStack(ModItems.OLYMPIAN_BRONZE_BLOCK));
+		ItemStack ascended = level.recipeAccess().getRecipeFor(net.minecraft.world.item.crafting.RecipeType.SMITHING, ascend, level).orElseThrow().value().assemble(ascend, level.registryAccess());
+		helper.assertTrue(GodItem.level(ascended) == com.olympus.god.UpgradeLevel.ASCENDED, "not Ascended");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void noUnbreakingOrMendingOnGodItems(GameTestHelper helper) {
+		var enchants = helper.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+		ItemStack blade = new ItemStack(ModItems.BLADE_OF_ARES);
+		helper.assertTrue(enchants.getOrThrow(net.minecraft.world.item.enchantment.Enchantments.SHARPNESS).value().canEnchant(blade), "Sharpness should apply");
+		helper.assertFalse(enchants.getOrThrow(net.minecraft.world.item.enchantment.Enchantments.UNBREAKING).value().canEnchant(blade), "Unbreaking applied");
+		helper.assertFalse(enchants.getOrThrow(net.minecraft.world.item.enchantment.Enchantments.MENDING).value().canEnchant(blade), "Mending applied");
+		helper.assertFalse(enchants.getOrThrow(net.minecraft.world.item.enchantment.Enchantments.VANISHING_CURSE).value().canEnchant(blade), "Vanishing applied");
+		helper.assertTrue(enchants.getOrThrow(net.minecraft.world.item.enchantment.Enchantments.INFINITY).value().canEnchant(new ItemStack(ModItems.SILVER_BOW)), "Infinity should apply to the Silver Bow");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void godSwapperRerollsAndKeepsLevel(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ItemStack relic = new ItemStack(ModItems.OWL_OF_ATHENA);
+		relic.set(ModComponents.UPGRADE_LEVEL, 2);
+		player.setItemInHand(net.minecraft.world.InteractionHand.OFF_HAND, relic);
+		ItemStack swapper = new ItemStack(ModItems.GOD_SWAPPER);
+		player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, swapper);
+		swapper.getItem().finishUsingItem(swapper, helper.getLevel(), player);
+		ItemStack result = player.getOffhandItem();
+		helper.assertTrue(result.getItem() instanceof GodItem g && g.isStarterRelic() && !result.is(ModItems.OWL_OF_ATHENA), "relic was not rerolled: " + result);
+		helper.assertTrue(GodItem.level(result) == com.olympus.god.UpgradeLevel.ASCENDED, "upgrade level lost");
+		helper.assertTrue(swapper.isEmpty(), "swapper was not used up");
+		helper.assertTrue(PlayerOlympusData.get(player).claimedGod().orElse(null) == ((GodItem) result.getItem()).god(), "claimed god not updated");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void carryLimitIsThree(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+		player.getInventory().clearContent(); // the mock player was just claimed and holds a starter relic
+		player.getInventory().add(new ItemStack(ModItems.AEGIS));
+		player.getInventory().add(new ItemStack(ModItems.OWL_OF_ATHENA));
+		helper.assertTrue(com.olympus.limit.GodItemLimit.canTakeAnother(player), "should allow a third");
+		player.getInventory().add(new ItemStack(ModItems.LYRE_OF_APOLLO));
+		helper.assertFalse(com.olympus.limit.GodItemLimit.canTakeAnother(player), "allowed a fourth");
+		player.getInventory().add(new ItemStack(ModItems.TALARIA)); // e.g. via /give
+		com.olympus.limit.GodItemLimit.sweep(player);
+		helper.assertTrue(com.olympus.limit.GodItemLimit.count(player) == 3, "sweep did not drop the extra");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void droppedRelicsAreIndestructible(GameTestHelper helper) {
+		var item = new net.minecraft.world.entity.item.ItemEntity(helper.getLevel(), helper.absoluteVec(new net.minecraft.world.phys.Vec3(1, 2, 1)).x,
+			helper.absoluteVec(new net.minecraft.world.phys.Vec3(1, 2, 1)).y, helper.absoluteVec(new net.minecraft.world.phys.Vec3(1, 2, 1)).z, new ItemStack(ModItems.BLADE_OF_ARES));
+		helper.getLevel().addFreshEntity(item);
+		item.hurtServer(helper.getLevel(), helper.getLevel().damageSources().explosion(null, null), 100f);
+		item.hurtServer(helper.getLevel(), helper.getLevel().damageSources().cactus(), 100f);
+		item.hurtServer(helper.getLevel(), helper.getLevel().damageSources().lava(), 100f);
+		helper.assertTrue(item.isAlive(), "relic item entity was destroyed");
+		helper.assertFalse(net.minecraft.world.item.component.BundleContents.canItemBeInBundle(new ItemStack(ModItems.BLADE_OF_ARES)), "relic fits in a bundle");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void divinePowerUsesBlessedAbility(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ItemStack owl = new ItemStack(ModItems.OWL_OF_ATHENA);
+		player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, owl);
+		com.olympus.ability.DivinePower.onKey(player);
+		helper.assertFalse(player.hasEffect(net.minecraft.world.effect.MobEffects.STRENGTH), "Mortal relic used its Blessed ability");
+		owl.set(ModComponents.UPGRADE_LEVEL, 1);
+		helper.runAfterDelay(5, () -> {
+			com.olympus.ability.DivinePower.onKey(player);
+			helper.assertTrue(player.hasEffect(net.minecraft.world.effect.MobEffects.STRENGTH), "Battle Wisdom did not grant Strength");
+			helper.assertFalse(Cooldowns.isReady(player, owl, Cooldowns.Kind.BLESSED), "Blessed cooldown not started");
+			helper.succeed();
+		});
+	}
+
 	private static int countGodItems(ServerPlayer player) {
 		int n = 0;
 		for (int i = 0; i < player.getInventory().getContainerSize(); i++) {

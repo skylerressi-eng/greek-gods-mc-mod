@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "olympus:item/ascension_core"
+    "model": "minecraft:item/nether_star"
   }
 }

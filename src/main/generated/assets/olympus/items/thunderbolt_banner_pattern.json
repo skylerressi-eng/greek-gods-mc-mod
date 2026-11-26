@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "olympus:item/thunderbolt_banner_pattern"
+    "model": "minecraft:item/flow_banner_pattern"
   }
 }

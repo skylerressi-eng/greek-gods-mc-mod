@@ -60,6 +60,25 @@ public final class OlympusTagProviders {
 				}
 			}
 			builder(net.minecraft.tags.ItemTags.BEACON_PAYMENT_ITEMS).add(key(ModItems.OLYMPIAN_BRONZE_INGOT));
+
+			// Enchanting: god items join the specific enchantable/* tags, NOT the tool tags
+			// (#minecraft:swords etc.), so Unbreaking and Mending (#enchantable/durability) never
+			// apply, and Curse of Vanishing (#enchantable/vanishing) can't delete a relic on death.
+			ench("melee_weapon", ModItems.BLADE_OF_ARES);
+			ench("sweeping", ModItems.BLADE_OF_ARES);
+			ench("mining", ModItems.HAMMER_OF_HEPHAESTUS, ModItems.SICKLE_OF_DEMETER);
+			ench("mining_loot", ModItems.HAMMER_OF_HEPHAESTUS, ModItems.SICKLE_OF_DEMETER);
+			ench("head_armor", ModItems.HELM_OF_DARKNESS);
+			ench("foot_armor", ModItems.TALARIA);
+			ench("equippable", ModItems.HELM_OF_DARKNESS, ModItems.TALARIA);
+			ench("bow", ModItems.SILVER_BOW);
+		}
+
+		private void ench(String tag, Item... items) {
+			var builder = builder(net.minecraft.tags.TagKey.create(Registries.ITEM, net.minecraft.resources.Identifier.withDefaultNamespace("enchantable/" + tag)));
+			for (Item item : items) {
+				builder.add(key(item));
+			}
 		}
 	}
 
