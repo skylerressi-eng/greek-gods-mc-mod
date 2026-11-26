@@ -24,42 +24,52 @@ public class OlympusRecipeProvider extends FabricRecipeProvider {
 		return new RecipeProvider(recipes, advancements) {
 			@Override
 			public void buildRecipes() {
+				// Base material: everything else is built from it, so it is only moderately harder.
 				shaped(RecipeCategory.MISC, ModItems.OLYMPIAN_BRONZE_INGOT)
-					.pattern("GCG").pattern("CSC").pattern("GCG")
-					.define('G', Items.GOLD_BLOCK).define('C', Ingredient.of(Items.COPPER_BLOCK.weathering().unaffected(), Items.COPPER_BLOCK.waxed().unaffected())).define('S', Items.NETHERITE_SCRAP)
+					.pattern("GDG").pattern("CSC").pattern("GDG")
+					.define('G', Items.GOLD_BLOCK).define('D', Items.DIAMOND)
+					.define('C', Ingredient.of(Items.COPPER_BLOCK.weathering().unaffected(), Items.COPPER_BLOCK.waxed().unaffected()))
+					.define('S', Items.NETHERITE_SCRAP)
 					.unlockedBy(getHasName(Items.NETHERITE_SCRAP), has(Items.NETHERITE_SCRAP))
 					.save(output, "olympian_bronze_ingot_from_alloy");
 
 				nineBlockStorageRecipes(RecipeCategory.MISC, ModItems.OLYMPIAN_BRONZE_INGOT, RecipeCategory.BUILDING_BLOCKS, ModItems.OLYMPIAN_BRONZE_BLOCK);
 
-				copySmithingTemplate(ModItems.DIVINE_SMITHING_TEMPLATE, ModItems.OLYMPIAN_BRONZE_INGOT);
+				shaped(RecipeCategory.MISC, ModItems.DIVINE_SMITHING_TEMPLATE, 2)
+					.pattern("KdK").pattern("dTd").pattern("KIK")
+					.define('K', Items.DIAMOND_BLOCK).define('d', Items.DIAMOND)
+					.define('T', ModItems.DIVINE_SMITHING_TEMPLATE).define('I', ModItems.OLYMPIAN_BRONZE_INGOT)
+					.unlockedBy(getHasName(ModItems.DIVINE_SMITHING_TEMPLATE), has(ModItems.DIVINE_SMITHING_TEMPLATE))
+					.save(output);
 
 				shaped(RecipeCategory.MISC, ModItems.BLESSING_CORE)
-					.pattern("IDI").pattern("DED").pattern("IDI")
-					.define('I', ModItems.OLYMPIAN_BRONZE_INGOT).define('D', Items.DIAMOND_BLOCK).define('E', Items.ENCHANTED_GOLDEN_APPLE)
+					.pattern("IDI").pattern("DED").pattern("NDN")
+					.define('I', ModItems.OLYMPIAN_BRONZE_INGOT).define('D', Items.DIAMOND_BLOCK)
+					.define('E', Items.ENCHANTED_GOLDEN_APPLE).define('N', Items.NETHERITE_INGOT)
 					.unlockedBy(getHasName(ModItems.OLYMPIAN_BRONZE_INGOT), has(ModItems.OLYMPIAN_BRONZE_INGOT))
 					.save(output);
 
 				shaped(RecipeCategory.MISC, ModItems.ASCENSION_CORE)
-					.pattern("NEN").pattern("BSB").pattern("NEN")
-					.define('N', Items.NETHERITE_INGOT).define('E', Items.ENCHANTED_GOLDEN_APPLE)
+					.pattern("KEK").pattern("BSB").pattern("NEN")
+					.define('K', Items.NETHERITE_BLOCK).define('N', Items.NETHERITE_INGOT).define('E', Items.ENCHANTED_GOLDEN_APPLE)
 					.define('B', ModItems.OLYMPIAN_BRONZE_BLOCK).define('S', Items.NETHER_STAR)
 					.unlockedBy(getHasName(Items.NETHER_STAR), has(Items.NETHER_STAR))
 					.save(output);
 
 				shaped(RecipeCategory.MISC, ModItems.GOD_SWAPPER)
-					.pattern("IEI").pattern("ETE").pattern("IEI")
+					.pattern("IEI").pattern("ETE").pattern("DGD")
 					.define('I', ModItems.OLYMPIAN_BRONZE_INGOT).define('E', Items.ECHO_SHARD).define('T', Items.TOTEM_OF_UNDYING)
+					.define('D', Items.DIAMOND_BLOCK).define('G', Items.ENCHANTED_GOLDEN_APPLE)
 					.unlockedBy(getHasName(Items.TOTEM_OF_UNDYING), has(Items.TOTEM_OF_UNDYING))
 					.save(output);
 
 				shapeless(RecipeCategory.MISC, ModItems.GORGONEION_BANNER_PATTERN)
-					.requires(Items.PAPER).requires(Items.GOLD_INGOT).requires(Items.SPIDER_EYE)
-					.unlockedBy(getHasName(Items.GOLD_INGOT), has(Items.GOLD_INGOT))
+					.requires(Items.PAPER).requires(Items.GOLD_BLOCK).requires(Items.SPIDER_EYE)
+					.unlockedBy(getHasName(Items.GOLD_BLOCK), has(Items.GOLD_BLOCK))
 					.save(output);
 				shapeless(RecipeCategory.MISC, ModItems.THUNDERBOLT_BANNER_PATTERN)
-					.requires(Items.PAPER).requires(Items.GOLD_INGOT).requires(Items.LIGHTNING_ROD.weathering().unaffected())
-					.unlockedBy(getHasName(Items.GOLD_INGOT), has(Items.GOLD_INGOT))
+					.requires(Items.PAPER).requires(Items.GOLD_BLOCK).requires(Items.LIGHTNING_ROD.weathering().unaffected())
+					.unlockedBy(getHasName(Items.GOLD_BLOCK), has(Items.GOLD_BLOCK))
 					.save(output);
 			}
 		};

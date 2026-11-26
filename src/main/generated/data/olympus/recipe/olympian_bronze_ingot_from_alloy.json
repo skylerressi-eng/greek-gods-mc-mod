@@ -5,13 +5,14 @@
       "minecraft:copper_block",
       "minecraft:waxed_copper_block"
     ],
+    "D": "minecraft:diamond",
     "G": "minecraft:gold_block",
     "S": "minecraft:netherite_scrap"
   },
   "pattern": [
-    "GCG",
+    "GDG",
     "CSC",
-    "GCG"
+    "GDG"
   ],
   "result": {
     "id": "olympus:olympian_bronze_ingot"

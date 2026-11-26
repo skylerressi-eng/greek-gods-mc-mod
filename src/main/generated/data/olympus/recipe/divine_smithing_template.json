@@ -1,14 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "#": "minecraft:diamond",
-    "C": "olympus:olympian_bronze_ingot",
-    "S": "olympus:divine_smithing_template"
+    "I": "olympus:olympian_bronze_ingot",
+    "K": "minecraft:diamond_block",
+    "T": "olympus:divine_smithing_template",
+    "d": "minecraft:diamond"
   },
   "pattern": [
-    "#S#",
-    "#C#",
-    "###"
+    "KdK",
+    "dTd",
+    "KIK"
   ],
   "result": {
     "count": 2,

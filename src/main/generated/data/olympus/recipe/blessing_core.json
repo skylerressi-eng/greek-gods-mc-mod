@@ -3,12 +3,13 @@
   "key": {
     "D": "minecraft:diamond_block",
     "E": "minecraft:enchanted_golden_apple",
-    "I": "olympus:olympian_bronze_ingot"
+    "I": "olympus:olympian_bronze_ingot",
+    "N": "minecraft:netherite_ingot"
   },
   "pattern": [
     "IDI",
     "DED",
-    "IDI"
+    "NDN"
   ],
   "result": {
     "id": "olympus:blessing_core"

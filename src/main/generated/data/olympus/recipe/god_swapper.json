@@ -1,14 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
+    "D": "minecraft:diamond_block",
     "E": "minecraft:echo_shard",
+    "G": "minecraft:enchanted_golden_apple",
     "I": "olympus:olympian_bronze_ingot",
     "T": "minecraft:totem_of_undying"
   },
   "pattern": [
     "IEI",
     "ETE",
-    "IEI"
+    "DGD"
   ],
   "result": {
     "id": "olympus:god_swapper"
