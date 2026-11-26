@@ -61,36 +61,47 @@ The core is used up. Enchantments are kept.
 
 ## Craftable god items (Phase 3)
 
+**Progression:** every craftable god item needs a starter relic of the same god as an ingredient (it is used up), so you climb tier by tier: starter relic → craftable relic → legendary.
+
+| Craftable | Needs this starter relic |
+|---|---|
+| Caduceus | Talaria (Hermes) |
+| Spear of Athena | Owl of Athena |
+| Forge Hammer | Hammer of Hephaestus |
+| Harpe | Helm of Darkness (Perseus wore Hades' helm to slay Medusa) |
+| Thyrsus | Goblet of Dionysus |
+| Cornucopia | Sickle of Demeter |
+
 ### Caduceus
 ```
 D H D     D = Diamond Block
-E N E     H = Heavy Core (Ominous Vaults)
-R B R     E = Enchanted Golden Apple, N = Netherite Block, R = Breeze Rod, B = Block of Olympian Bronze
+E T E     H = Heavy Core (Ominous Vaults), T = Talaria
+R B R     E = Enchanted Golden Apple, R = Breeze Rod, B = Block of Olympian Bronze
 ```
 
 ### Thyrsus
 ```
-G B G     G = Glow Berries
-V S V     B = Block of Olympian Bronze, V = Vines
-D E D     S = Netherite Sword, D = Diamond Block, E = Enchanted Golden Apple
+G O G     G = Glow Berries, O = Goblet of Dionysus
+V S V     V = Vines
+D B D     S = Netherite Sword, D = Diamond Block, B = Block of Olympian Bronze
 ```
 
 ### Cornucopia
 ```
-A B A     A = Golden Apple
-C H C     B = Block of Olympian Bronze, C = Golden Carrot
-D Y D     H = Goat Horn, D = Diamond Block, Y = Hay Bale
+A S A     A = Golden Apple, S = Sickle of Demeter
+C H C     C = Golden Carrot, H = Goat Horn
+D B D     D = Diamond Block, B = Block of Olympian Bronze
 ```
 
-### Smithing: Divine Smithing Template + base + Block of Olympian Bronze
-| Base | Result |
-|---|---|
-| Trident | Spear of Athena |
-| Netherite Pickaxe | Forge Hammer |
-| Netherite Sword | Harpe |
-| Netherite Helmet / Chestplate / Leggings / Boots | Hoplite piece |
+### Spear of Athena, Forge Hammer, Harpe (crafting)
+```
+D R D     R = the starter relic (Owl of Athena / Hammer of Hephaestus / Helm of Darkness)
+B W B     W = Trident / Netherite Pickaxe / Netherite Sword
+D T D     B = Block of Olympian Bronze, D = Diamond Block, T = Divine Smithing Template
+```
 
-These get harder through their parts: each needs a template (diamond blocks to copy) and a bronze block (9 netherite scrap, 18 diamonds, 36 gold blocks).
+### Hoplite Armor (smithing, not a god item)
+Divine Smithing Template + Netherite armor piece + Block of Olympian Bronze.
 
 ## Consumables & ammo (Phase 3)
 
