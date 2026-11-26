@@ -268,6 +268,10 @@ public class OlympusGameTests {
 		ServerPlayer player = helper.makeMockServerPlayerInLevel();
 		player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
 		player.getInventory().clearContent(); // the mock player was just claimed and holds a starter relic
+		var general = com.olympus.config.ConfigManager.get().general;
+		boolean opsIgnore = general.opsIgnoreLimit;
+		general.opsIgnoreLimit = false; // mock players are operators
+		try {
 		player.getInventory().add(new ItemStack(ModItems.AEGIS));
 		player.getInventory().add(new ItemStack(ModItems.OWL_OF_ATHENA));
 		helper.assertTrue(com.olympus.limit.GodItemLimit.canTakeAnother(player), "should allow a third");
@@ -276,6 +280,32 @@ public class OlympusGameTests {
 		player.getInventory().add(new ItemStack(ModItems.TALARIA)); // e.g. via /give
 		com.olympus.limit.GodItemLimit.sweep(player);
 		helper.assertTrue(com.olympus.limit.GodItemLimit.count(player) == 3, "sweep did not drop the extra");
+		} finally {
+			general.opsIgnoreLimit = opsIgnore;
+		}
+		helper.succeed();
+	}
+
+	@GameTest
+	public void creativePlayersKeepEveryRelic(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(net.minecraft.world.level.GameType.CREATIVE);
+		var general = com.olympus.config.ConfigManager.get().general;
+		boolean opsIgnore = general.opsIgnoreLimit;
+		general.opsIgnoreLimit = false;
+		try {
+			player.getInventory().clearContent();
+			for (var item : ModItems.ALL) {
+				if (item instanceof com.olympus.god.GodItem) {
+					player.getInventory().add(new ItemStack(item));
+				}
+			}
+			int before = com.olympus.limit.GodItemLimit.count(player);
+			com.olympus.limit.GodItemLimit.sweep(player);
+			helper.assertTrue(before > 3 && com.olympus.limit.GodItemLimit.count(player) == before, "creative player lost relics");
+		} finally {
+			general.opsIgnoreLimit = opsIgnore;
+		}
 		helper.succeed();
 	}
 

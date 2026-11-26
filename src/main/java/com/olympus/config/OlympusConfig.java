@@ -51,6 +51,8 @@ public class OlympusConfig {
 	public static class General {
 		/** Maximum god items a player may carry. */
 		public int maxGodItems = 3;
+		/** Operators (cheats on) can carry any number of god items, like creative players. */
+		public boolean opsIgnoreLimit = true;
 		/** Each Laurel of Olympus permanently adds this many relic slots... */
 		public int laurelSlotsPerUse = 1;
 		/** ...up to this many extra slots per player. */

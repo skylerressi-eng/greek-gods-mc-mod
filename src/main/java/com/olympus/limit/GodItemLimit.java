@@ -33,8 +33,13 @@ public final class GodItemLimit {
 		return max() + Math.max(0, bonus);
 	}
 
+	/** Creative/spectator players and (by default) operators ignore the relic limit. */
 	public static boolean bypasses(Player player) {
-		return player.canUseGameMasterBlocks();
+		if (player.getAbilities().instabuild || player.isSpectator()) {
+			return true;
+		}
+		return ConfigManager.get().general.opsIgnoreLimit
+			&& player.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER);
 	}
 
 	public static int count(Player player) {

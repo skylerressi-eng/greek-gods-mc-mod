@@ -57,7 +57,11 @@ public final class HelmHandler {
 			boolean wearing = player.getItemBySlot(EquipmentSlot.HEAD).is(ModItems.HELM_OF_DARKNESS);
 			if (until == null || now >= until || !wearing || !player.hasEffect(MobEffects.INVISIBILITY)) {
 				reveal(player);
-			} else if (now % 10 == 0) {
+				return;
+			}
+			// Vanilla re-broadcasts gear whenever it changes; keep it hidden.
+			sendEquipment(player, true);
+			if (now % 10 == 0) {
 				// A faint shadow at the feet: visible up close if you know what to look for.
 				player.level().sendParticles(ModParticles.SHADE, player.getX(), player.getY() + 0.1, player.getZ(), 1, 0.2, 0.0, 0.2, 0.0);
 			}

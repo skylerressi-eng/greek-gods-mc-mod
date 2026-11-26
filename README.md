@@ -105,7 +105,7 @@ Group buffs (Lyre, Battle Wisdom, War Cry, Wild Party, Feast) only reach **allie
 - **Jump in mid-air** with Talaria for the double jump (Survival).
 
 ## Config
-`config/olympus.json` holds every number (damage, durations, cooldowns, radii, chances, item limit, loot chances, boss health, rewards). It's created with defaults on first run and synced to clients; `/olympus reload` applies changes live. Notable options: `general.maxGodItems` (3), `general.starterTier` (netherite / diamond / iron, restart needed), `general.abilitiesAffectPlayers` (turn PvP effects off), `general.claimDelayMinutes` (anti alt-farming), `lightning.lightningFire` (off: no griefing), `events.wrathAutoStartChance`.
+`config/olympus.json` holds every number (damage, durations, cooldowns, radii, chances, item limit, loot chances, boss health, rewards). It's created with defaults on first run and synced to clients; `/olympus reload` applies changes live. Notable options: `general.maxGodItems` (3; creative players and ops ignore it unless `general.opsIgnoreLimit` is false), `general.starterTier` (netherite / diamond / iron, restart needed), `general.abilitiesAffectPlayers` (turn PvP effects off), `general.claimDelayMinutes` (anti alt-farming), `lightning.lightningFire` (off: no griefing), `events.wrathAutoStartChance`.
 
 ## Development
 - `./gradlew build`: builds and runs 27 automated in-game tests
