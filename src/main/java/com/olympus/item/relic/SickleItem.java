@@ -31,9 +31,9 @@ import net.minecraft.world.phys.Vec3;
  * Demeter — Sickle of Demeter. A netherite hoe; right-click crops to make everything in a 5x5 area
  * ripen instantly. Right-clicking anything that isn't near crops tills like a normal hoe.
  */
-public class SickleItem extends Item implements GodItem {
-	public SickleItem(Properties properties) {
-		super(properties);
+public class SickleItem extends net.minecraft.world.item.HoeItem implements GodItem {
+	public SickleItem(net.minecraft.world.item.ToolMaterial material, Properties properties) {
+		super(material, -4.0F, 0.0F, properties);
 	}
 
 	@Override

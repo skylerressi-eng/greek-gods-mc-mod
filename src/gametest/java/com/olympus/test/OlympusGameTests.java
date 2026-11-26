@@ -451,6 +451,48 @@ public class OlympusGameTests {
 		helper.succeed();
 	}
 
+	@GameTest
+	public void sickleTillsAndStaysUnbreakable(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ItemStack sickle = new ItemStack(ModItems.SICKLE_OF_DEMETER);
+		helper.assertFalse(sickle.isDamageableItem(), "Sickle has durability");
+		helper.assertTrue(ModItems.SICKLE_OF_DEMETER instanceof net.minecraft.world.item.HoeItem, "Sickle is not a hoe");
+		helper.setBlock(new BlockPos(1, 1, 1), Blocks.DIRT);
+		helper.setBlock(new BlockPos(1, 2, 1), Blocks.AIR);
+		player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, sickle);
+		BlockPos dirt = helper.absolutePos(new BlockPos(1, 1, 1));
+		var hit = new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.atCenterOf(dirt).add(0, 0.5, 0), net.minecraft.core.Direction.UP, dirt, false);
+		sickle.useOn(new net.minecraft.world.item.context.UseOnContext(player, net.minecraft.world.InteractionHand.MAIN_HAND, hit));
+		helper.assertBlockPresent(Blocks.FARMLAND, new BlockPos(1, 1, 1));
+		helper.succeed();
+	}
+
+	@GameTest
+	public void creativeLegendaryCopiesDontClaimTheRealOne(GameTestHelper helper) {
+		var server = helper.getLevel().getServer();
+		com.olympus.data.LegendaryRegistry.remove(server, "golden_fleece");
+		ServerPlayer admin = helper.makeMockServerPlayerInLevel();
+		admin.setGameMode(net.minecraft.world.level.GameType.CREATIVE);
+		admin.getInventory().add(new ItemStack(ModItems.GOLDEN_FLEECE));
+		com.olympus.event.EventManager.guardLegendaries(admin);
+		helper.assertTrue(com.olympus.data.LegendaryRegistry.get(server, "golden_fleece").isEmpty(), "a creative copy claimed the legendary");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void summonsSpareTheOwnersAllies(GameTestHelper helper) {
+		ServerPlayer owner = helper.makeMockServerPlayerInLevel();
+		ServerPlayer friend = helper.makeMockServerPlayerInLevel();
+		PlayerOlympusData.set(owner, PlayerOlympusData.get(owner).withAllies(List.of(friend.getUUID())));
+		Zombie zombie = helper.spawn(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+		com.olympus.handler.MirrorHandler.charmAlly(zombie, owner, 200);
+		zombie.setTarget(friend);
+		helper.assertTrue(zombie.getTarget() != friend, "charmed mob attacked the owner's ally");
+		zombie.setTarget(owner);
+		helper.assertTrue(zombie.getTarget() != owner, "charmed mob attacked its owner");
+		helper.succeed();
+	}
+
 	private static int countGodItems(ServerPlayer player) {
 		int n = 0;
 		for (int i = 0; i < player.getInventory().getContainerSize(); i++) {

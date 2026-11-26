@@ -84,8 +84,15 @@ public final class MirrorHandler {
 
 	/** @return true if {@code mob} must not target {@code target} right now. */
 	public static boolean isPacifiedAgainst(Mob mob, LivingEntity target) {
-		if (target == null || PACIFIED.isEmpty()) {
+		if (target == null || (PACIFIED.isEmpty() && CHARMED.isEmpty())) {
 			return false;
+		}
+		Pacify charm = CHARMED.get(mob.getUUID());
+		if (charm != null && target instanceof net.minecraft.world.entity.player.Player p && mob.level().getGameTime() < charm.until()) {
+			var owner = p.level().getServer() == null ? null : p.level().getServer().getPlayerList().getPlayer(charm.player());
+			if (owner == null || com.olympus.util.Targets.isAlly(owner, p) || !com.olympus.config.ConfigManager.get().general.abilitiesAffectPlayers) {
+				return true; // your summons and charmed mobs never turn on you or your allies
+			}
 		}
 		Pacify p = PACIFIED.get(mob.getUUID());
 		return p != null && p.player().equals(target.getUUID()) && mob.level().getGameTime() < p.until();

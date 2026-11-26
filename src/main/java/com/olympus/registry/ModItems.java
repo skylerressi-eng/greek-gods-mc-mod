@@ -119,8 +119,8 @@ public final class ModItems {
 		p -> new SimpleRelicItem(p, God.HEPHAESTUS, true, () -> 0, () -> ConfigManager.get().hammerOfHephaestus.forgeFireCooldownSeconds),
 		GodProperties.unbreakable(GodProperties.base().pickaxe(STARTER.tool, 1.0F, -2.8F)));
 
-	public static final Item SICKLE_OF_DEMETER = starter("sickle_of_demeter", SickleItem::new,
-		GodProperties.unbreakable(GodProperties.base().hoe(STARTER.tool, -4.0F, 0.0F)));
+	// A real HoeItem (so it tills), with durability stripped after the hoe stats are applied.
+	public static final Item SICKLE_OF_DEMETER = starter("sickle_of_demeter", p -> new SickleItem(STARTER.tool, p), GodProperties.unbreakableHoe());
 
 	public static final Item GOBLET_OF_DIONYSUS = starter("goblet_of_dionysus", GobletItem::new, GodProperties.base());
 

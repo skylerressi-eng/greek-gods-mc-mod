@@ -136,7 +136,11 @@ public final class OlympusCommand {
 				pos = pos.add(look.normalize().scale(8));
 			}
 		}
-		var error = com.olympus.event.EventManager.start(event, source.getLevel(), net.minecraft.core.BlockPos.containing(pos));
+		var target = net.minecraft.core.BlockPos.containing(pos);
+		if (!source.getLevel().getBlockState(target).getCollisionShape(source.getLevel(), target).isEmpty()) {
+			target = net.minecraft.core.BlockPos.containing(source.getPosition()); // wall in front: spawn at the admin instead
+		}
+		var error = com.olympus.event.EventManager.start(event, source.getLevel(), target);
 		if (error.isPresent()) {
 			c.getSource().sendFailure(error.get());
 			return 0;

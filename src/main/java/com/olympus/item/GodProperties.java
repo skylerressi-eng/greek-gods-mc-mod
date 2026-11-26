@@ -46,6 +46,20 @@ public final class GodProperties {
 	}
 
 	/**
+	 * Properties for a god item built on vanilla's HoeItem, whose constructor applies the hoe
+	 * stats itself: durability is stripped right after.
+	 */
+	public static Item.Properties unbreakableHoe() {
+		Item.Properties props = new Item.Properties() {
+			@Override
+			public Item.Properties hoe(ToolMaterial material, float damage, float speed) {
+				return unbreakable(super.hoe(material, damage, speed));
+			}
+		};
+		return props.stacksTo(1).fireResistant().rarity(Rarity.RARE).component(com.olympus.registry.ModComponents.UPGRADE_LEVEL, 0);
+	}
+
+	/**
 	 * Removes durability entirely: no damage bar, can never break, can't be repaired.
 	 * Must be applied after tool/armor properties, which add durability.
 	 */

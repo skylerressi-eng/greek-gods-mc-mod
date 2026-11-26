@@ -84,6 +84,10 @@ public final class EventManager {
 		}
 		boss.setHealth(health);
 		boss.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
+		// Never spawn inside a wall: find room a little higher, else use the requested spot's surface.
+		for (int up = 0; up < 8 && !level.noCollision(boss); up++) {
+			boss.snapTo(pos.getX() + 0.5, pos.getY() + up + 1, pos.getZ() + 0.5, 0, 0);
+		}
 		boss.setCustomName(Component.translatable("entity.olympus." + BuiltInRegistries.ENTITY_TYPE.getKey(event.bossType()).getPath()).withStyle(event.god.style()).withStyle(ChatFormatting.BOLD));
 		boss.setCustomNameVisible(true);
 		level.addFreshEntity(boss);
@@ -264,6 +268,9 @@ public final class EventManager {
 			ModComponents.Legendary tag = stack.get(ModComponents.LEGENDARY);
 			Optional<LegendaryRegistry.Entry> entry = LegendaryRegistry.get(server, id);
 			if (tag == null) {
+				if (player.isCreative()) {
+					continue; // creative-menu copies stay unbound and never claim the real legendary
+				}
 				if (entry.isEmpty()) {
 					UUID instance = UUID.randomUUID();
 					stack.set(ModComponents.LEGENDARY, new ModComponents.Legendary(instance, name));
