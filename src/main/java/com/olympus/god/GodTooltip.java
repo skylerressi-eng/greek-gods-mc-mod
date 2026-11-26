@@ -33,6 +33,17 @@ public final class GodTooltip {
 			lines.add(at, Component.translatable("olympus.hint.ascension_core").withStyle(ChatFormatting.GRAY));
 			return;
 		}
+		String hint = stack.is(ModItems.AMBROSIA) ? "olympus.hint.ambrosia" : stack.is(ModItems.NECTAR) ? "olympus.hint.nectar"
+			: stack.is(ModItems.SUN_ARROW) ? "olympus.hint.sun_arrow" : stack.is(ModItems.HOPLITE_HELMET) ? "olympus.hint.hoplite_helmet"
+			: stack.is(ModItems.HOPLITE_CHESTPLATE) ? "olympus.hint.hoplite_chestplate" : stack.is(ModItems.HOPLITE_LEGGINGS) ? "olympus.hint.hoplite_leggings"
+			: stack.is(ModItems.HOPLITE_BOOTS) ? "olympus.hint.hoplite_boots" : null;
+		if (hint != null) {
+			if (hint.startsWith("olympus.hint.hoplite")) {
+				lines.add(at, Component.translatable("olympus.hint.hoplite_set").withStyle(ChatFormatting.DARK_AQUA));
+			}
+			lines.add(at, Component.translatable(hint).withStyle(ChatFormatting.GOLD));
+			return;
+		}
 		if (stack.is(ModItems.LAUREL_OF_OLYMPUS)) {
 			lines.add(at, Component.translatable("olympus.hint.laurel", ConfigManager.get().general.laurelMaxBonusSlots).withStyle(ChatFormatting.GOLD));
 			return;

@@ -414,6 +414,11 @@ public class OlympusGameTests {
 		ServerPlayer caster = helper.makeMockServerPlayerInLevel();
 		ServerPlayer friend = helper.makeMockServerPlayerInLevel();
 		ServerPlayer enemy = helper.makeMockServerPlayerInLevel();
+		// Stand them together inside the (loaded) test area.
+		for (ServerPlayer p : List.of(caster, friend, enemy)) {
+			var at = helper.absoluteVec(new net.minecraft.world.phys.Vec3(1.5, 1, 1.5));
+			p.snapTo(at.x, at.y, at.z, 0, 0);
+		}
 		helper.assertFalse(com.olympus.util.Targets.alliesAround(caster, 10).contains(enemy), "a non-ally got buffs");
 		helper.assertTrue(com.olympus.util.Targets.alliesAround(caster, 10).contains(caster), "caster should buff themselves");
 		PlayerOlympusData.set(caster, PlayerOlympusData.get(caster).withAllies(List.of(friend.getUUID())));
@@ -490,6 +495,48 @@ public class OlympusGameTests {
 		helper.assertTrue(zombie.getTarget() != friend, "charmed mob attacked the owner's ally");
 		zombie.setTarget(owner);
 		helper.assertTrue(zombie.getTarget() != owner, "charmed mob attacked its owner");
+		helper.succeed();
+	}
+
+	private static double sum(ItemStack stack, net.minecraft.core.Holder<net.minecraft.world.entity.ai.attributes.Attribute> attribute) {
+		double total = 0;
+		for (var entry : stack.get(net.minecraft.core.component.DataComponents.ATTRIBUTE_MODIFIERS).modifiers()) {
+			if (entry.attribute().equals(attribute)) {
+				total += entry.modifier().amount();
+			}
+		}
+		return total;
+	}
+
+	@GameTest
+	public void harpeOutDamagesNetherite(GameTestHelper helper) {
+		var dmg = net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE;
+		double netherite = sum(new ItemStack(Items.NETHERITE_SWORD), dmg);
+		double harpe = sum(new ItemStack(ModItems.HARPE), dmg);
+		helper.assertTrue(harpe >= netherite + 1.9, "Harpe (" + harpe + ") should beat a netherite sword (" + netherite + ")");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void ambrosiaFullyHeals(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+		player.setHealth(2f);
+		player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.POISON, 200));
+		ItemStack ambrosia = new ItemStack(ModItems.AMBROSIA, 2);
+		ModItems.AMBROSIA.finishUsingItem(ambrosia, helper.getLevel(), player);
+		helper.assertTrue(player.getHealth() >= player.getMaxHealth(), "not fully healed");
+		helper.assertFalse(player.hasEffect(net.minecraft.world.effect.MobEffects.POISON), "poison not cleared");
+		helper.assertTrue(player.hasEffect(net.minecraft.world.effect.MobEffects.RESISTANCE), "no Resistance");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void hoplitePiecesHaveBonuses(GameTestHelper helper) {
+		helper.assertTrue(sum(new ItemStack(ModItems.HOPLITE_CHESTPLATE), net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH) == 4, "breastplate: no extra hearts");
+		helper.assertTrue(sum(new ItemStack(ModItems.HOPLITE_LEGGINGS), net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED) > 0, "greaves: no speed");
+		helper.assertTrue(sum(new ItemStack(ModItems.HOPLITE_BOOTS), net.minecraft.world.entity.ai.attributes.Attributes.FALL_DAMAGE_MULTIPLIER) < 0, "sandals: no fall protection");
+		helper.assertTrue(sum(new ItemStack(ModItems.HOPLITE_CHESTPLATE), net.minecraft.world.entity.ai.attributes.Attributes.ARMOR) == 8, "breastplate lost netherite armor");
 		helper.succeed();
 	}
 

@@ -273,10 +273,17 @@ public class OlympusConfig {
 	}
 
 	public static class Consumables {
-		public float ambrosiaHeal = 12.0f;
-		public int ambrosiaRegenSeconds = 10;
+		/** Ambrosia: full heal, clears harmful effects, then a god-tier buff set. */
+		public int ambrosiaRegenSeconds = 15;
+		public int ambrosiaRegenAmplifier = 2;
 		public int ambrosiaAbsorptionSeconds = 120;
+		public int ambrosiaAbsorptionAmplifier = 3;
+		public int ambrosiaResistanceSeconds = 30;
+		public int ambrosiaStrengthSeconds = 30;
+		public int ambrosiaFireResistanceSeconds = 180;
 		public int ambrosiaCooldownSeconds = 30;
+		/** Hoplite full set: attackers take this share of their melee damage back. */
+		public double hopliteReflect = 0.15;
 		public int nectarResistanceSeconds = 30;
 		public int sunArrowFireSeconds = 5;
 		public int sunArrowLightSeconds = 5;

@@ -38,9 +38,24 @@ public final class ConsumableItems {
 		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
 			ItemStack result = super.finishUsingItem(stack, level, entity);
 			if (level instanceof ServerLevel server) {
-				entity.heal(cfg().ambrosiaHeal);
-				entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, cfg().ambrosiaRegenSeconds * 20, 1));
-				entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, cfg().ambrosiaAbsorptionSeconds * 20, 1));
+				OlympusConfig.Consumables c = cfg();
+				// Food of the gods: full heal, harmful effects gone, then a god-tier buff set.
+				entity.setHealth(entity.getMaxHealth());
+				for (var effect : new ArrayList<>(entity.getActiveEffects())) {
+					if (effect.getEffect().value().getCategory() == MobEffectCategory.HARMFUL) {
+						entity.removeEffect(effect.getEffect());
+					}
+				}
+				entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, c.ambrosiaRegenSeconds * 20, c.ambrosiaRegenAmplifier));
+				entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, c.ambrosiaAbsorptionSeconds * 20, c.ambrosiaAbsorptionAmplifier));
+				entity.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, c.ambrosiaResistanceSeconds * 20, 1));
+				entity.addEffect(new MobEffectInstance(MobEffects.STRENGTH, c.ambrosiaStrengthSeconds * 20, 0));
+				entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, c.ambrosiaFireResistanceSeconds * 20, 0));
+				if (entity instanceof Player p) {
+					p.getFoodData().setFoodLevel(20);
+					p.getFoodData().setSaturation(20.0f);
+				}
+				Fx.helix(server, ModParticles.DIVINE_GLINT, entity.position(), 0.8, 2.4, 50);
 				Fx.burst(server, ModParticles.DIVINE_GLINT, entity.position().add(0, 1.2, 0), 25, 0.4, 0.05);
 				Fx.sound(entity, ModSounds.LYRE_SHIMMER, 0.8f, 1.4f);
 				if (entity instanceof Player player) {

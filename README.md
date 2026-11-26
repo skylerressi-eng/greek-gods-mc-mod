@@ -58,10 +58,10 @@ Every relic looks like its vanilla base item (Talaria = gold leather boots, Gobl
 | Blessing Core / Ascension Core | Upgrade cores (smithing table template slot) |
 | God Swapper | Rerolls your starter relic |
 | Laurel of Olympus | Right-click: permanently carry one more god item (up to 5) |
-| Ambrosia | Heals 6 hearts, Regeneration II, Absorption II (30 s cooldown) |
+| Ambrosia | Full heal, clears harmful effects, Regeneration III, Absorption IV, Resistance II, Strength, Fire Resistance, full hunger (30 s cooldown) |
 | Nectar | Clears all harmful effects, Resistance I |
 | Sun Arrows | Set targets on fire and light up where they land |
-| Hoplite Armor | Full set: Resistance I + extra knockback resistance (normal durability) |
+| Hoplite Armor | Netherite armor with a bonus per piece (helmet: no Blindness/Darkness, breastplate: +2 hearts, greaves: +10% speed, sandals: half fall damage). Full set: Resistance I, extra knockback resistance, melee attackers take 15% back |
 | Gorgoneion / Thunderbolt Banner Patterns | Banner and shield designs for the loom |
 | Codex of Olympus | The in-game guide |
 

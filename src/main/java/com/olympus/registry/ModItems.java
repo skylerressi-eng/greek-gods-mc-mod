@@ -138,7 +138,8 @@ public final class ModItems {
 		GodProperties.unbreakable(GodProperties.base().pickaxe(net.minecraft.world.item.ToolMaterial.NETHERITE, 1.0F, -2.8F)));
 	public static final Item HARPE = register("harpe",
 		p -> new SimpleRelicItem(p, God.HERMES, false, () -> 0, () -> ConfigManager.get().harpe.leapCooldownSeconds),
-		GodProperties.unbreakable(GodProperties.base().sword(net.minecraft.world.item.ToolMaterial.NETHERITE, 3.0F, -2.4F)));
+		// 10 attack damage: hits harder than an unenchanted netherite sword (8).
+		GodProperties.unbreakable(GodProperties.base().sword(net.minecraft.world.item.ToolMaterial.NETHERITE, 5.0F, -2.4F)));
 	public static final Item THYRSUS = register("thyrsus",
 		p -> new SimpleRelicItem(p, God.DIONYSUS, false, () -> 0, () -> ConfigManager.get().thyrsus.snareCooldownSeconds),
 		GodProperties.unbreakable(GodProperties.base().sword(net.minecraft.world.item.ToolMaterial.NETHERITE, 3.0F, -2.4F)));
@@ -186,8 +187,24 @@ public final class ModItems {
 			.enchantable(15);
 	}
 
+	/**
+	 * Hoplite armor: netherite stats plus a bonus per piece. Helmet: immune to Blindness and
+	 * Darkness (handled in CraftedRelicHandler). Breastplate: +2 hearts. Greaves: +10% speed.
+	 * Sandals: half fall damage. Full set: Resistance I, more knockback resistance, and attackers
+	 * take back part of their melee damage.
+	 */
 	private static Item hoplite(String name, ArmorType type) {
-		return register(name, Item::new, new Item.Properties().humanoidArmor(net.minecraft.world.item.equipment.ArmorMaterials.NETHERITE, type).fireResistant().rarity(Rarity.RARE));
+		var material = net.minecraft.world.item.equipment.ArmorMaterials.NETHERITE;
+		var attributes = material.createAttributes(type);
+		var group = EquipmentSlotGroup.bySlot(type.getSlot());
+		var id = Olympus.id(name + "_bonus");
+		attributes = switch (type) {
+			case CHESTPLATE -> attributes.withModifierAdded(Attributes.MAX_HEALTH, new AttributeModifier(id, 4.0, AttributeModifier.Operation.ADD_VALUE), group);
+			case LEGGINGS -> attributes.withModifierAdded(Attributes.MOVEMENT_SPEED, new AttributeModifier(id, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), group);
+			case BOOTS -> attributes.withModifierAdded(Attributes.FALL_DAMAGE_MULTIPLIER, new AttributeModifier(id, -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), group);
+			default -> attributes;
+		};
+		return register(name, Item::new, new Item.Properties().humanoidArmor(material, type).attributes(attributes).fireResistant().rarity(Rarity.RARE));
 	}
 
 	private static <T extends Item> T legendary(String name, Function<Item.Properties, T> factory, Item.Properties properties) {
