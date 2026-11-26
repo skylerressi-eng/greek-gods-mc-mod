@@ -2,12 +2,12 @@ package com.olympus.client.datagen;
 
 import com.olympus.registry.ModBlocks;
 import java.util.concurrent.CompletableFuture;
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.core.HolderLookup;
 
-public class OlympusLootProvider extends FabricBlockLootSubProvider {
-	public OlympusLootProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+public class OlympusLootProvider extends FabricBlockLootTableProvider {
+	public OlympusLootProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registries) {
 		super(output, registries);
 	}
 

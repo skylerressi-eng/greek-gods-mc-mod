@@ -3,7 +3,7 @@ package com.olympus.client.datagen;
 import com.olympus.registry.ModBlocks;
 import com.olympus.registry.ModItems;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.model.ItemModelUtils;
@@ -13,7 +13,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 
 public class OlympusModelProvider extends FabricModelProvider {
-	public OlympusModelProvider(FabricPackOutput output) {
+	public OlympusModelProvider(FabricDataOutput output) {
 		super(output);
 	}
 
@@ -37,10 +37,9 @@ public class OlympusModelProvider extends FabricModelProvider {
 		generators.generateBow(ModItems.SILVER_BOW);
 
 		// The Aegis reuses the vanilla shield model and renderer; its emblem comes from its banner patterns.
-		generators.itemModelOutput.accept(ModItems.AEGIS, ItemModelUtils.conditional(
-			ShieldSpecialRenderer.DEFAULT_TRANSFORMATION,
+		generators.generateBooleanDispatch(ModItems.AEGIS,
 			ItemModelUtils.isUsingItem(),
 			ItemModelUtils.specialModel(Identifier.withDefaultNamespace("item/shield_blocking"), new ShieldSpecialRenderer.Unbaked()),
-			ItemModelUtils.specialModel(Identifier.withDefaultNamespace("item/shield"), new ShieldSpecialRenderer.Unbaked())));
+			ItemModelUtils.specialModel(Identifier.withDefaultNamespace("item/shield"), new ShieldSpecialRenderer.Unbaked()));
 	}
 }

@@ -2,18 +2,15 @@
 
 Mod id `olympus` · Fabric · client + server mod
 
-## 0. Versions (checked against meta.fabricmc.net / Mojang, 2026-11-26)
+## 0. Versions
 
 | Component | Version | Notes |
 |---|---|---|
-| Minecraft | **26.3** (latest stable; 26.4 is only at pre-1) | |
-| Java | **25** (Mojang's manifest for 26.3 requires Java 25) | Gradle toolchain + foojay resolver auto-downloads JDK 25, so `./gradlew` works even if Debian only has JDK 21 installed |
+| Minecraft | **1.21.11** | changed from 26.3 at your request (the 26.3 code is tagged `mc-26.3-phase1`) |
+| Java | **21** (the game) | Gradle itself runs on JDK 25 (Loom needs it); `./gradlew` downloads it automatically |
 | Fabric Loader | 0.20.1 | |
-| Fabric API | 0.167.0+26.3 | |
-| Fabric Loom | 1.19.x (latest stable 1.19.4) | Since 26.1 the game ships **unobfuscated**, so there's no Yarn layer and the code uses Mojang's official names. Loom uses the non-remapping plugin |
-| Gradle | whatever version the official template's wrapper pins | |
-
-The project starts from the official Fabric template layout (split `main`/`client` source sets, `fabric.mod.json`, datagen entrypoint, `./gradlew runDatagen` output in `src/main/generated`).
+| Fabric API | 0.141.6+1.21.11 | |
+| Fabric Loom | 1.19 (`fabric-loom-remap`) | Mojang official mappings, remapped to intermediary for release |
 
 ### Additions after review
 - **Particles:** every god has its own particle type (storm spark, tide drop, shade, owl feather, war ember, sun mote, moonbeam, wind wisp, forge spark, grain leaf, wine drop, rose petal, titan dust) plus a gold "divine glint". One configurable client particle class (`DivineParticle`) gives each its own motion: crackle, flutter, spark, drop, smoke, wisp or mote.

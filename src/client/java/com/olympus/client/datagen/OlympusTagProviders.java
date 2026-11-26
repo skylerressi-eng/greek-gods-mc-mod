@@ -5,8 +5,8 @@ import com.olympus.registry.ModBlocks;
 import com.olympus.registry.ModItems;
 import com.olympus.registry.ModKeys;
 import java.util.concurrent.CompletableFuture;
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -24,8 +24,8 @@ public final class OlympusTagProviders {
 		return BuiltInRegistries.ITEM.getResourceKey(item).orElseThrow();
 	}
 
-	public static class Blocks extends FabricTagsProvider.BlockTagsProvider {
-		public Blocks(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+	public static class Blocks extends FabricTagProvider.BlockTagProvider {
+		public Blocks(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registries) {
 			super(output, registries);
 		}
 
@@ -38,8 +38,8 @@ public final class OlympusTagProviders {
 		}
 	}
 
-	public static class Items extends FabricTagsProvider.ItemTagsProvider {
-		public Items(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registries, Blocks blocks) {
+	public static class Items extends FabricTagProvider.ItemTagProvider {
+		public Items(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registries, Blocks blocks) {
 			super(output, registries, blocks);
 		}
 
@@ -63,8 +63,8 @@ public final class OlympusTagProviders {
 		}
 	}
 
-	public static class BannerPatterns extends FabricTagsProvider<BannerPattern> {
-		public BannerPatterns(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+	public static class BannerPatterns extends FabricTagProvider<BannerPattern> {
+		public BannerPatterns(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registries) {
 			super(output, Registries.BANNER_PATTERN, registries);
 		}
 
@@ -75,8 +75,8 @@ public final class OlympusTagProviders {
 		}
 	}
 
-	public static class EntityTypes extends FabricTagsProvider<EntityType<?>> {
-		public EntityTypes(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+	public static class EntityTypes extends FabricTagProvider<EntityType<?>> {
+		public EntityTypes(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registries) {
 			super(output, Registries.ENTITY_TYPE, registries);
 		}
 
@@ -84,10 +84,10 @@ public final class OlympusTagProviders {
 		protected void addTags(HolderLookup.Provider registries) {
 			// Olympus bosses are added in Phase 4. Vanilla bosses are also checked in code.
 			builder(ModKeys.BOSSES)
-				.add(BuiltInRegistries.ENTITY_TYPE.getResourceKey(net.minecraft.world.entity.EntityTypes.ENDER_DRAGON).orElseThrow())
-				.add(BuiltInRegistries.ENTITY_TYPE.getResourceKey(net.minecraft.world.entity.EntityTypes.WITHER).orElseThrow())
-				.add(BuiltInRegistries.ENTITY_TYPE.getResourceKey(net.minecraft.world.entity.EntityTypes.WARDEN).orElseThrow())
-				.add(BuiltInRegistries.ENTITY_TYPE.getResourceKey(net.minecraft.world.entity.EntityTypes.ELDER_GUARDIAN).orElseThrow());
+				.add(BuiltInRegistries.ENTITY_TYPE.getResourceKey(net.minecraft.world.entity.EntityType.ENDER_DRAGON).orElseThrow())
+				.add(BuiltInRegistries.ENTITY_TYPE.getResourceKey(net.minecraft.world.entity.EntityType.WITHER).orElseThrow())
+				.add(BuiltInRegistries.ENTITY_TYPE.getResourceKey(net.minecraft.world.entity.EntityType.WARDEN).orElseThrow())
+				.add(BuiltInRegistries.ENTITY_TYPE.getResourceKey(net.minecraft.world.entity.EntityType.ELDER_GUARDIAN).orElseThrow());
 		}
 	}
 }

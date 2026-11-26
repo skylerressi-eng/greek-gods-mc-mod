@@ -42,7 +42,6 @@ import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
-import net.minecraft.world.level.block.entity.BannerPatterns;
 
 public final class ModItems {
 	/** Every item in creative-tab order. */
@@ -64,23 +63,20 @@ public final class ModItems {
 	public static final Item GOD_SWAPPER = register("god_swapper", Item::new,
 		new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant().component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
 	public static final Item GORGONEION_BANNER_PATTERN = register("gorgoneion_banner_pattern", Item::new,
-		new Item.Properties().stacksTo(1).rarity(Rarity.RARE).delayedComponent(DataComponents.PROVIDES_BANNER_PATTERNS, c -> c.getOrThrow(ModKeys.PATTERN_ITEM_GORGONEION)));
+		new Item.Properties().stacksTo(1).rarity(Rarity.RARE).component(DataComponents.PROVIDES_BANNER_PATTERNS, ModKeys.PATTERN_ITEM_GORGONEION));
 	public static final Item THUNDERBOLT_BANNER_PATTERN = register("thunderbolt_banner_pattern", Item::new,
-		new Item.Properties().stacksTo(1).rarity(Rarity.RARE).delayedComponent(DataComponents.PROVIDES_BANNER_PATTERNS, c -> c.getOrThrow(ModKeys.PATTERN_ITEM_THUNDERBOLT)));
+		new Item.Properties().stacksTo(1).rarity(Rarity.RARE).component(DataComponents.PROVIDES_BANNER_PATTERNS, ModKeys.PATTERN_ITEM_THUNDERBOLT));
 
 	// ─── Starter relics (one per Olympian) ──────────────────────────────────
 	public static final Item AEGIS = starter("aegis", AegisItem::new, GodProperties.base()
 		.equippableUnswappable(EquipmentSlot.OFFHAND)
 		.component(DataComponents.BASE_COLOR, DyeColor.YELLOW)
-		.delayedComponent(DataComponents.BANNER_PATTERNS, c -> new BannerPatternLayers(List.of(
-			new BannerPatternLayers.Layer(c.getOrThrow(BannerPatterns.GRADIENT_UP), DyeColor.ORANGE),
-			new BannerPatternLayers.Layer(c.getOrThrow(ModKeys.GORGONEION), DyeColor.BROWN),
-			new BannerPatternLayers.Layer(c.getOrThrow(BannerPatterns.BORDER), DyeColor.ORANGE))))
-		.delayedComponent(DataComponents.BLOCKS_ATTACKS, c -> new BlocksAttacks(
+		.component(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY) // emblem added by AegisItem.applyEmblem
+		.component(DataComponents.BLOCKS_ATTACKS, new BlocksAttacks(
 			0.25F, 1.0F,
 			List.of(new BlocksAttacks.DamageReduction(90.0F, Optional.empty(), 0.0F, 1.0F)),
 			new BlocksAttacks.ItemDamageFunction(3.0F, 1.0F, 1.0F),
-			Optional.of(c.getOrThrow(DamageTypeTags.BYPASSES_SHIELD)),
+			Optional.of(DamageTypeTags.BYPASSES_SHIELD),
 			Optional.of(SoundEvents.SHIELD_BLOCK),
 			Optional.of(SoundEvents.SHIELD_BREAK))));
 

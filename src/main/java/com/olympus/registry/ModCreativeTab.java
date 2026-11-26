@@ -1,7 +1,7 @@
 package com.olympus.registry;
 
 import com.olympus.Olympus;
-import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -18,12 +18,14 @@ public final class ModCreativeTab {
 	}
 
 	public static void register() {
-		CreativeModeTab tab = FabricCreativeModeTab.builder()
+		CreativeModeTab tab = FabricItemGroup.builder()
 			.title(Component.translatable("itemGroup.olympus.relics_of_olympus"))
 			.icon(() -> new ItemStack(ModItems.AEGIS))
 			.displayItems((params, output) -> {
 				for (Item item : ModItems.ALL) {
-					output.accept(item);
+					ItemStack stack = new ItemStack(item);
+					com.olympus.item.relic.AegisItem.applyEmblem(stack, params.holders());
+					output.accept(stack);
 				}
 			})
 			.build();

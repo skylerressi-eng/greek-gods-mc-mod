@@ -13,7 +13,7 @@ public abstract class AbstractArrowMixin {
 	@Inject(method = "tick", at = @At("HEAD"))
 	private void olympus$silverArrowTick(CallbackInfo ci) {
 		AbstractArrow self = (AbstractArrow) (Object) this;
-		if (self.entityTags().contains(SilverBowItem.ARROW_TAG)) {
+		if (self.getTags().contains(SilverBowItem.ARROW_TAG)) {
 			SilverBowHandler.tickArrow(self);
 		}
 	}

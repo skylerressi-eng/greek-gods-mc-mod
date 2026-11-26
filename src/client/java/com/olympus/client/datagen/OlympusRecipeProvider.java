@@ -2,11 +2,12 @@ package com.olympus.client.datagen;
 
 import com.olympus.registry.ModItems;
 import java.util.concurrent.CompletableFuture;
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.item.Items;
@@ -15,20 +16,20 @@ import net.minecraft.world.item.crafting.Recipe;
 
 /** Phase 1 recipes (materials). Layouts are documented in RECIPES.md. */
 public class OlympusRecipeProvider extends FabricRecipeProvider {
-	public OlympusRecipeProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+	public OlympusRecipeProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registries) {
 		super(output, registries);
 	}
 
 	@Override
-	protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
-		return new RecipeProvider(recipes, advancements) {
+	protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
+		return new RecipeProvider(registries, output) {
 			@Override
 			public void buildRecipes() {
 				// Base material: everything else is built from it, so it is only moderately harder.
 				shaped(RecipeCategory.MISC, ModItems.OLYMPIAN_BRONZE_INGOT)
 					.pattern("GDG").pattern("CSC").pattern("GDG")
 					.define('G', Items.GOLD_BLOCK).define('D', Items.DIAMOND)
-					.define('C', Ingredient.of(Items.COPPER_BLOCK.weathering().unaffected(), Items.COPPER_BLOCK.waxed().unaffected()))
+					.define('C', Ingredient.of(Items.COPPER_BLOCK, Items.WAXED_COPPER_BLOCK))
 					.define('S', Items.NETHERITE_SCRAP)
 					.unlockedBy(getHasName(Items.NETHERITE_SCRAP), has(Items.NETHERITE_SCRAP))
 					.save(output, "olympian_bronze_ingot_from_alloy");
@@ -68,7 +69,7 @@ public class OlympusRecipeProvider extends FabricRecipeProvider {
 					.unlockedBy(getHasName(Items.GOLD_BLOCK), has(Items.GOLD_BLOCK))
 					.save(output);
 				shapeless(RecipeCategory.MISC, ModItems.THUNDERBOLT_BANNER_PATTERN)
-					.requires(Items.PAPER).requires(Items.GOLD_BLOCK).requires(Items.LIGHTNING_ROD.weathering().unaffected())
+					.requires(Items.PAPER).requires(Items.GOLD_BLOCK).requires(Items.LIGHTNING_ROD)
 					.unlockedBy(getHasName(Items.GOLD_BLOCK), has(Items.GOLD_BLOCK))
 					.save(output);
 			}

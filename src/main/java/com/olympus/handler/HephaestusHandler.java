@@ -52,7 +52,7 @@ public final class HephaestusHandler {
 				result.add(drop);
 				continue;
 			}
-			ItemStack out = recipe.get().value().assemble(new SingleRecipeInput(drop));
+			ItemStack out = recipe.get().value().assemble(new SingleRecipeInput(drop), level.registryAccess());
 			if (out.isEmpty()) {
 				result.add(drop);
 				continue;

@@ -59,7 +59,7 @@ public final class Cooldowns {
 		if (remaining <= 0) {
 			return true;
 		}
-		player.sendOverlayMessage(Component.translatable("olympus.message.cooldown", stack.getHoverName(), formatSeconds(remaining)).withStyle(ChatFormatting.RED));
+		player.displayClientMessage(Component.translatable("olympus.message.cooldown", stack.getHoverName(), formatSeconds(remaining)).withStyle(ChatFormatting.RED), true);
 		player.level().playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.COOLDOWN_DENY, SoundSource.PLAYERS, 0.5f, 0.8f);
 		return false;
 	}

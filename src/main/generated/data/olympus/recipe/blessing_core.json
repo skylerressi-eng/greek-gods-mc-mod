@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "D": "minecraft:diamond_block",
     "E": "minecraft:enchanted_golden_apple",
@@ -12,6 +13,7 @@
     "NDN"
   ],
   "result": {
+    "count": 1,
     "id": "olympus:blessing_core"
   }
 }

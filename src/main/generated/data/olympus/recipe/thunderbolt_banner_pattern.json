@@ -1,11 +1,13 @@
 {
   "type": "minecraft:crafting_shapeless",
+  "category": "misc",
   "ingredients": [
     "minecraft:paper",
     "minecraft:gold_block",
     "minecraft:lightning_rod"
   ],
   "result": {
+    "count": 1,
     "id": "olympus:thunderbolt_banner_pattern"
   }
 }

@@ -96,11 +96,11 @@ public class GobletItem extends Item implements GodItem {
 			if (random.nextDouble() < cfg().nauseaChance) {
 				player.addEffect(new MobEffectInstance(MobEffects.NAUSEA, cfg().nauseaSeconds * 20, 0));
 				Fx.sound(player, ModSounds.GOBLET_HIC, 1.0f, 1.3f);
-				player.sendOverlayMessage(Component.translatable("olympus.message.goblet_hangover").withStyle(ChatFormatting.DARK_PURPLE));
+				player.displayClientMessage(Component.translatable("olympus.message.goblet_hangover").withStyle(ChatFormatting.DARK_PURPLE), true);
 			} else {
 				Holder<MobEffect> effect = randomEffect(random);
 				player.addEffect(new MobEffectInstance(effect, upgrade.durationTicks(cfg().effectSeconds), 0, false, true, true));
-				player.sendOverlayMessage(Component.translatable("olympus.message.goblet_blessing", effect.value().getDisplayName()).withStyle(God.DIONYSUS.style()));
+				player.displayClientMessage(Component.translatable("olympus.message.goblet_blessing", effect.value().getDisplayName()).withStyle(God.DIONYSUS.style()), true);
 			}
 			Fx.burst(serverLevel, ModParticles.WINE_DROP, player.getEyePosition(), 25, 0.35, 0.05);
 			Fx.helix(serverLevel, ModParticles.WINE_DROP, player.position(), 0.7, 2.0, 24);

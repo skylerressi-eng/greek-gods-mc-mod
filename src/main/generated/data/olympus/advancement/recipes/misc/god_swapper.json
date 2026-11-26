@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipes": "olympus:god_swapper"
+        "recipe": "olympus:god_swapper"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

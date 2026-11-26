@@ -20,7 +20,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
@@ -131,7 +130,7 @@ public class SickleItem extends Item implements GodItem {
 		if (state.is(Blocks.NETHER_WART)) {
 			return state.getValue(NetherWartBlock.AGE) >= NetherWartBlock.MAX_AGE;
 		}
-		return !(state.getBlock() instanceof BonemealableBlock b) || !b.isValidBonemealTarget(level, pos, state, BonemealSource.INTERACTION);
+		return !(state.getBlock() instanceof BonemealableBlock b) || !b.isValidBonemealTarget(level, pos, state);
 	}
 
 	public static boolean growFully(ServerLevel level, BlockPos pos) {
@@ -151,10 +150,10 @@ public class SickleItem extends Item implements GodItem {
 			// Stems, berries, cocoa: apply growth until ripe (bounded).
 			for (int i = 0; i < 8; i++) {
 				BlockState current = level.getBlockState(pos);
-				if (!(current.getBlock() instanceof BonemealableBlock bb) || !bb.isValidBonemealTarget(level, pos, current, BonemealSource.INTERACTION)) {
+				if (!(current.getBlock() instanceof BonemealableBlock bb) || !bb.isValidBonemealTarget(level, pos, current)) {
 					break;
 				}
-				bb.performBonemeal(level, level.getRandom(), pos, current, BonemealSource.INTERACTION);
+				bb.performBonemeal(level, level.getRandom(), pos, current);
 			}
 			return true;
 		}

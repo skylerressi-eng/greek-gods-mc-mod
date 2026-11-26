@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "D": "minecraft:diamond_block",
     "E": "minecraft:echo_shard",
@@ -13,6 +14,7 @@
     "DGD"
   ],
   "result": {
+    "count": 1,
     "id": "olympus:god_swapper"
   }
 }

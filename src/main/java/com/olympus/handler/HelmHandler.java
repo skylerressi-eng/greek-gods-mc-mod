@@ -72,7 +72,7 @@ public final class HelmHandler {
 		boolean still = !cfg.requireStandingStill || moved < 9.0E-4; // < 0.03 blocks per tick
 		if (!helm.is(ModItems.HELM_OF_DARKNESS) || !player.isShiftKeyDown() || !still || !player.onGround()) {
 			if (CHARGE.remove(id) != null) {
-				player.sendOverlayMessage(Component.empty());
+				player.displayClientMessage(Component.empty(), true);
 			}
 			return;
 		}
@@ -91,7 +91,7 @@ public final class HelmHandler {
 		if (charge % 4 == 0) {
 			double a = charge * 0.6;
 			level.sendParticles(ModParticles.SHADE, player.getX() + Math.cos(a) * 0.7, player.getY() + 0.2 + charge / (double) needed, player.getZ() + Math.sin(a) * 0.7, 2, 0.05, 0.05, 0.05, 0.0);
-			player.sendOverlayMessage(progressBar(charge, needed));
+			player.displayClientMessage(progressBar(charge, needed), true);
 		}
 		if (charge == 1) {
 			Fx.sound(player, ModSounds.HELM_CHARGE, 0.5f, 0.6f);
@@ -121,7 +121,7 @@ public final class HelmHandler {
 		Fx.sound(player, ModSounds.HELM_VANISH, 1.0f, 0.7f);
 		Fx.burst(level, ModParticles.SHADE, player.position().add(0, 1, 0), 60, 0.4, 0.04);
 		Fx.ring(level, ModParticles.SHADE, player.position().add(0, 0.1, 0), 0.3, 24, 0.25);
-		player.sendOverlayMessage(Component.translatable("olympus.message.helm_vanish").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC));
+		player.displayClientMessage(Component.translatable("olympus.message.helm_vanish").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC), true);
 	}
 
 	/** Ends Hades' invisibility early (also used by the Blessed ambush hit). */

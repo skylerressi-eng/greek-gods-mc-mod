@@ -5,7 +5,6 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -19,12 +18,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Block.class)
 public abstract class BlockMixin {
 	@Inject(
-		method = "getDrops(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/entity/BlockEntity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/item/ItemInstance;)Ljava/util/List;",
+		method = "getDrops(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/entity/BlockEntity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/item/ItemStack;)Ljava/util/List;",
 		at = @At("RETURN"), cancellable = true)
-	private static void olympus$autoSmelt(BlockState state, ServerLevel level, BlockPos pos, BlockEntity blockEntity, Entity breaker, ItemInstance tool,
+	private static void olympus$autoSmelt(BlockState state, ServerLevel level, BlockPos pos, BlockEntity blockEntity, Entity breaker, ItemStack tool,
 		CallbackInfoReturnable<List<ItemStack>> cir) {
-		if (tool instanceof ItemStack stack && breaker != null) {
-			cir.setReturnValue(HephaestusHandler.smeltDrops(state, level, pos, stack, cir.getReturnValue()));
+		if (tool != null && breaker != null) {
+			cir.setReturnValue(HephaestusHandler.smeltDrops(state, level, pos, tool, cir.getReturnValue()));
 		}
 	}
 }

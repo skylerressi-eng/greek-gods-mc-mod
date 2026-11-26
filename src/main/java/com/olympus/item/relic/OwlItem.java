@@ -54,7 +54,7 @@ public class OwlItem extends CharmItem {
 		Fx.sound(player, ModSounds.OWL_HOOT, 1.4f, 1.0f);
 		Fx.sphere(level, ModParticles.OWL_FEATHER, player.position().add(0, 1, 0), 3.0, 80);
 		Fx.ring(level, ModParticles.OWL_FEATHER, player.position().add(0, 0.3, 0), 1.0, 32, 0.6);
-		player.sendOverlayMessage(Component.translatable("olympus.message.owl_reveal", targets.size()).withStyle(God.ATHENA.style()).withStyle(ChatFormatting.ITALIC));
+		player.displayClientMessage(Component.translatable("olympus.message.owl_reveal", targets.size()).withStyle(God.ATHENA.style()).withStyle(ChatFormatting.ITALIC), true);
 		return true;
 	}
 }

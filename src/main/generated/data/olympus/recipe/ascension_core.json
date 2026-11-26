@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "B": "olympus:olympian_bronze_block",
     "E": "minecraft:enchanted_golden_apple",
@@ -13,6 +14,7 @@
     "NEN"
   ],
   "result": {
+    "count": 1,
     "id": "olympus:ascension_core"
   }
 }

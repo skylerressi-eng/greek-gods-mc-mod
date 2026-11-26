@@ -2,14 +2,14 @@ package com.olympus.client.datagen;
 
 import com.olympus.registry.ModKeys;
 import java.util.concurrent.CompletableFuture;
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 
 /** Writes the banner patterns and damage type declared in {@link OlympusDataGenerator#buildRegistry}. */
 public class OlympusRegistryProvider extends FabricDynamicRegistryProvider {
-	public OlympusRegistryProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+	public OlympusRegistryProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registries) {
 		super(output, registries);
 	}
 

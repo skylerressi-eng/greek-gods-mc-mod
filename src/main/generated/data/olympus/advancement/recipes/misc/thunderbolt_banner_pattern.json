@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "olympus:thunderbolt_banner_pattern"
+        "recipe": "olympus:thunderbolt_banner_pattern"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

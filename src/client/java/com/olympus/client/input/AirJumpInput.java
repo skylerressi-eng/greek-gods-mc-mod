@@ -37,7 +37,7 @@ public final class AirJumpInput {
 			return;
 		}
 		ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
-		if (!pressed || !boots.is(ModItems.TALARIA) || client.gui.screen() != null) {
+		if (!pressed || !boots.is(ModItems.TALARIA) || client.screen != null) {
 			return;
 		}
 		if (player.getAbilities().flying || player.isFallFlying() || player.isPassenger() || player.isInLava() || player.isSpectator()) {

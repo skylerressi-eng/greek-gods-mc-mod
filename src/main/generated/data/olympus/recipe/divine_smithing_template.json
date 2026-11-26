@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "I": "olympus:olympian_bronze_ingot",
     "K": "minecraft:diamond_block",

@@ -82,8 +82,8 @@ public class DivineParticle extends SingleQuadParticle {
 	}
 
 	@Override
-	public int getLightCoords(float partialTick) {
-		return style.emissive() ? 0xF000F0 : super.getLightCoords(partialTick);
+	public int getLightColor(float partialTick) {
+		return style.emissive() ? 0xF000F0 : super.getLightColor(partialTick);
 	}
 
 	public static class Provider implements ParticleProvider<SimpleParticleType> {

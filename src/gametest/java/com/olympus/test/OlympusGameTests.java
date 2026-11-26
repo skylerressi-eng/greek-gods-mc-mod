@@ -23,7 +23,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -62,7 +62,9 @@ public class OlympusGameTests {
 
 	@GameTest
 	public void aegisCarriesTheGorgoneion(GameTestHelper helper) {
-		var patterns = new ItemStack(ModItems.AEGIS).get(DataComponents.BANNER_PATTERNS);
+		ItemStack aegis = new ItemStack(ModItems.AEGIS);
+		com.olympus.item.relic.AegisItem.applyEmblem(aegis, helper.getLevel().registryAccess());
+		var patterns = aegis.get(DataComponents.BANNER_PATTERNS);
 		helper.assertTrue(patterns != null && patterns.layers().stream().anyMatch(l -> l.pattern().is(ModKeys.GORGONEION)),
 			"Aegis should carry the Gorgoneion banner pattern");
 		helper.assertTrue(new ItemStack(ModItems.AEGIS).has(DataComponents.BLOCKS_ATTACKS), "Aegis must block like a shield");
@@ -109,7 +111,7 @@ public class OlympusGameTests {
 	@GameTest
 	public void divineLightningSparesTheCaster(GameTestHelper helper) {
 		ServerPlayer caster = helper.makeMockServerPlayerInLevel();
-		Zombie zombie = helper.spawn(EntityTypes.ZOMBIE, new BlockPos(1, 1, 1));
+		Zombie zombie = helper.spawn(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
 		caster.snapTo(zombie.getX(), zombie.getY(), zombie.getZ());
 		float casterHealth = caster.getHealth();
 		float zombieHealth = zombie.getHealth();

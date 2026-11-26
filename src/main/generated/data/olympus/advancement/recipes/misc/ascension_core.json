@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "olympus:ascension_core"
+        "recipe": "olympus:ascension_core"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

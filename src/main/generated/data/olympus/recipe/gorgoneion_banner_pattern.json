@@ -1,11 +1,13 @@
 {
   "type": "minecraft:crafting_shapeless",
+  "category": "misc",
   "ingredients": [
     "minecraft:paper",
     "minecraft:gold_block",
     "minecraft:spider_eye"
   ],
   "result": {
+    "count": 1,
     "id": "olympus:gorgoneion_banner_pattern"
   }
 }

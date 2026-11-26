@@ -84,7 +84,7 @@ public final class ClaimManager {
 	/** Puts the stack in the inventory, or drops it at the player's feet if there is no room. */
 	public static void give(ServerPlayer player, ItemStack stack) {
 		if (!player.getInventory().add(stack)) {
-			player.drop(stack, false, net.minecraft.util.Prediction.SERVER_ONLY);
+			player.drop(stack, false);
 		}
 	}
 }

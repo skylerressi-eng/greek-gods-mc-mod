@@ -21,7 +21,7 @@ public final class SilverBowHandler {
 
 	public static void register() {
 		ServerLivingEntityEvents.AFTER_DAMAGE.register((entity, source, baseDamage, damageTaken, blocked) -> {
-			if (!(source.getDirectEntity() instanceof AbstractArrow arrow) || !arrow.entityTags().contains(SilverBowItem.ARROW_TAG)) {
+			if (!(source.getDirectEntity() instanceof AbstractArrow arrow) || !arrow.getTags().contains(SilverBowItem.ARROW_TAG)) {
 				return;
 			}
 			if (!(arrow.getOwner() instanceof ServerPlayer shooter)) {

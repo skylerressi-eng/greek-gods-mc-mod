@@ -13,7 +13,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.minecraft.core.particles.SimpleParticleType;
 
 public class OlympusClient implements ClientModInitializer {
@@ -35,7 +35,7 @@ public class OlympusClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		ParticleProviderRegistry registry = ParticleProviderRegistry.getInstance();
+		ParticleFactoryRegistry registry = ParticleFactoryRegistry.getInstance();
 		for (Map.Entry<String, SimpleParticleType> entry : ModParticles.ALL.entrySet()) {
 			Style style = PARTICLE_STYLES.getOrDefault(entry.getKey(), Style.MOTE);
 			registry.register(entry.getValue(), sprites -> new DivineParticle.Provider(sprites, style));

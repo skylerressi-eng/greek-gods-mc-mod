@@ -6,13 +6,13 @@ import com.olympus.registry.ModCreativeTab;
 import com.olympus.registry.ModItems;
 import com.olympus.registry.ModSounds;
 import java.util.concurrent.CompletableFuture;
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.Item;
 
 public class OlympusLangProvider extends FabricLanguageProvider {
-	public OlympusLangProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+	public OlympusLangProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registries) {
 		super(output, registries);
 	}
 

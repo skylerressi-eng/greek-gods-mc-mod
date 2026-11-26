@@ -48,8 +48,8 @@ public final class OlympusNetwork {
 	}
 
 	public static void register() {
-		PayloadTypeRegistry.serverboundPlay().register(AirJumpPayload.TYPE, AirJumpPayload.CODEC);
-		PayloadTypeRegistry.clientboundPlay().register(ConfigSyncPayload.TYPE, ConfigSyncPayload.CODEC);
+		PayloadTypeRegistry.playC2S().register(AirJumpPayload.TYPE, AirJumpPayload.CODEC);
+		PayloadTypeRegistry.playS2C().register(ConfigSyncPayload.TYPE, ConfigSyncPayload.CODEC);
 
 		ServerPlayNetworking.registerGlobalReceiver(AirJumpPayload.TYPE, (payload, context) -> TalariaHandler.onAirJump(context.player()));
 	}

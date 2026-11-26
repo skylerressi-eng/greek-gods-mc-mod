@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "C": [
       "minecraft:copper_block",
@@ -15,6 +16,7 @@
     "GDG"
   ],
   "result": {
+    "count": 1,
     "id": "olympus:olympian_bronze_ingot"
   }
 }
