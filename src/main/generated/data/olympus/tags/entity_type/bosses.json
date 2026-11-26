@@ -1,5 +1,11 @@
 {
   "values": [
+    "olympus:typhon",
+    "olympus:cetus",
+    "olympus:cerberus",
+    "olympus:medusa",
+    "olympus:colchian_dragon",
+    "olympus:kronos",
     "minecraft:ender_dragon",
     "minecraft:wither",
     "minecraft:warden",

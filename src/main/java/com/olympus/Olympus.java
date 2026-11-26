@@ -46,14 +46,29 @@ public class Olympus implements ModInitializer {
 		ModSounds.init();
 		ModBlocks.init();
 		ModItems.init();
+		com.olympus.registry.ModEntities.init();
+		com.olympus.data.LegendaryRegistry.init();
 		PlayerOlympusData.init();
 		ModCreativeTab.register();
 		ModLoot.register();
 		OlympusNetwork.register();
 
 		AresHandler.register();
+		// Thrown god tridents always return; Riptide/Loyalty would break them, Channeling is built into Poseidon's.
+		net.fabricmc.fabric.api.item.v1.EnchantmentEvents.ALLOW_ENCHANTING.register((enchantment, stack, context) -> {
+			if (stack.getItem() instanceof com.olympus.item.relic.GodTridentItem
+				&& (enchantment.is(net.minecraft.world.item.enchantment.Enchantments.RIPTIDE) || enchantment.is(net.minecraft.world.item.enchantment.Enchantments.LOYALTY)
+				|| (stack.getItem() instanceof com.olympus.item.relic.PoseidonTridentItem && enchantment.is(net.minecraft.world.item.enchantment.Enchantments.CHANNELING)))) {
+				return net.fabricmc.fabric.api.util.TriState.FALSE;
+			}
+			return net.fabricmc.fabric.api.util.TriState.DEFAULT;
+		});
 		SilverBowHandler.register();
 		com.olympus.handler.CombatHandler.register();
+		com.olympus.handler.UnderworldAllies.register();
+		com.olympus.handler.PetrifyHandler.register();
+		com.olympus.handler.LegendaryHandler.register();
+		com.olympus.handler.CraftedRelicHandler.register();
 
 		CommandRegistrationCallback.EVENT.register((dispatcher, context, selection) -> OlympusCommand.register(dispatcher));
 
@@ -69,26 +84,35 @@ public class Olympus implements ModInitializer {
 			AresHandler.forget(player.getUUID());
 			com.olympus.handler.CombatHandler.forget(player.getUUID());
 			com.olympus.ability.DivinePower.forget(player.getUUID());
+			com.olympus.handler.LegendaryHandler.forget(player.getUUID());
+			com.olympus.handler.CraftedRelicHandler.forget(player.getUUID());
 			com.olympus.limit.GodItemLimit.forget(player.getUUID());
 		});
 		EntityTrackingEvents.START_TRACKING.register(HelmHandler::onStartTracking);
 
 		ServerTickEvents.END_SERVER_TICK.register(Olympus::tick);
+		net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPED.register(server -> com.olympus.event.EventManager.reset());
 
 		LOGGER.info("The gods of Olympus awaken.");
 	}
 
 	private static void tick(MinecraftServer server) {
 		HelmHandler.tickServer(server);
+		com.olympus.handler.LegendaryHandler.tick(server);
+		com.olympus.handler.CraftedRelicHandler.tick(server);
+		com.olympus.handler.PetrifyHandler.tick(server);
 		for (ServerPlayer player : server.getPlayerList().getPlayers()) {
 			TalariaHandler.tickPlayer(player);
 		}
 		if (server.getTickCount() % 20 == 0) {
 			MirrorHandler.tick(server);
 			com.olympus.handler.CombatHandler.tick(server);
+			com.olympus.handler.UnderworldAllies.tick(server);
+			com.olympus.event.EventManager.tick(server);
 			for (ServerPlayer player : server.getPlayerList().getPlayers()) {
 				syncCooldownOverlays(player);
 				com.olympus.limit.GodItemLimit.sweep(player);
+				com.olympus.event.EventManager.guardLegendaries(player);
 				ClaimManager.tryAutoClaim(player);
 			}
 		}

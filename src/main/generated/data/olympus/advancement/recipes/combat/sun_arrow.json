@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_olympian_bronze_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "olympus:olympian_bronze_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "olympus:sun_arrow"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_olympian_bronze_ingot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "olympus:sun_arrow"
+    ]
+  }
+}

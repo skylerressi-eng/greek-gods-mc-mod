@@ -46,8 +46,13 @@ public final class GodTooltip {
 		Object[][] args = args(stack.getItem(), level);
 
 		List<Component> out = new ArrayList<>();
-		out.add(Component.translatable(godItem.isStarterRelic() ? "olympus.tooltip.starter_relic_of" : "olympus.tooltip.relic_of", god.displayName())
+		out.add(Component.translatable(ModItems.LEGENDARIES.contains(stack.getItem()) ? "olympus.tooltip.legendary_of"
+			: godItem.isStarterRelic() ? "olympus.tooltip.starter_relic_of" : "olympus.tooltip.relic_of", god.displayName())
 			.withStyle(ChatFormatting.GRAY));
+		var legendary = stack.get(com.olympus.registry.ModComponents.LEGENDARY);
+		if (legendary != null) {
+			out.add(Component.translatable("olympus.tooltip.first_won_by", legendary.firstOwner()).withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC));
+		}
 		out.add(Component.translatable("olympus.tooltip.level", level.displayName()).withStyle(ChatFormatting.DARK_GRAY));
 		out.add(Component.empty());
 
@@ -133,6 +138,34 @@ public final class GodTooltip {
 			return new Object[][]{{num(l.durationTicks(c.mirror.playerCharmSeconds) / 20.0)},
 				{num(l.durationTicks(c.mirror.charmSeconds) / 20.0)}};
 		}
+		if (item == ModItems.CADUCEUS) {
+			return new Object[][]{{num(l.radius(c.caduceus.blinkDistance))}, {num(c.caduceus.waypointWindowSeconds / 60.0)}};
+		} else if (item == ModItems.SPEAR_OF_ATHENA) {
+			return new Object[][]{{c.spearOfAthena.pierceTargets}, {num(l.radius(c.spearOfAthena.shockwaveRadius))}};
+		} else if (item == ModItems.HARPE) {
+			return new Object[][]{{pct(c.harpe.bossDamageBonus)}, {num(c.harpe.leapRange)}};
+		} else if (item == ModItems.THYRSUS) {
+			return new Object[][]{{num(c.thyrsus.hitEffectSeconds)}, {num(l.radius(c.thyrsus.snareRadius)), num(l.durationTicks(c.thyrsus.snareSeconds) / 20.0)}};
+		} else if (item == ModItems.CORNUCOPIA) {
+			return new Object[][]{{}, {num(l.radius(c.cornucopia.feastRadius))}};
+		} else if (item == ModItems.THUNDERBOLT_OF_ZEUS) {
+			return new Object[][]{{c.thunderbolt.strikes}, {num(c.thunderbolt.skybreakerHeight)}};
+		} else if (item == ModItems.TRIDENT_OF_POSEIDON) {
+			return new Object[][]{{}, {num(l.radius(c.tridentOfPoseidon.earthshakerRadius))}};
+		} else if (item == ModItems.BIDENT_OF_HADES) {
+			return new Object[][]{{c.bident.skeletons, num(l.durationTicks(c.bident.allySeconds) / 20.0)}, {num(l.durationTicks(c.bident.soulHarvestSeconds) / 20.0)}};
+		} else if (item == ModItems.HEAD_OF_MEDUSA) {
+			return new Object[][]{{num(l.durationTicks(c.headOfMedusa.petrifySeconds) / 20.0)}, {num(c.headOfMedusa.gazeRange), num(l.durationTicks(c.headOfMedusa.gazeSeconds) / 20.0)}};
+		} else if (item == ModItems.GOLDEN_FLEECE) {
+			return new Object[][]{{}, {num(c.goldenFleece.cheatDeathCooldownSeconds / 60.0)}};
+		} else if (item == ModItems.SCYTHE_OF_KRONOS) {
+			return new Object[][]{{num(l.radius(c.scythe.freezeRadius)), num(l.durationTicks(c.scythe.freezeSeconds) / 20.0)}, {num(c.scythe.rewindSeconds)}};
+		}
 		return new Object[][]{{}, {}};
+	}
+
+	/** Public for the Codex datagen: the formatted power texts' arguments. */
+	public static Object[][] argsFor(Item item) {
+		return args(item, UpgradeLevel.MORTAL);
 	}
 }

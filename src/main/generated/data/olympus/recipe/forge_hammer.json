@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "olympus:olympian_bronze_block",
+    "D": "minecraft:diamond_block",
+    "R": "olympus:hammer_of_hephaestus",
+    "T": "olympus:divine_smithing_template",
+    "W": "minecraft:netherite_pickaxe"
+  },
+  "pattern": [
+    "DRD",
+    "BWB",
+    "DTD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "olympus:forge_hammer"
+  }
+}

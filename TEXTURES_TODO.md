@@ -51,5 +51,8 @@ All items now use **vanilla Minecraft textures**: each relic looks like its base
 |---|---|
 | ☐ | `assets/olympus/icon.png` (128×128; currently the Fabric template icon) |
 
-## Coming in later phases
+## Bosses
+The six bosses use **tinted vanilla models** (Typhon = blaze, Cetus = elder guardian, Cerberus = hoglin, Medusa = witch, Colchian Dragon = zoglin, Kronos = wither skeleton). Replace each in `client/render/BossRenderers.java` with a Blockbench model when ready.
+
+## Older note
 Phase 3 craftables (Caduceus, Spear of Athena, Forge Hammer, Harpe, Thyrsus, Cornucopia, Ambrosia, Nectar, Sun Arrows, Hoplite armor), Phase 4 legendaries and the six bosses' recolored placeholder skins. Each phase adds its rows here.

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "olympus:olympian_bronze_block",
+  "base": "minecraft:netherite_helmet",
+  "result": {
+    "id": "olympus:hoplite_helmet"
+  },
+  "template": "olympus:divine_smithing_template"
+}

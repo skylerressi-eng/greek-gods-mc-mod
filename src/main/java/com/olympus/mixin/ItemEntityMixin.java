@@ -30,6 +30,11 @@ public abstract class ItemEntityMixin {
 
 	@Inject(method = "tick", at = @At("HEAD"))
 	private void olympus$protect(CallbackInfo ci) {
+		ItemEntity self = (ItemEntity) (Object) this;
+		if (self.level() instanceof net.minecraft.server.level.ServerLevel server && self.getY() < server.getMinY() - 40
+			&& com.olympus.registry.ModItems.LEGENDARIES.contains(getItem().getItem())) {
+			com.olympus.event.EventManager.onLegendaryLost(server.getServer(), getItem());
+		}
 		if (!olympus$protected && GodItem.is(getItem())) {
 			olympus$protected = true;
 			setUnlimitedLifetime();

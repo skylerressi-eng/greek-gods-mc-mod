@@ -115,6 +115,21 @@ public final class ConfigManager {
 		if (c.sickle == null) c.sickle = d.sickle;
 		if (c.goblet == null) c.goblet = d.goblet;
 		if (c.mirror == null) c.mirror = d.mirror;
+		if (c.caduceus == null) c.caduceus = d.caduceus;
+		if (c.spearOfAthena == null) c.spearOfAthena = d.spearOfAthena;
+		if (c.forgeHammer == null) c.forgeHammer = d.forgeHammer;
+		if (c.harpe == null) c.harpe = d.harpe;
+		if (c.thyrsus == null) c.thyrsus = d.thyrsus;
+		if (c.cornucopia == null) c.cornucopia = d.cornucopia;
+		if (c.consumables == null) c.consumables = d.consumables;
+		if (c.hoplite == null) c.hoplite = d.hoplite;
+		if (c.events == null) c.events = d.events;
+		if (c.thunderbolt == null) c.thunderbolt = d.thunderbolt;
+		if (c.tridentOfPoseidon == null) c.tridentOfPoseidon = d.tridentOfPoseidon;
+		if (c.bident == null) c.bident = d.bident;
+		if (c.headOfMedusa == null) c.headOfMedusa = d.headOfMedusa;
+		if (c.goldenFleece == null) c.goldenFleece = d.goldenFleece;
+		if (c.scythe == null) c.scythe = d.scythe;
 		if (c.goblet.effectPool == null || c.goblet.effectPool.isEmpty()) c.goblet.effectPool = d.goblet.effectPool;
 		if (c.general.starterTier == null) c.general.starterTier = d.general.starterTier;
 	}

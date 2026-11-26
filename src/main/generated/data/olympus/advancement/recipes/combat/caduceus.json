@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_talaria": {
+      "conditions": {
+        "items": [
+          {
+            "items": "olympus:talaria"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "olympus:caduceus"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_talaria"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "olympus:caduceus"
+    ]
+  }
+}

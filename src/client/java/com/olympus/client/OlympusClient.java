@@ -48,6 +48,7 @@ public class OlympusClient implements ClientModInitializer {
 			(payload, context) -> ConfigManager.setClientView(payload.json(), Thread.currentThread()));
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> ConfigManager.clearClientView());
 		ClientTickEvents.END_CLIENT_TICK.register(AirJumpInput::tick);
+		com.olympus.client.render.BossRenderers.register();
 
 		DIVINE_POWER = net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper.registerKeyBinding(
 			new net.minecraft.client.KeyMapping("key.olympus.divine_power", org.lwjgl.glfw.GLFW.GLFW_KEY_R, CATEGORY));

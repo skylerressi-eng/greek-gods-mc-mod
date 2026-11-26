@@ -29,6 +29,25 @@ public class OlympusConfig {
 	public Goblet goblet = new Goblet();
 	public Mirror mirror = new Mirror();
 
+	// Phase 3: craftables
+	public Caduceus caduceus = new Caduceus();
+	public SpearOfAthena spearOfAthena = new SpearOfAthena();
+	public ForgeHammer forgeHammer = new ForgeHammer();
+	public Harpe harpe = new Harpe();
+	public Thyrsus thyrsus = new Thyrsus();
+	public Cornucopia cornucopia = new Cornucopia();
+	public Consumables consumables = new Consumables();
+	public Hoplite hoplite = new Hoplite();
+
+	// Phase 4: events, bosses, legendaries
+	public Events events = new Events();
+	public Thunderbolt thunderbolt = new Thunderbolt();
+	public TridentOfPoseidon tridentOfPoseidon = new TridentOfPoseidon();
+	public Bident bident = new Bident();
+	public HeadOfMedusa headOfMedusa = new HeadOfMedusa();
+	public GoldenFleece goldenFleece = new GoldenFleece();
+	public Scythe scythe = new Scythe();
+
 	public static class General {
 		/** Maximum god items a player may carry. */
 		public int maxGodItems = 3;
@@ -203,5 +222,133 @@ public class OlympusConfig {
 		public int charmSeconds = 15;
 		public int charmCooldownSeconds = 120;
 		public double charmRange = 24.0;
+	}
+
+	public static class Caduceus {
+		public double blinkDistance = 10.0;
+		public int cooldownSeconds = 8;
+		public int waypointWindowSeconds = 300;
+		public int waypointCooldownSeconds = 180;
+	}
+
+	public static class SpearOfAthena {
+		public float throwDamage = 10.0f;
+		public int pierceTargets = 3;
+		public double shockwaveRadius = 4.0;
+		public float shockwaveDamage = 6.0f;
+		public int shockwaveSlownessSeconds = 4;
+		public int shockwaveCooldownSeconds = 30;
+	}
+
+	public static class ForgeHammer {
+		/** Blocks harder than the center block times this are not broken by the area. */
+		public double maxHardnessRatio = 1.5;
+	}
+
+	public static class Harpe {
+		public double bossDamageBonus = 0.5;
+		public double leapRange = 12.0;
+		public double leapDamageMultiplier = 2.0;
+		public int leapCooldownSeconds = 30;
+	}
+
+	public static class Thyrsus {
+		public int hitEffectSeconds = 5;
+		public double snareRadius = 6.0;
+		public int snareSeconds = 3;
+		public int snareCooldownSeconds = 60;
+	}
+
+	public static class Cornucopia {
+		public int cooldownSeconds = 600;
+		public double feastRadius = 10.0;
+		public int feastRegenSeconds = 10;
+		public int feastCooldownSeconds = 900;
+	}
+
+	public static class Consumables {
+		public float ambrosiaHeal = 12.0f;
+		public int ambrosiaRegenSeconds = 10;
+		public int ambrosiaAbsorptionSeconds = 120;
+		public int ambrosiaCooldownSeconds = 30;
+		public int nectarResistanceSeconds = 30;
+		public int sunArrowFireSeconds = 5;
+		public int sunArrowLightSeconds = 5;
+	}
+
+	public static class Hoplite {
+		public double extraKnockbackResistance = 0.5;
+	}
+
+	public static class Events {
+		/** Chance that a thunderstorm starts Wrath of Zeus by itself. */
+		public double wrathAutoStartChance = 0.15;
+		public int wrathAutoMinPlayers = 2;
+		public int wrathWarningSeconds = 60;
+		public int eventTimeoutMinutes = 30;
+		/** Boss health ×(1 + this × (players nearby − 1)). */
+		public double healthPerExtraPlayer = 0.5;
+		public double rewardRadius = 64.0;
+		public double rewardMinDamageShare = 0.10;
+		public int rewardIngotsMin = 2;
+		public int rewardIngotsMax = 4;
+		public double rewardTemplateChance = 0.25;
+		public float typhonHealth = 600f;
+		public float cetusHealth = 700f;
+		public float cerberusHealth = 650f;
+		public float medusaHealth = 500f;
+		public float dragonHealth = 800f;
+		public float kronosHealth = 1200f;
+	}
+
+	public static class Thunderbolt {
+		public float strikeDamage = 6.0f;
+		public int strikes = 5;
+		public int cooldownSeconds = 30;
+		public double skybreakerHeight = 15.0;
+		public int skybreakerCooldownSeconds = 60;
+	}
+
+	public static class TridentOfPoseidon {
+		public double riptideStrength = 3.0;
+		public double waveRadius = 4.0;
+		public int channelingCooldownSeconds = 10;
+		public double earthshakerRadius = 10.0;
+		public float earthshakerDamage = 6.0f;
+		public int earthshakerCooldownSeconds = 60;
+	}
+
+	public static class Bident {
+		public int skeletons = 3;
+		public int allySeconds = 30;
+		public int cooldownSeconds = 90;
+		public int soulHarvestSeconds = 15;
+		public int soulHarvestCooldownSeconds = 180;
+		public int maxAlliesPerPlayer = 8;
+	}
+
+	public static class HeadOfMedusa {
+		public double range = 20.0;
+		public int petrifySeconds = 4;
+		/** Petrify on players lasts this fraction as long (stun-lock protection). */
+		public double playerDurationMultiplier = 0.5;
+		public int playerImmunitySeconds = 10;
+		public int cooldownSeconds = 60;
+		public double gazeRange = 10.0;
+		public int gazeSeconds = 3;
+		public int gazeCooldownSeconds = 120;
+	}
+
+	public static class GoldenFleece {
+		public int cheatDeathCooldownSeconds = 600;
+		public float cheatDeathHealth = 8.0f;
+	}
+
+	public static class Scythe {
+		public double freezeRadius = 15.0;
+		public int freezeSeconds = 6;
+		public int cooldownSeconds = 120;
+		public int rewindSeconds = 5;
+		public int rewindCooldownSeconds = 180;
 	}
 }

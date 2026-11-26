@@ -124,6 +124,76 @@ public final class ModItems {
 
 	public static final Item MIRROR_OF_APHRODITE = starter("mirror_of_aphrodite", MirrorItem::new, GodProperties.base());
 
+	// ─── Phase 3: craftable god items (each needs its god's starter relic) ─────
+	public static final List<Item> LEGENDARIES = new ArrayList<>();
+
+	public static final Item CADUCEUS = register("caduceus", com.olympus.item.relic.CaduceusItem::new, GodProperties.base());
+	public static final Item SPEAR_OF_ATHENA = register("spear_of_athena",
+		p -> new com.olympus.item.relic.GodTridentItem(p, God.ATHENA, () -> 0, () -> ConfigManager.get().spearOfAthena.shockwaveCooldownSeconds),
+		tridentProperties());
+	public static final Item FORGE_HAMMER = register("forge_hammer",
+		p -> new SimpleRelicItem(p, God.HEPHAESTUS, false, () -> 0, () -> 1),
+		GodProperties.unbreakable(GodProperties.base().pickaxe(net.minecraft.world.item.ToolMaterial.NETHERITE, 1.0F, -2.8F)));
+	public static final Item HARPE = register("harpe",
+		p -> new SimpleRelicItem(p, God.HERMES, false, () -> 0, () -> ConfigManager.get().harpe.leapCooldownSeconds),
+		GodProperties.unbreakable(GodProperties.base().sword(net.minecraft.world.item.ToolMaterial.NETHERITE, 3.0F, -2.4F)));
+	public static final Item THYRSUS = register("thyrsus",
+		p -> new SimpleRelicItem(p, God.DIONYSUS, false, () -> 0, () -> ConfigManager.get().thyrsus.snareCooldownSeconds),
+		GodProperties.unbreakable(GodProperties.base().sword(net.minecraft.world.item.ToolMaterial.NETHERITE, 3.0F, -2.4F)));
+	public static final Item CORNUCOPIA = register("cornucopia", com.olympus.item.relic.CornucopiaItem::new, GodProperties.base());
+
+	// ─── Phase 3: consumables, ammo, armor (not god items) ─────────────────
+	public static final Item AMBROSIA = register("ambrosia", com.olympus.item.ConsumableItems.Ambrosia::new,
+		new Item.Properties().stacksTo(16).rarity(Rarity.EPIC).food(new net.minecraft.world.food.FoodProperties(10, 12.0F, true))
+			.component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
+	public static final Item NECTAR = register("nectar", com.olympus.item.ConsumableItems.Nectar::new,
+		new Item.Properties().stacksTo(16).rarity(Rarity.RARE).component(DataComponents.CONSUMABLE, net.minecraft.world.item.component.Consumables.DEFAULT_DRINK));
+	public static final Item SUN_ARROW = register("sun_arrow", com.olympus.item.SunArrowItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final Item HOPLITE_HELMET = hoplite("hoplite_helmet", ArmorType.HELMET);
+	public static final Item HOPLITE_CHESTPLATE = hoplite("hoplite_chestplate", ArmorType.CHESTPLATE);
+	public static final Item HOPLITE_LEGGINGS = hoplite("hoplite_leggings", ArmorType.LEGGINGS);
+	public static final Item HOPLITE_BOOTS = hoplite("hoplite_boots", ArmorType.BOOTS);
+
+	// ─── Phase 4: legendaries (boss drops, one of each per server) ─────────
+	public static final Item THUNDERBOLT_OF_ZEUS = legendary("thunderbolt_of_zeus",
+		p -> new com.olympus.item.relic.GodTridentItem(p, God.ZEUS, () -> ConfigManager.get().thunderbolt.cooldownSeconds, () -> ConfigManager.get().thunderbolt.skybreakerCooldownSeconds),
+		tridentProperties());
+	public static final Item TRIDENT_OF_POSEIDON = legendary("trident_of_poseidon", com.olympus.item.relic.PoseidonTridentItem::new, tridentProperties());
+	public static final Item BIDENT_OF_HADES = legendary("bident_of_hades", com.olympus.item.relic.BidentItem::new,
+		GodProperties.base().attributes(net.minecraft.world.item.TridentItem.createAttributes())
+			.component(DataComponents.WEAPON, new net.minecraft.world.item.component.Weapon(1)).enchantable(15));
+	public static final Item HEAD_OF_MEDUSA = legendary("head_of_medusa", com.olympus.item.relic.HeadOfMedusaItem::new,
+		GodProperties.base().component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.HEAD).setSwappable(false).build()));
+	public static final Item GOLDEN_FLEECE = legendary("golden_fleece",
+		p -> new SimpleRelicItem(p, God.ARES, false, () -> 0, () -> ConfigManager.get().goldenFleece.cheatDeathCooldownSeconds).passiveBlessed(),
+		GodProperties.unbreakable(GodProperties.base()
+			.humanoidArmor(net.minecraft.world.item.equipment.ArmorMaterials.NETHERITE, ArmorType.CHESTPLATE)
+			.component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.CHEST)
+				.setEquipSound(net.minecraft.sounds.SoundEvents.ARMOR_EQUIP_GOLD).setAsset(EquipmentAssets.GOLD).build())));
+	public static final Item SCYTHE_OF_KRONOS = legendary("scythe_of_kronos", com.olympus.item.relic.ScytheOfKronosItem::new,
+		GodProperties.unbreakable(GodProperties.base().sword(net.minecraft.world.item.ToolMaterial.NETHERITE, 4.0F, -2.6F)));
+
+	public static final Item CODEX_OF_OLYMPUS = register("codex_of_olympus", com.olympus.item.CodexItem::new,
+		new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).component(DataComponents.WRITTEN_BOOK_CONTENT, com.olympus.item.CodexItem.content()));
+
+	private static Item.Properties tridentProperties() {
+		return GodProperties.base()
+			.attributes(net.minecraft.world.item.TridentItem.createAttributes())
+			.component(DataComponents.TOOL, net.minecraft.world.item.TridentItem.createToolProperties())
+			.component(DataComponents.WEAPON, new net.minecraft.world.item.component.Weapon(1))
+			.enchantable(15);
+	}
+
+	private static Item hoplite(String name, ArmorType type) {
+		return register(name, Item::new, new Item.Properties().humanoidArmor(net.minecraft.world.item.equipment.ArmorMaterials.NETHERITE, type).fireResistant().rarity(Rarity.RARE));
+	}
+
+	private static <T extends Item> T legendary(String name, Function<Item.Properties, T> factory, Item.Properties properties) {
+		T item = register(name, factory, properties.rarity(Rarity.EPIC));
+		LEGENDARIES.add(item);
+		return item;
+	}
+
 	private ModItems() {
 	}
 

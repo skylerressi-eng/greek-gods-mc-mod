@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_goblet_of_dionysus": {
+      "conditions": {
+        "items": [
+          {
+            "items": "olympus:goblet_of_dionysus"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "olympus:thyrsus"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_goblet_of_dionysus"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "olympus:thyrsus"
+    ]
+  }
+}

@@ -109,6 +109,26 @@ public final class DivinePower {
 		if (item == ModItems.SICKLE_OF_DEMETER) return greatHarvest(player, level, lvl);
 		if (item == ModItems.GOBLET_OF_DIONYSUS) return wildParty(player, level, lvl);
 		if (item == ModItems.MIRROR_OF_APHRODITE) return charm(player, level, lvl);
+		if (item == ModItems.CADUCEUS) return waypoint(player, level);
+		if (item == ModItems.SPEAR_OF_ATHENA) return armSpear(player, level);
+		if (item == ModItems.FORGE_HAMMER) return toggleHammer(player, stack);
+		if (item == ModItems.HARPE) return heroLeap(player, level);
+		if (item == ModItems.THYRSUS) return vineSnare(player, level, lvl);
+		if (item == ModItems.CORNUCOPIA) return feast(player, level, lvl);
+		if (item == ModItems.THUNDERBOLT_OF_ZEUS) {
+			com.olympus.handler.LegendaryHandler.skybreaker(player, lvl);
+			return true;
+		}
+		if (item == ModItems.TRIDENT_OF_POSEIDON) return earthshaker(player, level, lvl);
+		if (item == ModItems.BIDENT_OF_HADES) {
+			com.olympus.handler.UnderworldAllies.startSoulHarvest(player, lvl.durationTicks(cfg().bident.soulHarvestSeconds));
+			Fx.helix(level, ModParticles.SHADE, player.position(), 0.9, 2.4, 40);
+			Fx.sound(player, ModSounds.HELM_VANISH, 1.2f, 0.5f);
+			player.displayClientMessage(Component.translatable("olympus.message.soul_harvest").withStyle(God.HADES.style()), true);
+			return true;
+		}
+		if (item == ModItems.HEAD_OF_MEDUSA) return gorgonsGaze(player, level, lvl);
+		if (item == ModItems.SCYTHE_OF_KRONOS) return com.olympus.handler.LegendaryHandler.rewind(player);
 		return false;
 	}
 
@@ -283,7 +303,124 @@ public final class DivinePower {
 		return true;
 	}
 
+	// ─── Hermes: Caduceus Waypoint ───
+	private static final Map<UUID, net.minecraft.core.GlobalPos> WAYPOINTS = new ConcurrentHashMap<>();
+	private static final Map<UUID, Long> WAYPOINT_UNTIL = new ConcurrentHashMap<>();
+
+	private static boolean waypoint(ServerPlayer player, ServerLevel level) {
+		long now = level.getGameTime();
+		var mark = WAYPOINTS.get(player.getUUID());
+		if (mark == null || now > WAYPOINT_UNTIL.getOrDefault(player.getUUID(), 0L)) {
+			WAYPOINTS.put(player.getUUID(), net.minecraft.core.GlobalPos.of(level.dimension(), player.blockPosition()));
+			WAYPOINT_UNTIL.put(player.getUUID(), now + cfg().caduceus.waypointWindowSeconds * 20L);
+			Fx.pillar(level, ModParticles.WIND_WISP, player.position(), 3, 20);
+			player.displayClientMessage(Component.translatable("olympus.message.waypoint_set").withStyle(God.HERMES.style()), true);
+			return false; // marking is free; the cooldown starts when you return
+		}
+		WAYPOINTS.remove(player.getUUID());
+		if (!mark.dimension().equals(level.dimension())) {
+			player.displayClientMessage(Component.translatable("olympus.message.waypoint_dimension").withStyle(ChatFormatting.GRAY), true);
+			return false;
+		}
+		Fx.burst(level, ModParticles.WIND_WISP, player.position().add(0, 1, 0), 30, 0.4, 0.1);
+		player.teleportTo(mark.pos().getX() + 0.5, mark.pos().getY(), mark.pos().getZ() + 0.5);
+		player.resetFallDistance();
+		Fx.burst(level, ModParticles.WIND_WISP, player.position().add(0, 1, 0), 30, 0.4, 0.1);
+		Fx.sound(player, ModSounds.TALARIA_JUMP, 1.2f, 0.7f);
+		return true;
+	}
+
+	private static boolean armSpear(ServerPlayer player, ServerLevel level) {
+		com.olympus.handler.LegendaryHandler.armSpear(player);
+		Fx.helix(level, ModParticles.OWL_FEATHER, player.position(), 0.6, 2.0, 24);
+		player.displayClientMessage(Component.translatable("olympus.message.spear_armed").withStyle(God.ATHENA.style()), true);
+		return true;
+	}
+
+	private static boolean toggleHammer(ServerPlayer player, ItemStack stack) {
+		int next = stack.getOrDefault(com.olympus.registry.ModComponents.MINING_RADIUS, 1) == 1 ? 2 : 1;
+		stack.set(com.olympus.registry.ModComponents.MINING_RADIUS, next);
+		player.displayClientMessage(Component.translatable("olympus.message.hammer_mode", next == 1 ? "3x3" : "5x5").withStyle(God.HEPHAESTUS.style()), true);
+		Fx.sound(player, net.minecraft.sounds.SoundEvents.ANVIL_USE, 0.6f, 1.4f);
+		return true;
+	}
+
+	private static LivingEntity lookTarget(ServerPlayer player, double range) {
+		Vec3 eye = player.getEyePosition();
+		Vec3 end = eye.add(player.getLookAngle().scale(range));
+		var hit = ProjectileUtil.getEntityHitResult(player, eye, end, player.getBoundingBox().expandTowards(player.getLookAngle().scale(range)).inflate(1.0),
+			e -> e instanceof LivingEntity && e.isAlive() && e != player, range * range);
+		return hit != null && hit.getEntity() instanceof LivingEntity living ? living : null;
+	}
+
+	private static boolean heroLeap(ServerPlayer player, ServerLevel level) {
+		LivingEntity target = lookTarget(player, cfg().harpe.leapRange);
+		if (target == null || !Targets.canHarm(player, target)) {
+			player.displayClientMessage(Component.translatable("olympus.message.charm_nothing").withStyle(ChatFormatting.GRAY), true);
+			return false;
+		}
+		com.olympus.handler.CraftedRelicHandler.startLeap(player, target);
+		return true;
+	}
+
+	private static boolean vineSnare(ServerPlayer player, ServerLevel level, UpgradeLevel lvl) {
+		int ticks = lvl.durationTicks(cfg().thyrsus.snareSeconds);
+		for (LivingEntity e : Targets.around(player, lvl.radius(cfg().thyrsus.snareRadius), e -> Targets.canHarm(player, e))) {
+			e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, ticks, 9), player);
+			e.addEffect(new MobEffectInstance(MobEffects.JUMP_BOOST, ticks, 128), player); // no jumping out
+			e.setDeltaMovement(0, 0, 0);
+			e.hurtMarked = true;
+			level.sendParticles(ModParticles.GRAIN_LEAF, e.getX(), e.getY() + 0.3, e.getZ(), 15, 0.3, 0.2, 0.3, 0.01);
+		}
+		Fx.sound(player, net.minecraft.sounds.SoundEvents.CAVE_VINES_PLACE, 1.5f, 0.7f);
+		Fx.shockwave(level, ModParticles.GRAIN_LEAF, player.position().add(0, 0.2, 0), lvl.radius(cfg().thyrsus.snareRadius));
+		return true;
+	}
+
+	private static boolean feast(ServerPlayer player, ServerLevel level, UpgradeLevel lvl) {
+		for (ServerPlayer ally : Targets.alliesAround(player, lvl.radius(cfg().cornucopia.feastRadius))) {
+			com.olympus.item.relic.CornucopiaItem.feed(ally);
+			ally.addEffect(new MobEffectInstance(MobEffects.REGENERATION, lvl.durationTicks(cfg().cornucopia.feastRegenSeconds), 0), player);
+		}
+		Fx.sound(player, net.minecraft.sounds.SoundEvents.GENERIC_EAT.value(), 1.5f, 0.8f);
+		Fx.shockwave(level, ModParticles.GRAIN_LEAF, player.position().add(0, 0.2, 0), 5);
+		return true;
+	}
+
+	private static boolean earthshaker(ServerPlayer player, ServerLevel level, UpgradeLevel lvl) {
+		double radius = lvl.radius(cfg().tridentOfPoseidon.earthshakerRadius);
+		for (LivingEntity e : Targets.around(player, radius, e -> Targets.canHarm(player, e))) {
+			e.setDeltaMovement(e.getDeltaMovement().add(0, 1.2, 0));
+			e.hurtMarked = true;
+			e.hurtServer(level, player.damageSources().playerAttack(player), cfg().tridentOfPoseidon.earthshakerDamage);
+		}
+		Fx.shockwave(level, ParticleTypes.SPLASH, player.position().add(0, 0.2, 0), radius);
+		Fx.shockwave(level, ModParticles.TIDE_DROP, player.position().add(0, 0.4, 0), radius);
+		Fx.sound(player, net.minecraft.sounds.SoundEvents.MACE_SMASH_GROUND_HEAVY, 1.5f, 0.6f);
+		return true;
+	}
+
+	private static boolean gorgonsGaze(ServerPlayer player, ServerLevel level, UpgradeLevel lvl) {
+		double range = cfg().headOfMedusa.gazeRange;
+		Vec3 look = player.getLookAngle();
+		int petrified = 0;
+		for (LivingEntity e : Targets.around(player, range, e -> Targets.canHarm(player, e))) {
+			Vec3 to = e.getEyePosition().subtract(player.getEyePosition()).normalize();
+			if (to.dot(look) > 0.75 && com.olympus.handler.PetrifyHandler.petrify(e, player, lvl.durationTicks(cfg().headOfMedusa.gazeSeconds))) {
+				petrified++;
+			}
+		}
+		for (double d = 1; d <= range; d += 1) {
+			Vec3 p = player.getEyePosition().add(look.scale(d));
+			level.sendParticles(ModParticles.TITAN_DUST, p.x, p.y, p.z, (int) d, d * 0.2, d * 0.2, d * 0.2, 0);
+		}
+		Fx.sound(player, net.minecraft.sounds.SoundEvents.STONE_PLACE, 1.5f, 0.5f);
+		return petrified > 0 || true;
+	}
+
 	public static void forget(UUID player) {
+		WAYPOINTS.remove(player);
+		WAYPOINT_UNTIL.remove(player);
 		LAST_PRESS.remove(player);
 		VOLLEY.remove(player);
 	}

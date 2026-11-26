@@ -72,6 +72,25 @@ public final class OlympusTagProviders {
 			ench("foot_armor", ModItems.TALARIA);
 			ench("equippable", ModItems.HELM_OF_DARKNESS, ModItems.TALARIA);
 			ench("bow", ModItems.SILVER_BOW);
+			ench("melee_weapon", ModItems.HARPE, ModItems.THYRSUS, ModItems.SCYTHE_OF_KRONOS, ModItems.BIDENT_OF_HADES);
+			ench("sweeping", ModItems.HARPE, ModItems.THYRSUS, ModItems.SCYTHE_OF_KRONOS);
+			ench("mining", ModItems.FORGE_HAMMER);
+			ench("mining_loot", ModItems.FORGE_HAMMER);
+			ench("trident", ModItems.SPEAR_OF_ATHENA, ModItems.THUNDERBOLT_OF_ZEUS, ModItems.TRIDENT_OF_POSEIDON);
+			ench("chest_armor", ModItems.GOLDEN_FLEECE);
+			ench("equippable", ModItems.GOLDEN_FLEECE);
+
+			var legendaries = builder(net.minecraft.tags.TagKey.create(Registries.ITEM, com.olympus.Olympus.id("legendaries")));
+			for (Item item : ModItems.LEGENDARIES) legendaries.add(key(item));
+			builder(net.minecraft.tags.ItemTags.ARROWS).add(key(ModItems.SUN_ARROW));
+			// Hoplite armor is regular gear: normal armor tags (enchantable, trimmable, durability enchants).
+			builder(net.minecraft.tags.ItemTags.HEAD_ARMOR).add(key(ModItems.HOPLITE_HELMET));
+			builder(net.minecraft.tags.ItemTags.CHEST_ARMOR).add(key(ModItems.HOPLITE_CHESTPLATE));
+			builder(net.minecraft.tags.ItemTags.LEG_ARMOR).add(key(ModItems.HOPLITE_LEGGINGS));
+			builder(net.minecraft.tags.ItemTags.FOOT_ARMOR).add(key(ModItems.HOPLITE_BOOTS));
+			for (Item h : new Item[]{ModItems.HOPLITE_HELMET, ModItems.HOPLITE_CHESTPLATE, ModItems.HOPLITE_LEGGINGS, ModItems.HOPLITE_BOOTS}) {
+				builder(net.minecraft.tags.ItemTags.TRIMMABLE_ARMOR).add(key(h));
+			}
 		}
 
 		private void ench(String tag, Item... items) {
@@ -101,8 +120,13 @@ public final class OlympusTagProviders {
 
 		@Override
 		protected void addTags(HolderLookup.Provider registries) {
-			// Olympus bosses are added in Phase 4. Vanilla bosses are also checked in code.
 			builder(ModKeys.BOSSES)
+				.add(BuiltInRegistries.ENTITY_TYPE.getResourceKey(com.olympus.registry.ModEntities.TYPHON).orElseThrow())
+				.add(BuiltInRegistries.ENTITY_TYPE.getResourceKey(com.olympus.registry.ModEntities.CETUS).orElseThrow())
+				.add(BuiltInRegistries.ENTITY_TYPE.getResourceKey(com.olympus.registry.ModEntities.CERBERUS).orElseThrow())
+				.add(BuiltInRegistries.ENTITY_TYPE.getResourceKey(com.olympus.registry.ModEntities.MEDUSA).orElseThrow())
+				.add(BuiltInRegistries.ENTITY_TYPE.getResourceKey(com.olympus.registry.ModEntities.COLCHIAN_DRAGON).orElseThrow())
+				.add(BuiltInRegistries.ENTITY_TYPE.getResourceKey(com.olympus.registry.ModEntities.KRONOS).orElseThrow())
 				.add(BuiltInRegistries.ENTITY_TYPE.getResourceKey(net.minecraft.world.entity.EntityType.ENDER_DRAGON).orElseThrow())
 				.add(BuiltInRegistries.ENTITY_TYPE.getResourceKey(net.minecraft.world.entity.EntityType.WITHER).orElseThrow())
 				.add(BuiltInRegistries.ENTITY_TYPE.getResourceKey(net.minecraft.world.entity.EntityType.WARDEN).orElseThrow())

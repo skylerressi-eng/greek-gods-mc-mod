@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_hammer_of_hephaestus": {
+      "conditions": {
+        "items": [
+          {
+            "items": "olympus:hammer_of_hephaestus"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "olympus:forge_hammer"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_hammer_of_hephaestus"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "olympus:forge_hammer"
+    ]
+  }
+}

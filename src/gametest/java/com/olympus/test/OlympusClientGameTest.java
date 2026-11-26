@@ -52,6 +52,48 @@ public class OlympusClientGameTest implements FabricClientGameTest {
 					context.takeScreenshot("olympus_" + BuiltInRegistries.ITEM.getKey(relics.get(batch + slot)).getPath());
 				}
 			}
+			// Phase 3 craftables and Phase 4 legendaries, in creative (ops in creative bypass the 3-item limit)
+			server.runCommand("gamemode creative @a");
+			List<Item> more = new java.util.ArrayList<>(List.of(ModItems.CADUCEUS, ModItems.SPEAR_OF_ATHENA, ModItems.FORGE_HAMMER,
+				ModItems.HARPE, ModItems.THYRSUS, ModItems.CORNUCOPIA));
+			more.addAll(ModItems.LEGENDARIES);
+			for (int batch = 0; batch < more.size(); batch += 9) {
+				server.runCommand("clear @a");
+				for (int i = batch; i < Math.min(batch + 9, more.size()); i++) {
+					server.runCommand("olympus give @a " + BuiltInRegistries.ITEM.getKey(more.get(i)).getPath() + " 1");
+				}
+				server.runCommand("summon zombie ~4 ~ ~");
+				context.waitTicks(5);
+				for (int slot = 0; slot < 9 && batch + slot < more.size(); slot++) {
+					final int s2 = slot;
+					context.runOnClient(mc -> mc.player.getInventory().setSelectedSlot(s2));
+					context.waitTicks(2);
+					context.getInput().holdKeyFor((Options o) -> o.keyUse, 30);
+					context.getInput().pressKey(com.olympus.client.OlympusClient.DIVINE_POWER);
+					context.waitTicks(30);
+					context.takeScreenshot("olympus_" + BuiltInRegistries.ITEM.getKey(more.get(batch + slot)).getPath());
+				}
+			}
+			server.runCommand("gamemode survival @a");
+			server.runCommand("effect give @a minecraft:resistance infinite 4 true");
+			server.runCommand("effect give @a minecraft:instant_health 1 10 true");
+			for (String event : List.of("wrath_of_zeus", "gorgons_lair", "quest_for_the_fleece", "titanomachy")) {
+				server.runCommand("execute as @p at @s run olympus event start " + event);
+				context.waitTicks(120);
+				context.takeScreenshot("olympus_event_" + event);
+				server.runCommand("olympus event stop");
+				context.waitTicks(10);
+			}
+			server.runCommand("clear @a");
+			server.runCommand("give @a olympus:codex_of_olympus");
+			context.waitTicks(5);
+			context.runOnClient(mc -> mc.player.getInventory().setSelectedSlot(0));
+			context.getInput().pressMouse(1);
+			context.waitTicks(20);
+			context.takeScreenshot("olympus_codex");
+			context.getInput().pressKey(org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE);
+			context.waitTicks(5);
+
 			// Inventory with tooltips
 			context.getInput().pressKey((Options o) -> o.keyInventory);
 			context.waitTicks(10);

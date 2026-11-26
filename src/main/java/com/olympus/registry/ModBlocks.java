@@ -14,6 +14,10 @@ public final class ModBlocks {
 	public static final Block OLYMPIAN_BRONZE_BLOCK = register("olympian_bronze_block",
 		BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).requiresCorrectToolForDrops().strength(25.0F, 1200.0F).sound(SoundType.NETHERITE_BLOCK));
 
+	public static final Block SUN_GLOW = Registry.register(BuiltInRegistries.BLOCK, ResourceKey.create(Registries.BLOCK, com.olympus.Olympus.id("sun_glow")),
+		new com.olympus.block.SunGlowBlock(BlockBehaviour.Properties.of().setId(ResourceKey.create(Registries.BLOCK, com.olympus.Olympus.id("sun_glow")))
+			.replaceable().noCollision().noLootTable().air().lightLevel(s -> 15).instabreak().pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
+
 	private ModBlocks() {
 	}
 

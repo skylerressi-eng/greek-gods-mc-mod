@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "minecraft:spectral_arrow",
+    "I": "olympus:olympian_bronze_ingot"
+  },
+  "pattern": [
+    "AAA",
+    "AIA",
+    "AAA"
+  ],
+  "result": {
+    "count": 8,
+    "id": "olympus:sun_arrow"
+  }
+}

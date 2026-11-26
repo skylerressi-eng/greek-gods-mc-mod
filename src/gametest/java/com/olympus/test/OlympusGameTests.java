@@ -308,6 +308,93 @@ public class OlympusGameTests {
 		});
 	}
 
+	@GameTest
+	public void phase3RecipesLoad(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		for (String id : List.of("caduceus", "thyrsus", "cornucopia", "spear_of_athena", "forge_hammer", "harpe", "ambrosia", "nectar",
+			"sun_arrow", "codex_of_olympus", "hoplite_helmet_smithing", "hoplite_chestplate_smithing", "hoplite_leggings_smithing",
+			"hoplite_boots_smithing", "blessed_upgrade", "ascended_upgrade")) {
+			helper.assertTrue(level.getServer().getRecipeManager().byKey(ResourceKey.create(Registries.RECIPE, Olympus.id(id))).isPresent(), "missing recipe " + id);
+		}
+		helper.succeed();
+	}
+
+	@GameTest(maxTicks = 100)
+	public void bossEventAwardsTheLegendaryOnce(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		var server = level.getServer();
+		com.olympus.data.LegendaryRegistry.remove(server, "head_of_medusa");
+		com.olympus.event.EventManager.stop(server, net.minecraft.network.chat.Component.empty());
+		ServerPlayer hero = helper.makeMockServerPlayerInLevel();
+		hero.getInventory().clearContent();
+		BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
+		var error = com.olympus.event.EventManager.start(com.olympus.event.OlympusEvent.GORGONS_LAIR, level, at);
+		helper.assertTrue(error.isEmpty(), "event did not start: " + error);
+		var boss = level.getEntitiesOfClass(com.olympus.entity.MedusaEntity.class, new net.minecraft.world.phys.AABB(at).inflate(4)).stream().findFirst().orElseThrow();
+		helper.assertTrue(boss.getMaxHealth() >= 500f, "boss health not scaled");
+		boss.hurtServer(level, hero.damageSources().playerAttack(hero), 100000f);
+		helper.assertTrue(boss.isDeadOrDying(), "boss did not die");
+		helper.assertTrue(hero.getInventory().contains(st -> st.is(ModItems.HEAD_OF_MEDUSA)), "top damage dealer did not get the legendary");
+		helper.assertTrue(com.olympus.data.LegendaryRegistry.get(server, "head_of_medusa").isPresent(), "legendary not registered");
+
+		// A second victory must not create a second Head of Medusa.
+		hero.getInventory().clearContent();
+		com.olympus.event.EventManager.start(com.olympus.event.OlympusEvent.GORGONS_LAIR, level, at);
+		var boss2 = level.getEntitiesOfClass(com.olympus.entity.MedusaEntity.class, new net.minecraft.world.phys.AABB(at).inflate(4), e -> e.isAlive()).stream().findFirst().orElseThrow();
+		boss2.hurtServer(level, hero.damageSources().playerAttack(hero), 100000f);
+		helper.assertFalse(hero.getInventory().contains(st -> st.is(ModItems.HEAD_OF_MEDUSA)), "a second legendary was created");
+		helper.assertTrue(hero.getInventory().contains(st -> st.is(ModItems.OLYMPIAN_BRONZE_INGOT)), "no consolation reward");
+		com.olympus.data.LegendaryRegistry.remove(server, "head_of_medusa");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void cetusNeedsTheOcean(GameTestHelper helper) {
+		var error = com.olympus.event.EventManager.start(com.olympus.event.OlympusEvent.RISE_OF_THE_DEEP, helper.getLevel(), helper.absolutePos(new BlockPos(1, 1, 1)));
+		helper.assertTrue(error.isPresent(), "Cetus spawned on dry land");
+		var nether = com.olympus.event.OlympusEvent.GATES_OF_THE_UNDERWORLD.checkLocation(helper.getLevel(), helper.absolutePos(new BlockPos(1, 1, 1)));
+		helper.assertTrue(nether.isPresent(), "Cerberus allowed outside the Nether");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void duplicateLegendariesCrumble(GameTestHelper helper) {
+		var server = helper.getLevel().getServer();
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+		player.getInventory().clearContent();
+		com.olympus.data.LegendaryRegistry.register(server, "scythe_of_kronos", new com.olympus.data.LegendaryRegistry.Entry(java.util.UUID.randomUUID(), "Original", "Original"));
+		ItemStack fake = new ItemStack(ModItems.SCYTHE_OF_KRONOS);
+		fake.set(ModComponents.LEGENDARY, new ModComponents.Legendary(java.util.UUID.randomUUID(), "Copycat"));
+		player.getInventory().add(fake);
+		com.olympus.event.EventManager.guardLegendaries(player);
+		helper.assertFalse(player.getInventory().contains(st -> st.is(ModItems.SCYTHE_OF_KRONOS)), "duplicate legendary survived");
+		com.olympus.data.LegendaryRegistry.remove(server, "scythe_of_kronos");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void petrifyFreezesMobs(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		Zombie zombie = helper.spawn(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+		helper.assertTrue(com.olympus.handler.PetrifyHandler.petrify(zombie, player, 80), "petrify failed");
+		helper.assertTrue(zombie.isNoAi() && zombie.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED) == 0, "zombie can still move");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void forgeHammerMinesThreeByThree(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+		player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(ModItems.FORGE_HAMMER));
+		for (int x = 0; x < 3; x++) for (int y = 1; y < 4; y++) helper.setBlock(new BlockPos(x, y, 2), Blocks.STONE);
+		var eye = helper.absoluteVec(new net.minecraft.world.phys.Vec3(1.5, 2.5 - 1.62, 0.5));
+		player.snapTo(eye.x, eye.y, eye.z, 0f, 0f); // facing +Z, looking at the wall
+		player.gameMode.destroyBlock(helper.absolutePos(new BlockPos(1, 2, 2)));
+		for (int x = 0; x < 3; x++) for (int y = 1; y < 4; y++) helper.assertBlockNotPresent(Blocks.STONE, new BlockPos(x, y, 2));
+		helper.succeed();
+	}
+
 	private static int countGodItems(ServerPlayer player) {
 		int n = 0;
 		for (int i = 0; i < player.getInventory().getContainerSize(); i++) {

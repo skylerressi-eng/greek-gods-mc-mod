@@ -14,6 +14,7 @@ public class SimpleRelicItem extends Item implements GodItem {
 	private final boolean starter;
 	private final IntSupplier primaryCooldown;
 	private final IntSupplier blessedCooldown;
+	private boolean blessedPassive;
 
 	public SimpleRelicItem(Properties properties, God god, boolean starter, IntSupplier primaryCooldown, IntSupplier blessedCooldown) {
 		super(properties);
@@ -21,6 +22,23 @@ public class SimpleRelicItem extends Item implements GodItem {
 		this.starter = starter;
 		this.primaryCooldown = primaryCooldown;
 		this.blessedCooldown = blessedCooldown;
+	}
+
+	/** Marks the Blessed ability as passive even though it has a cooldown (e.g. Golden Fleece). */
+	public SimpleRelicItem passiveBlessed() {
+		this.blessedPassive = true;
+		return this;
+	}
+
+	@Override
+	public boolean blessedIsPassive() {
+		return blessedPassive || GodItemDefaults.passive(blessedCooldown.getAsInt());
+	}
+
+	private static final class GodItemDefaults {
+		static boolean passive(int cooldown) {
+			return cooldown <= 0;
+		}
 	}
 
 	@Override

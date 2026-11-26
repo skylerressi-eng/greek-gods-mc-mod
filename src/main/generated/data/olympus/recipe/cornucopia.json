@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "minecraft:golden_apple",
+    "B": "olympus:olympian_bronze_block",
+    "C": "minecraft:golden_carrot",
+    "D": "minecraft:diamond_block",
+    "H": "minecraft:goat_horn",
+    "S": "olympus:sickle_of_demeter"
+  },
+  "pattern": [
+    "ASA",
+    "CHC",
+    "DBD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "olympus:cornucopia"
+  }
+}

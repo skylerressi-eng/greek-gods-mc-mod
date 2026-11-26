@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "olympus:olympian_bronze_block",
+    "D": "minecraft:diamond_block",
+    "E": "minecraft:enchanted_golden_apple",
+    "H": "minecraft:heavy_core",
+    "R": "minecraft:breeze_rod",
+    "T": "olympus:talaria"
+  },
+  "pattern": [
+    "DHD",
+    "ETE",
+    "RBR"
+  ],
+  "result": {
+    "count": 1,
+    "id": "olympus:caduceus"
+  }
+}

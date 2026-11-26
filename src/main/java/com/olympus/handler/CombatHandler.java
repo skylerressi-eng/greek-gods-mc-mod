@@ -97,6 +97,9 @@ public final class CombatHandler {
 			}
 		}
 
+		// Harpe: +50% vs bosses
+		result = CraftedRelicHandler.harpeBonus(victim, source, result);
+
 		// Silver Bow arrows
 		if (source.getDirectEntity() instanceof AbstractArrow arrow && arrow.getTags().contains(SilverBowItem.ARROW_TAG)) {
 			result *= (float) (1.0 + cfg().silverBow.arrowDamageBonus);

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_helm_of_darkness": {
+      "conditions": {
+        "items": [
+          {
+            "items": "olympus:helm_of_darkness"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "olympus:harpe"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_helm_of_darkness"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "olympus:harpe"
+    ]
+  }
+}

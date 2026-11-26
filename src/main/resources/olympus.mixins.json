@@ -9,10 +9,12 @@
 		"ItemEntityMixin",
 		"ItemMixin",
 		"LivingEntityMixin",
+		"MaceItemMixin",
 		"MobMixin",
 		"ShulkerBoxBlockEntityMixin",
 		"ShulkerBoxSlotMixin",
-		"SlotMixin"
+		"SlotMixin",
+		"ThrownTridentMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

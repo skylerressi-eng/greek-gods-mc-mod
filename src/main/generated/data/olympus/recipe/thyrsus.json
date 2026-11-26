@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "olympus:olympian_bronze_block",
+    "D": "minecraft:diamond_block",
+    "G": "minecraft:glow_berries",
+    "O": "olympus:goblet_of_dionysus",
+    "S": "minecraft:netherite_sword",
+    "V": "minecraft:vine"
+  },
+  "pattern": [
+    "GOG",
+    "VSV",
+    "DBD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "olympus:thyrsus"
+  }
+}

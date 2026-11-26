@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "olympus:olympian_bronze_block",
+  "base": "minecraft:netherite_boots",
+  "result": {
+    "id": "olympus:hoplite_boots"
+  },
+  "template": "olympus:divine_smithing_template"
+}

@@ -18,6 +18,25 @@ public final class ModComponents {
 	public static final DataComponentType<StackCooldowns> COOLDOWNS = register("cooldowns",
 		DataComponentType.<StackCooldowns>builder().persistent(StackCooldowns.CODEC).networkSynchronized(StackCooldowns.STREAM_CODEC).build());
 
+	/** Legendary identity: one instance per server, and who first won it. */
+	public static final DataComponentType<Legendary> LEGENDARY = register("legendary",
+		DataComponentType.<Legendary>builder().persistent(Legendary.CODEC).networkSynchronized(Legendary.STREAM_CODEC).build());
+
+	/** Forge Hammer mining mode: 1 = 3x3, 2 = 5x5. */
+	public static final DataComponentType<Integer> MINING_RADIUS = register("mining_radius",
+		DataComponentType.<Integer>builder().persistent(Codec.intRange(1, 2)).networkSynchronized(ByteBufCodecs.VAR_INT).build());
+
+	public record Legendary(java.util.UUID instance, String firstOwner) {
+		public static final Codec<Legendary> CODEC = RecordCodecBuilder.create(i -> i.group(
+			net.minecraft.core.UUIDUtil.CODEC.fieldOf("instance").forGetter(Legendary::instance),
+			Codec.STRING.fieldOf("first_owner").forGetter(Legendary::firstOwner)
+		).apply(i, Legendary::new));
+		public static final StreamCodec<io.netty.buffer.ByteBuf, Legendary> STREAM_CODEC = StreamCodec.composite(
+			net.minecraft.core.UUIDUtil.STREAM_CODEC, Legendary::instance,
+			ByteBufCodecs.STRING_UTF8, Legendary::firstOwner,
+			Legendary::new);
+	}
+
 	private ModComponents() {
 	}
 

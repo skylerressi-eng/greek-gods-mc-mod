@@ -95,6 +95,99 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 			"Enchanting Gaze: the player you look at can't hurt you for %ss and is slowed. Nearby hostile mobs also leave you alone.",
 			"Charm", "The mob you look at fights for you for %ss. Bosses and players resist.");
 
+		// ─── Phase 3: craftable god items ───
+		relic(t, ModItems.CADUCEUS, "Caduceus",
+			"Right-click: blink up to %s blocks where you look (never through walls).",
+			"Waypoint", "First press marks your spot; press again within %s minutes to return to it.");
+		relic(t, ModItems.SPEAR_OF_ATHENA, "Spear of Athena",
+			"A thrown spear that pierces up to %s enemies and always returns to you.",
+			"Aegis Strike", "Your next throw lands with a shockwave that knocks back and slows enemies within %s blocks.");
+		relic(t, ModItems.FORGE_HAMMER, "Forge Hammer",
+			"Mines a 3x3 area (sneak to mine a single block).",
+			"Forge Mode", "Switch between 3x3 and 5x5 mining.");
+		relic(t, ModItems.HARPE, "Harpe",
+			"Perseus' blade: %s more damage against bosses.",
+			"Hero's Leap", "Leap at the creature you look at (up to %s blocks) and strike it for double damage.");
+		relic(t, ModItems.THYRSUS, "Thyrsus",
+			"Hits make enemies stagger: Slowness II and dizziness for %ss.",
+			"Vine Snare", "Roots every enemy within %s blocks in place for %ss.");
+		relic(t, ModItems.CORNUCOPIA, "Cornucopia",
+			"Right-click: fully restores your hunger and saturation.",
+			"Feast", "Fully feeds every player within %s blocks and grants Regeneration.");
+		t.add(ModItems.AMBROSIA, "Ambrosia");
+		t.add(ModItems.NECTAR, "Nectar");
+		t.add(ModItems.SUN_ARROW, "Sun Arrow");
+		t.add(ModItems.HOPLITE_HELMET, "Hoplite Helmet");
+		t.add(ModItems.HOPLITE_CHESTPLATE, "Hoplite Breastplate");
+		t.add(ModItems.HOPLITE_LEGGINGS, "Hoplite Greaves");
+		t.add(ModItems.HOPLITE_BOOTS, "Hoplite Sandals");
+		t.add(ModItems.CODEX_OF_OLYMPUS, "Codex of Olympus");
+
+		// ─── Phase 4: legendaries ───
+		relic(t, ModItems.THUNDERBOLT_OF_ZEUS, "Thunderbolt of Zeus",
+			"Throw it: %s lightning strikes rain around the impact, then it returns to your hand.",
+			"Skybreaker", "Launch about %s blocks into the sky and land in a ring of lightning. No fall damage.");
+		relic(t, ModItems.TRIDENT_OF_POSEIDON, "Trident of Poseidon",
+			"Release to Riptide anywhere, even on dry land, with a wave that throws enemies back. Sneak to throw: Channeling is always on.",
+			"Earthshaker", "Every enemy within %s blocks is hurled into the air.");
+		relic(t, ModItems.BIDENT_OF_HADES, "Bident of Hades",
+			"Right-click: %s skeleton warriors rise to fight for you for %ss.",
+			"Soul Harvest", "For %ss, everything you kill rises as a skeleton ally.");
+		relic(t, ModItems.HEAD_OF_MEDUSA, "Head of Medusa",
+			"Look at a creature and right-click: it turns to stone for %ss (shorter on players). Wear it on your head.",
+			"Gorgon's Gaze", "Petrifies everything in a %s-block cone in front of you for %ss.");
+		relic(t, ModItems.GOLDEN_FLEECE, "Golden Fleece",
+			"While worn: constant Regeneration and immunity to fire.",
+			"Undying", "Once every %s minutes, a killing blow leaves you standing instead.");
+		relic(t, ModItems.SCYTHE_OF_KRONOS, "Scythe of Kronos",
+			"Right-click: time freezes for everything within %s blocks (Slowness IV, Mining Fatigue III) for %ss.",
+			"Rewind", "Return to where you were %s seconds ago, with the health you had then.");
+
+		// ─── Bosses & events ───
+		t.add("entity.olympus.typhon", "Typhon");
+		t.add("entity.olympus.cetus", "Cetus");
+		t.add("entity.olympus.cerberus", "Cerberus");
+		t.add("entity.olympus.medusa", "Medusa");
+		t.add("entity.olympus.colchian_dragon", "The Colchian Dragon");
+		t.add("entity.olympus.kronos", "Kronos, King of the Titans");
+		t.add("entity.olympus.underworld_warrior", "Underworld Warrior");
+		event(t, "wrath_of_zeus", "Wrath of Zeus", "Typhon tears through the storm clouds!");
+		event(t, "rise_of_the_deep", "Rise of the Deep", "Cetus rises from the abyss!");
+		event(t, "gates_of_the_underworld", "Gates of the Underworld", "Cerberus breaks his chains!");
+		event(t, "gorgons_lair", "Gorgon's Lair", "Medusa awakens. Do not meet her gaze!");
+		event(t, "quest_for_the_fleece", "Quest for the Fleece", "The sleepless dragon stirs!");
+		event(t, "titanomachy", "Titanomachy", "Kronos returns to reclaim the heavens!");
+		t.add("olympus.event.started.title", "%s");
+		t.add("olympus.event.started.chat", "⚡ %s has begun! %s appears at %s, %s, %s. The greatest hero will claim a legendary relic.");
+		t.add("olympus.event.won.title", "%s is over!");
+		t.add("olympus.event.legendary_won", "🏆 %s dealt the most damage and claims the %s!");
+		t.add("olympus.event.legendary_taken", "That legendary already belongs to someone. The gods reward you with bronze and a template instead.");
+		t.add("olympus.event.your_share", "You dealt %s%% of the damage. The gods reward you.");
+		t.add("olympus.event.legendary_lost", "The %s has fallen into the void. Its event may bring it back.");
+		t.add("olympus.event.needs_ocean", "Rise of the Deep needs deep ocean water (10+ blocks) below you.");
+		t.add("olympus.event.needs_nether", "Gates of the Underworld can only open in the Nether.");
+		t.add("olympus.event.already_running", "%s is already running. Use /olympus event stop first.");
+		t.add("olympus.event.none_running", "No event is running.");
+		t.add("olympus.event.stopped", "The event was ended by an admin.");
+		t.add("olympus.event.timeout", "Nobody defeated the boss in time. %s fades away...");
+		t.add("olympus.event.vanished", "The boss of %s has vanished.");
+		t.add("olympus.event.wrath_warning", "⚡ The sky darkens... Zeus' wrath will strike in %s seconds near %s (%s, %s, %s)!");
+		t.add("olympus.message.look_away", "Medusa's eyes begin to glow... LOOK AWAY!");
+		t.add("olympus.message.petrified", "You have been turned to stone!");
+		t.add("olympus.message.soul_harvest", "Soul Harvest: your victims will rise to serve you");
+		t.add("olympus.message.waypoint_set", "Waypoint marked. Press again to return here");
+		t.add("olympus.message.waypoint_dimension", "Your waypoint is in another dimension");
+		t.add("olympus.message.spear_armed", "Your next throw will shake the earth");
+		t.add("olympus.message.hammer_mode", "Forge Hammer: %s mining");
+		t.add("olympus.message.legendary_duplicate", "A false %s crumbles to dust: only one exists");
+		t.add("olympus.tooltip.legendary_of", "Legendary Relic of %s");
+		t.add("olympus.tooltip.first_won_by", "First won by %s");
+		t.add("olympus.command.legendary_reset", "%s can drop again from its event.");
+		t.add("olympus.command.legendary_free", "%s: not yet won");
+		t.add("olympus.command.legendary_owned", "%s: first won by %s, last seen with %s");
+
+		codex(t);
+
 		// ─── Tooltips ───
 		t.add("olympus.tooltip.relic_of", "Relic of %s");
 		t.add("olympus.tooltip.starter_relic_of", "Starter Relic of %s");
@@ -155,6 +248,51 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 		}
 	}
 
+	private static void event(TranslationBuilder t, String id, String name, String subtitle) {
+		t.add("olympus.event." + id, name);
+		t.add("olympus.event." + id + ".subtitle", subtitle);
+	}
+
+	/** Codex of Olympus pages (CodexItem.PAGES). Numbers use the default config. */
+	private static void codex(TranslationBuilder t) {
+		java.util.List<String> pages = new java.util.ArrayList<>();
+		pages.add("§6§lCodex of Olympus§r\n\nThe gods walk among you. Each mortal is claimed by one of the twelve Olympians and receives their starter relic.\n\nCarry at most §l3§r god items. They drop when you die, and others may claim them.");
+		pages.add("§lRelic Rules§r\n\n• God items never break.\n• Dropped relics glow and never despawn.\n• No ender chests, shulker boxes or bundles.\n• Enchant them like their base item (no Unbreaking or Mending).");
+		pages.add("§lUpgrades§r\n\nSmithing table:\n\n§bBlessed ★§r: Blessing Core + god item + Block of Olympian Bronze.\n-25% cooldowns, unlocks the §lDivine Power§r (key R).\n\n§6Ascended ★★§r: Ascension Core + Blessed item + bronze block. -50% cooldowns, +25% reach.");
+		pages.add("§lGod Swapper§r\n\nHold it in your main hand, your starter relic in your offhand, and hold right-click for 3 seconds.\n\nYour relic becomes another god's, keeping its level and every enchantment it can.");
+		java.util.List<Item> relics = new java.util.ArrayList<>(ModItems.STARTER_RELICS);
+		relics.addAll(java.util.List.of(ModItems.CADUCEUS, ModItems.SPEAR_OF_ATHENA, ModItems.FORGE_HAMMER, ModItems.HARPE, ModItems.THYRSUS, ModItems.CORNUCOPIA));
+		relics.addAll(ModItems.LEGENDARIES);
+		for (Item item : relics) {
+			String key = item.getDescriptionId();
+			Object[][] args = com.olympus.god.GodTooltip.argsFor(item);
+			String source = ModItems.STARTER_RELICS.contains(item) ? "Starter relic (claiming / God Swapper)"
+				: ModItems.LEGENDARIES.contains(item) ? "Legendary: boss event reward" : "Crafted (see RECIPES / recipe book)";
+			pages.add("§l" + NAMES.get(item) + "§r\n§7" + source + "§r\n\n" + fmt(TEXTS.get(key + ".primary"), args[0])
+				+ "\n\n§b✦ " + TEXTS.get(key + ".blessed.name") + ":§r " + fmt(TEXTS.get(key + ".blessed"), args[1]));
+		}
+		pages.add("§lDivine Events§r\n\nAdmins summon bosses with /olympus event start. Wrath of Zeus may strike in thunderstorms.\n\nThe top damage dealer wins the event's legendary. Everyone with 10%+ damage gets bronze, maybe a template.");
+		pages.add("§lLegendaries§r\n\nEach exists once per server. Lost to the void, it can drop again.\n\nTyphon → Thunderbolt\nCetus → Poseidon's Trident\nCerberus → Bident\nMedusa → Her Head\nDragon → Golden Fleece\nKronos → Scythe");
+		while (pages.size() < com.olympus.item.CodexItem.PAGES) {
+			pages.add("§o\"Fortune favors the bold.\"§r\n\n— Virgil");
+		}
+		for (int i = 0; i < com.olympus.item.CodexItem.PAGES; i++) {
+			t.add("olympus.codex.page." + (i + 1), pages.get(i));
+		}
+	}
+
+	private static String fmt(String template, Object[] args) {
+		if (template == null) return "";
+		try {
+			return String.format(java.util.Locale.ROOT, template.replace("%%", "%%"), args);
+		} catch (Exception e) {
+			return template;
+		}
+	}
+
+	private static final java.util.Map<String, String> TEXTS = new java.util.HashMap<>();
+	private static final java.util.Map<Item, String> NAMES = new java.util.HashMap<>();
+
 	private static void god(TranslationBuilder t, God god, String name, String epithet) {
 		t.add("god.olympus." + god.id(), name);
 		t.add("god.olympus." + god.id() + ".epithet", epithet);
@@ -163,6 +301,10 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 	private static void relic(TranslationBuilder t, Item item, String name, String primary, String blessedName, String blessed) {
 		t.add(item, name);
 		String key = item.getDescriptionId();
+		NAMES.put(item, name);
+		TEXTS.put(key + ".primary", primary);
+		TEXTS.put(key + ".blessed.name", blessedName);
+		TEXTS.put(key + ".blessed", blessed);
 		t.add(key + ".primary", primary);
 		t.add(key + ".blessed.name", blessedName);
 		t.add(key + ".blessed", blessed);
