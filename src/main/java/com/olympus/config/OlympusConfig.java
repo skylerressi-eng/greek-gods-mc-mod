@@ -85,6 +85,8 @@ public class OlympusConfig {
 	public static class Aegis {
 		public double lightningChance = 0.30;
 		public float lightningDamage = 5.0f;
+		/** Damage dealt to whoever disables the Aegis (axe hit). 2 = one heart. */
+		public float disableRetaliationDamage = 2.0f;
 		/** Every blocked melee hit pushes the attacker back (PvP spacing). */
 		public double blockKnockback = 0.6;
 		/** Blessed: every Nth blocked hit releases a shockwave. */

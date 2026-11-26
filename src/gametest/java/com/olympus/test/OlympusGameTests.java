@@ -423,6 +423,34 @@ public class OlympusGameTests {
 		helper.succeed();
 	}
 
+	@GameTest(maxTicks = 120)
+	public void vineSnareRootsWithoutLaunching(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		Zombie zombie = helper.spawn(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+		double startY = zombie.getY();
+		com.olympus.handler.PetrifyHandler.root(zombie, helper.getLevel(), 60);
+		helper.assertTrue(zombie.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.JUMP_STRENGTH) == 0, "rooted mob can still jump");
+		helper.assertTrue(zombie.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED) == 0, "rooted mob can still walk");
+		helper.assertFalse(zombie.hasEffect(net.minecraft.world.effect.MobEffects.JUMP_BOOST), "jump boost would launch them");
+		helper.runAfterDelay(80, () -> {
+			helper.assertTrue(zombie.getY() < startY + 2, "rooted mob flew into the air");
+			helper.assertTrue(zombie.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED) > 0, "root never wore off");
+			helper.succeed();
+		});
+	}
+
+	@GameTest
+	public void disablingTheAegisHurtsTheAttacker(GameTestHelper helper) {
+		ServerPlayer defender = helper.makeMockServerPlayerInLevel();
+		var vindicator = helper.spawn(EntityType.VINDICATOR, new BlockPos(1, 1, 1));
+		vindicator.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(Items.NETHERITE_AXE));
+		float before = vindicator.getHealth();
+		com.olympus.handler.AegisHandler.onMeleeBlocked(defender, vindicator, new ItemStack(ModItems.AEGIS));
+		helper.assertTrue(vindicator.getSecondsToDisableBlocking() <= 0 || vindicator.getHealth() <= before - 1.9f,
+			"axe attacker was not hurt for disabling the Aegis");
+		helper.succeed();
+	}
+
 	private static int countGodItems(ServerPlayer player) {
 		int n = 0;
 		for (int i = 0; i < player.getInventory().getContainerSize(); i++) {

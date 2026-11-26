@@ -366,10 +366,7 @@ public final class DivinePower {
 	private static boolean vineSnare(ServerPlayer player, ServerLevel level, UpgradeLevel lvl) {
 		int ticks = lvl.durationTicks(cfg().thyrsus.snareSeconds);
 		for (LivingEntity e : Targets.around(player, lvl.radius(cfg().thyrsus.snareRadius), e -> Targets.canHarm(player, e))) {
-			e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, ticks, 9), player);
-			e.addEffect(new MobEffectInstance(MobEffects.JUMP_BOOST, ticks, 128), player); // no jumping out
-			e.setDeltaMovement(0, 0, 0);
-			e.hurtMarked = true;
+			com.olympus.handler.PetrifyHandler.root(e, level, ticks); // can't move or jump, can still swing
 			level.sendParticles(ModParticles.GRAIN_LEAF, e.getX(), e.getY() + 0.3, e.getZ(), 15, 0.3, 0.2, 0.3, 0.01);
 		}
 		Fx.sound(player, net.minecraft.sounds.SoundEvents.CAVE_VINES_PLACE, 1.5f, 0.7f);

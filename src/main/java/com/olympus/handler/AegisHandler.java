@@ -45,7 +45,10 @@ public final class AegisHandler {
 
 	/** Called from {@code LivingEntityMixin} when a player blocks a melee attack with an item. */
 	public static void onMeleeBlocked(ServerPlayer player, LivingEntity attacker) {
-		ItemStack blocking = player.getItemBlockingWith();
+		onMeleeBlocked(player, attacker, player.getItemBlockingWith());
+	}
+
+	public static void onMeleeBlocked(ServerPlayer player, LivingEntity attacker, ItemStack blocking) {
 		if (blocking == null || !blocking.is(ModItems.AEGIS)) {
 			return;
 		}
@@ -54,6 +57,14 @@ public final class AegisHandler {
 		// Small golden flash on every block, so the shield feels divine even when lightning doesn't fire.
 		level.sendParticles(ModParticles.DIVINE_GLINT, player.getX(), player.getY() + 1.1, player.getZ(), 6, 0.4, 0.3, 0.4, 0.05);
 		countBlock(player, blocking);
+
+		// Disabling the Aegis (e.g. with an axe) costs the attacker: Zeus strikes back.
+		if (attacker.getSecondsToDisableBlocking() > 0 && cfg.disableRetaliationDamage > 0 && Targets.canHarm(player, attacker)) {
+			var type = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.DAMAGE_TYPE).getOrThrow(com.olympus.registry.ModKeys.DIVINE_LIGHTNING);
+			attacker.hurtServer(level, new net.minecraft.world.damagesource.DamageSource(type, player), cfg.disableRetaliationDamage);
+			level.sendParticles(ModParticles.STORM_SPARK, attacker.getX(), attacker.getY() + 1, attacker.getZ(), 15, 0.3, 0.4, 0.3, 0.1);
+			Fx.sound(attacker, ModSounds.AEGIS_SMITE, 0.6f, 1.6f);
+		}
 
 		if (Targets.canHarm(player, attacker) && cfg.blockKnockback > 0) {
 			attacker.knockback(cfg.blockKnockback, player.getX() - attacker.getX(), player.getZ() - attacker.getZ());

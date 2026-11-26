@@ -37,6 +37,19 @@ public final class PetrifyHandler {
 	private PetrifyHandler() {
 	}
 
+	/** Vine Snare roots: can't move or jump, but can still fight. */
+	private static final Map<UUID, Stone> ROOTED = new ConcurrentHashMap<>();
+
+	public static void root(LivingEntity target, ServerLevel level, int ticks) {
+		Stone existing = ROOTED.get(target.getUUID());
+		long until = level.getGameTime() + ticks;
+		ROOTED.put(target.getUUID(), new Stone(existing != null ? Math.max(existing.until(), until) : until, level, false));
+		addModifier(target.getAttribute(Attributes.MOVEMENT_SPEED));
+		addModifier(target.getAttribute(Attributes.JUMP_STRENGTH));
+		target.setDeltaMovement(0, Math.min(0, target.getDeltaMovement().y), 0);
+		target.hurtMarked = true;
+	}
+
 	public static boolean isPetrified(Entity entity) {
 		return PETRIFIED.containsKey(entity.getUUID());
 	}
@@ -83,6 +96,10 @@ public final class PetrifyHandler {
 	}
 
 	private static void release(LivingEntity entity, Stone stone) {
+		if (ROOTED.containsKey(entity.getUUID())) {
+			if (entity instanceof Mob mob) mob.setNoAi(stone.wasNoAi());
+			return; // still rooted by a Vine Snare; the root releases the attributes
+		}
 		var speed = entity.getAttribute(Attributes.MOVEMENT_SPEED);
 		var jump = entity.getAttribute(Attributes.JUMP_STRENGTH);
 		if (speed != null) speed.removeModifier(STONE);
@@ -113,6 +130,22 @@ public final class PetrifyHandler {
 			} else if (e.getValue().level().getGameTime() % 5 == 0) {
 				e.getValue().level().sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.STONE.defaultBlockState()),
 					living.getX(), living.getY() + 0.2, living.getZ(), 3, 0.2, 0.1, 0.2, 0.0);
+			}
+		}
+		Iterator<Map.Entry<UUID, Stone>> roots = ROOTED.entrySet().iterator();
+		while (roots.hasNext()) {
+			Map.Entry<UUID, Stone> e = roots.next();
+			Entity entity = e.getValue().level().getEntity(e.getKey());
+			if (!(entity instanceof LivingEntity living) || !living.isAlive()) {
+				roots.remove();
+			} else if (e.getValue().level().getGameTime() >= e.getValue().until()) {
+				if (!PETRIFIED.containsKey(e.getKey())) {
+					var speed = living.getAttribute(Attributes.MOVEMENT_SPEED);
+					var jump = living.getAttribute(Attributes.JUMP_STRENGTH);
+					if (speed != null) speed.removeModifier(STONE);
+					if (jump != null) jump.removeModifier(STONE);
+				}
+				roots.remove();
 			}
 		}
 		long now = server.overworld().getGameTime();
