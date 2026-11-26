@@ -1,0 +1,15 @@
+{
+	"schemaVersion": 1,
+	"id": "olympus-gametest",
+	"version": "1.0.0",
+	"name": "Relics of Olympus GameTests",
+	"environment": "*",
+	"entrypoints": {
+		"fabric-gametest": [
+			"com.olympus.test.OlympusGameTests"
+		]
+	},
+	"depends": {
+		"olympus": "*"
+	}
+}

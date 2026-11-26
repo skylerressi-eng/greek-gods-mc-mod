@@ -1,0 +1,18 @@
+{
+	"required": true,
+	"package": "com.olympus.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": [
+		"AbstractArrowMixin",
+		"BlockMixin",
+		"ItemMixin",
+		"LivingEntityMixin",
+		"MobMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

@@ -1,0 +1,239 @@
+{
+  "event.claim": {
+    "sounds": [
+      {
+        "name": "entity.lightning_bolt.thunder",
+        "type": "event",
+        "volume": 0.6,
+        "pitch": 1.0
+      }
+    ],
+    "subtitle": "subtitles.olympus.event.claim"
+  },
+  "event.claim_chime": {
+    "sounds": [
+      {
+        "name": "block.beacon.activate",
+        "type": "event",
+        "volume": 1.0,
+        "pitch": 1.2
+      }
+    ],
+    "subtitle": "subtitles.olympus.event.claim_chime"
+  },
+  "ability.deny": {
+    "sounds": [
+      {
+        "name": "block.note_block.bass",
+        "type": "event",
+        "volume": 0.6,
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.deny"
+  },
+  "ability.aegis.smite": {
+    "sounds": [
+      {
+        "name": "item.trident.thunder",
+        "type": "event",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.aegis.smite"
+  },
+  "ability.conch.blow": {
+    "sounds": [
+      {
+        "name": "item.goat_horn.sound.2",
+        "type": "event",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.conch.blow"
+  },
+  "ability.helm.vanish": {
+    "sounds": [
+      {
+        "name": "entity.illusioner.mirror_move",
+        "type": "event",
+        "volume": 1.0,
+        "pitch": 0.7
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.helm.vanish"
+  },
+  "ability.helm.reappear": {
+    "sounds": [
+      {
+        "name": "entity.illusioner.prepare_mirror",
+        "type": "event",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.helm.reappear"
+  },
+  "ability.helm.charge": {
+    "sounds": [
+      {
+        "name": "block.sculk_shrieker.shriek",
+        "type": "event",
+        "volume": 0.25,
+        "pitch": 1.6
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.helm.charge"
+  },
+  "ability.owl.reveal": {
+    "sounds": [
+      {
+        "name": "entity.parrot.imitate.evoker",
+        "type": "event",
+        "volume": 1.0,
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.owl.reveal"
+  },
+  "ability.ares.fury": {
+    "sounds": [
+      {
+        "name": "entity.ravager.roar",
+        "type": "event",
+        "volume": 0.5,
+        "pitch": 1.4
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.ares.fury"
+  },
+  "ability.ares.fury_ii": {
+    "sounds": [
+      {
+        "name": "entity.ravager.roar",
+        "type": "event",
+        "volume": 0.8,
+        "pitch": 1.0
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.ares.fury_ii"
+  },
+  "ability.lyre.chord": {
+    "sounds": [
+      {
+        "name": "block.note_block.harp",
+        "type": "event",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.lyre.chord"
+  },
+  "ability.lyre.shimmer": {
+    "sounds": [
+      {
+        "name": "block.amethyst_block.chime",
+        "type": "event",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.lyre.shimmer"
+  },
+  "ability.silver_bow.shot": {
+    "sounds": [
+      {
+        "name": "block.amethyst_block.resonate",
+        "type": "event",
+        "volume": 0.6,
+        "pitch": 1.0
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.silver_bow.shot"
+  },
+  "ability.silver_bow.mark": {
+    "sounds": [
+      {
+        "name": "block.amethyst_cluster.hit",
+        "type": "event",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.silver_bow.mark"
+  },
+  "ability.talaria.jump": {
+    "sounds": [
+      {
+        "name": "entity.breeze.jump",
+        "type": "event",
+        "volume": 0.8,
+        "pitch": 1.0
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.talaria.jump"
+  },
+  "ability.hephaestus.smelt": {
+    "sounds": [
+      {
+        "name": "block.fire.extinguish",
+        "type": "event",
+        "volume": 0.6,
+        "pitch": 1.0
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.hephaestus.smelt"
+  },
+  "ability.sickle.bloom": {
+    "sounds": [
+      {
+        "name": "item.bone_meal.use",
+        "type": "event",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "name": "block.azalea_leaves.place",
+        "type": "event",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.sickle.bloom"
+  },
+  "ability.goblet.drink": {
+    "sounds": [
+      {
+        "name": "entity.wandering_trader.drink_potion",
+        "type": "event",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.goblet.drink"
+  },
+  "ability.goblet.hic": {
+    "sounds": [
+      {
+        "name": "entity.villager.no",
+        "type": "event",
+        "volume": 1.0,
+        "pitch": 1.4
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.goblet.hic"
+  },
+  "ability.mirror.charm": {
+    "sounds": [
+      {
+        "name": "block.amethyst_block.resonate",
+        "type": "event",
+        "volume": 1.0,
+        "pitch": 1.4
+      }
+    ],
+    "subtitle": "subtitles.olympus.ability.mirror.charm"
+  }
+}

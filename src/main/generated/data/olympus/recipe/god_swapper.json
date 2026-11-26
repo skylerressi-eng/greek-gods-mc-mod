@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "E": "minecraft:echo_shard",
+    "I": "olympus:olympian_bronze_ingot",
+    "T": "minecraft:totem_of_undying"
+  },
+  "pattern": [
+    "IEI",
+    "ETE",
+    "IEI"
+  ],
+  "result": {
+    "id": "olympus:god_swapper"
+  }
+}

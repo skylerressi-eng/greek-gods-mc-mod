@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "D": "minecraft:diamond_block",
+    "E": "minecraft:enchanted_golden_apple",
+    "I": "olympus:olympian_bronze_ingot"
+  },
+  "pattern": [
+    "IDI",
+    "DED",
+    "IDI"
+  ],
+  "result": {
+    "id": "olympus:blessing_core"
+  }
+}

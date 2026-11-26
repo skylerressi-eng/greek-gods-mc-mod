@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "olympus:item/sickle_of_demeter"
+  }
+}

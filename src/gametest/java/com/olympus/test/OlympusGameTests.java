@@ -1,0 +1,187 @@
+package com.olympus.test;
+
+import com.olympus.Olympus;
+import com.olympus.ability.Cooldowns;
+import com.olympus.claim.ClaimManager;
+import com.olympus.config.ConfigManager;
+import com.olympus.data.PlayerOlympusData;
+import com.olympus.god.God;
+import com.olympus.god.GodItem;
+import com.olympus.handler.HephaestusHandler;
+import com.olympus.item.relic.GobletItem;
+import com.olympus.item.relic.SickleItem;
+import com.olympus.registry.ModComponents;
+import com.olympus.registry.ModItems;
+import com.olympus.registry.ModKeys;
+import com.olympus.util.DivineLightning;
+import java.util.List;
+import net.fabricmc.fabric.api.gametest.v1.GameTest;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.monster.zombie.Zombie;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CropBlock;
+
+/** Run with {@code ./gradlew runGameTest}. Each test checks one Phase 1 promise. */
+public class OlympusGameTests {
+	@GameTest
+	public void starterRelicsAreUnbreakableGodItems(GameTestHelper helper) {
+		helper.assertTrue(ModItems.STARTER_RELICS.size() == 12, "expected 12 starter relics");
+		for (Item item : ModItems.STARTER_RELICS) {
+			ItemStack stack = new ItemStack(item);
+			helper.assertTrue(item instanceof GodItem, item + " is not a GodItem");
+			helper.assertFalse(stack.has(DataComponents.MAX_DAMAGE), item + " has durability");
+			helper.assertFalse(stack.isDamageableItem(), item + " can be damaged");
+			helper.assertTrue(stack.getOrDefault(ModComponents.UPGRADE_LEVEL, -1) == 0, item + " is not Mortal by default");
+			helper.assertTrue(stack.is(ModKeys.GOD_ITEMS), item + " missing from #olympus:god_items");
+			helper.assertTrue(stack.is(ModKeys.STARTER_RELICS), item + " missing from #olympus:starter_relics");
+		}
+		helper.succeed();
+	}
+
+	@GameTest
+	public void netheriteStatsOnWeaponsAndArmor(GameTestHelper helper) {
+		ItemStack blade = new ItemStack(ModItems.BLADE_OF_ARES);
+		ItemStack vanilla = new ItemStack(Items.NETHERITE_SWORD);
+		helper.assertTrue(blade.get(DataComponents.ATTRIBUTE_MODIFIERS).equals(vanilla.get(DataComponents.ATTRIBUTE_MODIFIERS)),
+			"Blade of Ares should match netherite sword attributes");
+		helper.assertTrue(new ItemStack(ModItems.HELM_OF_DARKNESS).get(DataComponents.ATTRIBUTE_MODIFIERS)
+			.equals(new ItemStack(Items.NETHERITE_HELMET).get(DataComponents.ATTRIBUTE_MODIFIERS)), "Helm should match netherite helmet");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void aegisCarriesTheGorgoneion(GameTestHelper helper) {
+		var patterns = new ItemStack(ModItems.AEGIS).get(DataComponents.BANNER_PATTERNS);
+		helper.assertTrue(patterns != null && patterns.layers().stream().anyMatch(l -> l.pattern().is(ModKeys.GORGONEION)),
+			"Aegis should carry the Gorgoneion banner pattern");
+		helper.assertTrue(new ItemStack(ModItems.AEGIS).has(DataComponents.BLOCKS_ATTACKS), "Aegis must block like a shield");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void recipesAndRegistriesLoad(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		for (String id : List.of("olympian_bronze_ingot_from_alloy", "olympian_bronze_block", "olympian_bronze_ingot",
+			"divine_smithing_template", "blessing_core", "ascension_core", "god_swapper")) {
+			ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, Olympus.id(id));
+			helper.assertTrue(level.getServer().getRecipeManager().byKey(key).isPresent(), "missing recipe " + id);
+		}
+		helper.assertTrue(level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).get(ModKeys.DIVINE_LIGHTNING).isPresent(), "missing damage type");
+		helper.assertTrue(level.registryAccess().lookupOrThrow(Registries.BANNER_PATTERN).get(ModKeys.THUNDERBOLT).isPresent(), "missing banner pattern");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void claimingGivesTheStarterRelicOnce(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ClaimManager.tryAutoClaim(player);
+		PlayerOlympusData data = PlayerOlympusData.get(player);
+		helper.assertTrue(data.claimed() && data.claimedGod().isPresent(), "player was not claimed");
+		Item relic = ClaimManager.starterRelic(data.claimedGod().get());
+		helper.assertTrue(player.getInventory().contains(new ItemStack(relic)), "player did not receive " + relic);
+		int before = countGodItems(player);
+		ClaimManager.tryAutoClaim(player); // second join
+		helper.assertTrue(countGodItems(player) == before, "a second relic was granted");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void everyGodMapsToItsOwnRelic(GameTestHelper helper) {
+		for (God god : God.OLYMPIANS) {
+			Item relic = ClaimManager.starterRelic(god);
+			helper.assertTrue(((GodItem) relic).god() == god, relic + " does not belong to " + god);
+			helper.assertTrue(ClaimManager.godOfRelic(relic) == god, "reverse lookup failed for " + god);
+		}
+		helper.succeed();
+	}
+
+	@GameTest
+	public void divineLightningSparesTheCaster(GameTestHelper helper) {
+		ServerPlayer caster = helper.makeMockServerPlayerInLevel();
+		Zombie zombie = helper.spawn(EntityTypes.ZOMBIE, new BlockPos(1, 1, 1));
+		caster.snapTo(zombie.getX(), zombie.getY(), zombie.getZ());
+		float casterHealth = caster.getHealth();
+		float zombieHealth = zombie.getHealth();
+		DivineLightning.strike(helper.getLevel(), zombie.position(), caster, 6.0f, 1.5);
+		helper.assertTrue(caster.getHealth() == casterHealth, "lightning hurt its caster");
+		helper.assertTrue(zombie.getHealth() < zombieHealth, "lightning did not hurt the zombie");
+		helper.assertBlockNotPresent(Blocks.FIRE, helper.relativePos(zombie.blockPosition()));
+		helper.succeed();
+	}
+
+	@GameTest
+	public void hammerAutoSmeltsOres(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		BlockPos pos = helper.absolutePos(new BlockPos(1, 1, 1));
+		List<ItemStack> out = HephaestusHandler.smeltDrops(Blocks.IRON_ORE.defaultBlockState(), level, pos,
+			new ItemStack(ModItems.HAMMER_OF_HEPHAESTUS), List.of(new ItemStack(Items.RAW_IRON, 2)));
+		helper.assertTrue(out.size() == 1 && out.get(0).is(Items.IRON_INGOT) && out.get(0).getCount() == 2, "expected 2 iron ingots, got " + out);
+		List<ItemStack> stone = HephaestusHandler.smeltDrops(Blocks.STONE.defaultBlockState(), level, pos,
+			new ItemStack(ModItems.HAMMER_OF_HEPHAESTUS), List.of(new ItemStack(Items.COBBLESTONE)));
+		helper.assertTrue(stone.get(0).is(Items.COBBLESTONE), "non-ores must not be smelted");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void sickleRipensCropsButNotSaplings(GameTestHelper helper) {
+		BlockPos farmland = new BlockPos(1, 1, 1);
+		helper.setBlock(farmland, Blocks.FARMLAND);
+		helper.setBlock(farmland.above(), Blocks.WHEAT);
+		helper.setBlock(new BlockPos(3, 1, 1), Blocks.GRASS_BLOCK);
+		helper.setBlock(new BlockPos(3, 2, 1), Blocks.OAK_SAPLING);
+		SickleItem.growFully(helper.getLevel(), helper.absolutePos(farmland.above()));
+		helper.assertBlockProperty(farmland.above(), CropBlock.AGE, 7);
+		helper.assertFalse(SickleItem.growFully(helper.getLevel(), helper.absolutePos(new BlockPos(3, 2, 1))), "sapling was grown");
+		helper.assertBlockPresent(Blocks.OAK_SAPLING, new BlockPos(3, 2, 1));
+		helper.succeed();
+	}
+
+	@GameTest
+	public void cooldownsScaleWithLevelAndFollowTheStack(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ItemStack mortal = new ItemStack(ModItems.OWL_OF_ATHENA);
+		Cooldowns.start(player, mortal, Cooldowns.Kind.PRIMARY, 100);
+		helper.assertFalse(Cooldowns.isReady(player, mortal, Cooldowns.Kind.PRIMARY), "cooldown did not start");
+		helper.assertTrue(Cooldowns.remainingTicks(player, mortal, Cooldowns.Kind.PRIMARY) == 2000, "Mortal cooldown should be 100s");
+
+		ServerPlayer friend = helper.makeMockServerPlayerInLevel();
+		helper.assertFalse(Cooldowns.isReady(friend, mortal, Cooldowns.Kind.PRIMARY), "handing the relic over reset its cooldown");
+
+		ItemStack blessed = new ItemStack(ModItems.LYRE_OF_APOLLO);
+		blessed.set(ModComponents.UPGRADE_LEVEL, 1);
+		Cooldowns.start(friend, blessed, Cooldowns.Kind.PRIMARY, 100);
+		helper.assertTrue(Cooldowns.remainingTicks(friend, blessed, Cooldowns.Kind.PRIMARY) == 1500, "Blessed cooldown should be 75s");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void gobletPoolIsValid(GameTestHelper helper) {
+		for (int i = 0; i < 50; i++) {
+			var effect = GobletItem.randomEffect(helper.getLevel().getRandom());
+			helper.assertTrue(effect.value().isBeneficial(), "Goblet rolled a harmful effect: " + effect);
+		}
+		helper.assertTrue(ConfigManager.toJson().contains("maxGodItems"), "config JSON incomplete");
+		helper.succeed();
+	}
+
+	private static int countGodItems(ServerPlayer player) {
+		int n = 0;
+		for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+			if (GodItem.is(player.getInventory().getItem(i))) {
+				n++;
+			}
+		}
+		return n;
+	}
+}

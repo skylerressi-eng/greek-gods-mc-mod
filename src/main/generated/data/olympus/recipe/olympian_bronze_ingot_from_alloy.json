@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": [
+      "minecraft:copper_block",
+      "minecraft:waxed_copper_block"
+    ],
+    "G": "minecraft:gold_block",
+    "S": "minecraft:netherite_scrap"
+  },
+  "pattern": [
+    "GCG",
+    "CSC",
+    "GCG"
+  ],
+  "result": {
+    "id": "olympus:olympian_bronze_ingot"
+  }
+}

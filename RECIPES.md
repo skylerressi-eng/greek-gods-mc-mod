@@ -7,6 +7,7 @@ Legend letters are per recipe. `·` = empty slot.
 ## Materials
 
 ### Olympian Bronze Ingot ×1
+Waxed copper blocks work too.
 ```
 G C G     G = Gold Block
 C S C     C = Copper Block
@@ -120,6 +121,12 @@ A A A
 A I A     A = Arrow
 A A A     I = Olympian Bronze Ingot
 ```
+
+### Banner patterns (shapeless)
+- **Gorgoneion Banner Pattern**: Paper + Gold Ingot + Spider Eye
+- **Thunderbolt Banner Pattern**: Paper + Gold Ingot + Lightning Rod
+
+Use them in a loom like any vanilla pattern. The Gorgoneion is the emblem on the Aegis.
 
 ### Codex of Olympus (shapeless)
 Book + Gold Ingot

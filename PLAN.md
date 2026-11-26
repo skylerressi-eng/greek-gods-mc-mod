@@ -15,6 +15,13 @@ Mod id `olympus` · Fabric · client + server mod
 
 The project starts from the official Fabric template layout (split `main`/`client` source sets, `fabric.mod.json`, datagen entrypoint, `./gradlew runDatagen` output in `src/main/generated`).
 
+### Additions after review
+- **Particles:** every god has its own particle type (storm spark, tide drop, shade, owl feather, war ember, sun mote, moonbeam, wind wisp, forge spark, grain leaf, wine drop, rose petal, titan dust) plus a gold "divine glint". One configurable client particle class (`DivineParticle`) gives each its own motion: crackle, flutter, spark, drop, smoke, wisp or mote.
+- **Sounds:** every ability has its own sound id (`olympus:ability.*`). In `sounds.json` each one points at a vanilla sound event, so a resource pack can replace any of them without code.
+- **Aegis banner:** the Aegis uses the vanilla shield renderer with fixed banner layers: gold base, orange gradient, the new **Gorgoneion** pattern, and an orange border. Two new banner patterns (Gorgoneion, Thunderbolt) come with craftable pattern items, so players can put them on their own banners and shields.
+- **Config sync:** the server sends its config to every client on join and on `/olympus reload`, so tooltips and the double-jump prediction always use the server's numbers.
+- **Automated tests:** a Fabric GameTest suite (`./gradlew runGameTest`, in `src/gametest`) checks registries, recipes, claiming, lightning safety, auto-smelt, crop growth and cooldown rules on a real server.
+
 ## 1. Package structure
 
 ```
