@@ -73,10 +73,10 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 			"Ambush", "While invisible, your first hit deals %sx damage and ends the invisibility.");
 		relic(t, ModItems.OWL_OF_ATHENA, "Owl of Athena",
 			"Reveal: everything within %s blocks glows for %ss and takes %s more damage from you.",
-			"Battle Wisdom", "You and players within %s blocks gain Strength I and Resistance I for %ss.");
+			"Battle Wisdom", "You and allies within %s blocks gain Strength I and Resistance I for %ss.");
 		relic(t, ModItems.BLADE_OF_ARES, "Blade of Ares",
 			"Fury: %s hits in a row grant Strength I. Kills grant Strength II for %ss.",
-			"War Cry", "Mobs within %s blocks are weakened; you and nearby players gain Speed II for %ss.");
+			"War Cry", "Mobs within %s blocks are weakened; you and nearby allies gain Speed II for %ss.");
 		relic(t, ModItems.LYRE_OF_APOLLO, "Lyre of Apollo",
 			"Right-click: you and allies within %s blocks get Regeneration II and Speed I for %ss, and are cleansed of Poison and Wither.",
 			"Sunburst", "Sets hostile mobs within %s blocks ablaze and blinds enemies for %ss.");
@@ -94,7 +94,7 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 			"Great Harvest", "Harvests and replants every ripe crop in a %sx%s area.");
 		relic(t, ModItems.GOBLET_OF_DIONYSUS, "Goblet of Dionysus",
 			"Drink: a random level II combat blessing for %ss (%s chance of a hangover instead). Never empties.",
-			"Wild Party", "Players within %s blocks get a random blessing for %ss; mobs stagger drunkenly.");
+			"Wild Party", "Allies within %s blocks get a random blessing for %ss; enemies stagger drunkenly.");
 		relic(t, ModItems.MIRROR_OF_APHRODITE, "Mirror of Aphrodite",
 			"Enchanting Gaze: the player you look at can't hurt you for %ss and is slowed. Nearby hostile mobs also leave you alone.",
 			"Charm", "The mob you look at fights for you for %ss. Bosses and players resist.");
@@ -117,7 +117,7 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 			"Vine Snare", "Roots every enemy within %s blocks in place for %ss.");
 		relic(t, ModItems.CORNUCOPIA, "Cornucopia",
 			"Right-click: fully restores your hunger and saturation.",
-			"Feast", "Fully feeds every player within %s blocks and grants Regeneration.");
+			"Feast", "Fully feeds every ally within %s blocks and grants Regeneration.");
 		t.add(ModItems.AMBROSIA, "Ambrosia");
 		t.add(ModItems.NECTAR, "Nectar");
 		t.add(ModItems.SUN_ARROW, "Sun Arrow");
@@ -235,6 +235,12 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 		t.add("olympus.hint.god_swapper", "Hold in main hand, starter relic in offhand, hold right-click for 3s to reroll your god");
 		t.add("olympus.hint.blessed_unlocks", "Blessed ★: -25%% cooldowns, unlocks the Divine Power (R)");
 		t.add("olympus.hint.ascended_unlocks", "Ascended ★★: -50%% cooldowns, +25%% durations and radii");
+
+		t.add("olympus.ally.self", "You're always your own ally.");
+		t.add("olympus.ally.added", "%s is now your ally: your relic buffs reach them and your powers spare them.");
+		t.add("olympus.ally.removed", "%s is no longer your ally.");
+		t.add("olympus.ally.added_you", "%s added you as an ally. Use /ally add to return the favor.");
+		t.add("olympus.ally.list", "Your allies: %s (team: %s)");
 
 		// ─── Commands ───
 		t.add("olympus.command.unknown_god", "Unknown god: %s");

@@ -70,7 +70,10 @@ public class Olympus implements ModInitializer {
 		com.olympus.handler.LegendaryHandler.register();
 		com.olympus.handler.CraftedRelicHandler.register();
 
-		CommandRegistrationCallback.EVENT.register((dispatcher, context, selection) -> OlympusCommand.register(dispatcher));
+		CommandRegistrationCallback.EVENT.register((dispatcher, context, selection) -> {
+			OlympusCommand.register(dispatcher);
+			com.olympus.command.AllyCommand.register(dispatcher);
+		});
 
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
 			ServerPlayer player = handler.getPlayer();

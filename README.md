@@ -92,6 +92,14 @@ Bosses have boss bars, scale their health with nearby players, telegraph every a
 | `/olympus legendaries reset <id>` | Let a lost legendary drop again |
 | `/olympus reload` | Reload `config/olympus.json` |
 
+## Allies (everyone)
+Group buffs (Lyre, Battle Wisdom, War Cry, Wild Party, Feast) only reach **allies**, and your powers never hurt them. Allies are players on your `/team`, plus anyone you add:
+| Command | |
+|---|---|
+| `/ally add <player>` | Your buffs reach them; your powers spare them |
+| `/ally remove <player>` | Undo it |
+| `/ally list` | See your allies |
+
 ## Controls
 - **R**: Divine Power (Blessed ability). Rebind under Controls → Relics of Olympus. A HUD icon next to the hotbar shows its cooldown.
 - **Jump in mid-air** with Talaria for the double jump (Survival).

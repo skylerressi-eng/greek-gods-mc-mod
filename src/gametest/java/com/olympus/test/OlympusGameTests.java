@@ -409,6 +409,20 @@ public class OlympusGameTests {
 		helper.succeed();
 	}
 
+	@GameTest
+	public void buffsOnlyReachAllies(GameTestHelper helper) {
+		ServerPlayer caster = helper.makeMockServerPlayerInLevel();
+		ServerPlayer friend = helper.makeMockServerPlayerInLevel();
+		ServerPlayer enemy = helper.makeMockServerPlayerInLevel();
+		helper.assertFalse(com.olympus.util.Targets.alliesAround(caster, 10).contains(enemy), "a non-ally got buffs");
+		helper.assertTrue(com.olympus.util.Targets.alliesAround(caster, 10).contains(caster), "caster should buff themselves");
+		PlayerOlympusData.set(caster, PlayerOlympusData.get(caster).withAllies(List.of(friend.getUUID())));
+		helper.assertTrue(com.olympus.util.Targets.alliesAround(caster, 10).contains(friend), "ally did not get buffs");
+		helper.assertFalse(com.olympus.util.Targets.alliesAround(caster, 10).contains(enemy), "enemy got buffs");
+		helper.assertFalse(com.olympus.util.Targets.canHarm(caster, friend), "powers hurt an ally");
+		helper.succeed();
+	}
+
 	private static int countGodItems(ServerPlayer player) {
 		int n = 0;
 		for (int i = 0; i < player.getInventory().getContainerSize(); i++) {

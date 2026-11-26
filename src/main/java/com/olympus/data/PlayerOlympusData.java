@@ -18,14 +18,15 @@ import net.minecraft.world.entity.player.Player;
  * @param claimed   true once the starter relic has been granted (never granted twice)
  * @param cooldowns per-player cooldowns: "item_id/primary" or "item_id/blessed" → ready game time
  */
-public record PlayerOlympusData(Optional<String> god, boolean claimed, Map<String, Long> cooldowns, int bonusSlots) {
-	public static final PlayerOlympusData EMPTY = new PlayerOlympusData(Optional.empty(), false, Map.of(), 0);
+public record PlayerOlympusData(Optional<String> god, boolean claimed, Map<String, Long> cooldowns, int bonusSlots, java.util.List<java.util.UUID> allies) {
+	public static final PlayerOlympusData EMPTY = new PlayerOlympusData(Optional.empty(), false, Map.of(), 0, java.util.List.of());
 
 	public static final Codec<PlayerOlympusData> CODEC = RecordCodecBuilder.create(i -> i.group(
 		Codec.STRING.optionalFieldOf("god").forGetter(PlayerOlympusData::god),
 		Codec.BOOL.optionalFieldOf("claimed", false).forGetter(PlayerOlympusData::claimed),
 		Codec.unboundedMap(Codec.STRING, Codec.LONG).optionalFieldOf("cooldowns", Map.of()).forGetter(PlayerOlympusData::cooldowns),
-		Codec.INT.optionalFieldOf("bonus_slots", 0).forGetter(PlayerOlympusData::bonusSlots)
+		Codec.INT.optionalFieldOf("bonus_slots", 0).forGetter(PlayerOlympusData::bonusSlots),
+		net.minecraft.core.UUIDUtil.CODEC.listOf().optionalFieldOf("allies", java.util.List.of()).forGetter(PlayerOlympusData::allies)
 	).apply(i, PlayerOlympusData::new));
 
 	public static final AttachmentType<PlayerOlympusData> TYPE = AttachmentRegistry.create(Olympus.id("player_data"),
@@ -44,7 +45,7 @@ public record PlayerOlympusData(Optional<String> god, boolean claimed, Map<Strin
 	}
 
 	public PlayerOlympusData withClaim(God newGod) {
-		return new PlayerOlympusData(Optional.of(newGod.id()), true, cooldowns, bonusSlots);
+		return new PlayerOlympusData(Optional.of(newGod.id()), true, cooldowns, bonusSlots, allies);
 	}
 
 	public long cooldown(String key) {
@@ -60,11 +61,15 @@ public record PlayerOlympusData(Optional<String> god, boolean claimed, Map<Strin
 			}
 		});
 		map.put(key, readyAt);
-		return new PlayerOlympusData(god, claimed, Map.copyOf(map), bonusSlots);
+		return new PlayerOlympusData(god, claimed, Map.copyOf(map), bonusSlots, allies);
 	}
 
 	public PlayerOlympusData withBonusSlots(int slots) {
-		return new PlayerOlympusData(god, claimed, cooldowns, slots);
+		return new PlayerOlympusData(god, claimed, cooldowns, slots, allies);
+	}
+
+	public PlayerOlympusData withAllies(java.util.List<java.util.UUID> newAllies) {
+		return new PlayerOlympusData(god, claimed, cooldowns, bonusSlots, java.util.List.copyOf(newAllies));
 	}
 
 	public static void init() {
