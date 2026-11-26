@@ -65,9 +65,9 @@ The core is used up. Enchantments, name and legendary data are kept.
 ### Caduceus (crafting)
 No End items needed.
 ```
-P H P     P = Phantom Membrane (wings)
-E B E     H = Heavy Core (winged cap, from Ominous Vaults)
-R B R     E = Eye of Ender (serpents' eyes), B = Olympian Bronze Block (×2), R = Breeze Rod (Hermes' wind)
+D H D     D = Diamond Block, H = Heavy Core (from Ominous Vaults)
+E N E     E = Enchanted Golden Apple, N = Netherite Block
+R B R     R = Breeze Rod, B = Olympian Bronze Block
 ```
 
 ### Thyrsus (crafting)
