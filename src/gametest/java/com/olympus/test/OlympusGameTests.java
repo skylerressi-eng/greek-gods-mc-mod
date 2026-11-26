@@ -395,6 +395,20 @@ public class OlympusGameTests {
 		helper.succeed();
 	}
 
+	@GameTest
+	public void laurelRaisesTheLimit(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+		helper.assertTrue(com.olympus.limit.GodItemLimit.max(player) == 3, "base limit should be 3");
+		player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(ModItems.LAUREL_OF_OLYMPUS, 3));
+		for (int i = 0; i < 3; i++) {
+			ModItems.LAUREL_OF_OLYMPUS.use(helper.getLevel(), player, net.minecraft.world.InteractionHand.MAIN_HAND);
+		}
+		helper.assertTrue(com.olympus.limit.GodItemLimit.max(player) == 5, "limit should cap at 5, got " + com.olympus.limit.GodItemLimit.max(player));
+		helper.assertTrue(player.getMainHandItem().getCount() == 1, "the third Laurel should not be used up");
+		helper.succeed();
+	}
+
 	private static int countGodItems(ServerPlayer player) {
 		int n = 0;
 		for (int i = 0; i < player.getInventory().getContainerSize(); i++) {

@@ -51,6 +51,7 @@ public class OlympusModelProvider extends FabricModelProvider {
 		looksLike(g, ModItems.BLESSING_CORE, "item/heart_of_the_sea");
 		looksLike(g, ModItems.ASCENSION_CORE, "item/nether_star");
 		looksLike(g, ModItems.GOD_SWAPPER, "item/ender_eye");
+		looksLike(g, ModItems.LAUREL_OF_OLYMPUS, "item/totem_of_undying");
 		looksLike(g, ModItems.GORGONEION_BANNER_PATTERN, "item/skull_banner_pattern");
 		looksLike(g, ModItems.THUNDERBOLT_BANNER_PATTERN, "item/flow_banner_pattern");
 

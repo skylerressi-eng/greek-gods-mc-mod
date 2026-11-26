@@ -6,7 +6,7 @@ A Fabric mod for **Minecraft 1.21.11** (Java 21). The gods of Olympus claim ever
 
 ## How it plays
 1. **Claimed on first join.** A random god claims you ("You have been claimed by Zeus!") and gives you their starter relic.
-2. **Carry at most 3 god items.** They drop when you die (others can take them), never break, glow on the ground, never despawn, and survive fire, lava and explosions (the void still destroys them). No ender chests, shulker boxes or bundles.
+2. **Carry at most 3 god items** (Laurels of Olympus raise it to 5). They drop when you die (others can take them), never break, glow on the ground, never despawn, and survive fire, lava and explosions (the void still destroys them). No ender chests, shulker boxes or bundles.
 3. **Upgrade** in a smithing table: Blessing Core → **Blessed ★** (-25% cooldowns, unlocks the Divine Power on **R**), then Ascension Core → **Ascended ★★** (-50% cooldowns, +25% durations and radii, gold name).
 4. **Reroll** your god with the God Swapper: hold it, starter relic in offhand, hold right-click 3 s.
 5. **Craft** stronger relics: each one consumes its god's starter relic.
@@ -57,6 +57,7 @@ Every relic looks like its vanilla base item (Talaria = gold leather boots, Gobl
 | Divine Smithing Template | Smithing template, ~8% in Ancient City / Bastion / End City treasure; copyable |
 | Blessing Core / Ascension Core | Upgrade cores (smithing table template slot) |
 | God Swapper | Rerolls your starter relic |
+| Laurel of Olympus | Right-click: permanently carry one more god item (up to 5) |
 | Ambrosia | Heals 6 hearts, Regeneration II, Absorption II (30 s cooldown) |
 | Nectar | Clears all harmful effects, Resistance I |
 | Sun Arrows | Set targets on fire and light up where they land |

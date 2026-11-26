@@ -46,6 +46,14 @@ E T E     E = Echo Shard
 D G D     T = Totem of Undying, D = Diamond Block, G = Enchanted Golden Apple
 ```
 
+### Laurel of Olympus ×1
+Right-click: permanently carry **one more god item** (up to +2, so 5 total). Kept when you die.
+```
+D B D     D = Diamond Block
+E S E     B = Block of Olympian Bronze
+D B D     E = Enchanted Golden Apple, S = Nether Star
+```
+
 ### Banner patterns (shapeless, cosmetic)
 - **Gorgoneion**: Paper + Gold Block + Spider Eye
 - **Thunderbolt**: Paper + Gold Block + Lightning Rod

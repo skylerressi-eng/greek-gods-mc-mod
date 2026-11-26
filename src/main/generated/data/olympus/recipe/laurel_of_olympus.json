@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "olympus:olympian_bronze_block",
+    "D": "minecraft:diamond_block",
+    "E": "minecraft:enchanted_golden_apple",
+    "S": "minecraft:nether_star"
+  },
+  "pattern": [
+    "DBD",
+    "ESE",
+    "DBD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "olympus:laurel_of_olympus"
+  }
+}

@@ -51,6 +51,10 @@ public class OlympusConfig {
 	public static class General {
 		/** Maximum god items a player may carry. */
 		public int maxGodItems = 3;
+		/** Each Laurel of Olympus permanently adds this many relic slots... */
+		public int laurelSlotsPerUse = 1;
+		/** ...up to this many extra slots per player. */
+		public int laurelMaxBonusSlots = 2;
 		/** Stat tier of starter relics: netherite, diamond or iron. Restart required. */
 		public String starterTier = "netherite";
 		/** If false, abilities never apply harmful effects to other players (buffs still work). */

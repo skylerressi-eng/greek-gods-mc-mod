@@ -22,8 +22,15 @@ public final class GodItemLimit {
 	private GodItemLimit() {
 	}
 
+	/** Base limit from the config. */
 	public static int max() {
 		return Math.max(0, ConfigManager.get().general.maxGodItems);
+	}
+
+	/** This player's limit: base + slots earned with Laurels of Olympus. */
+	public static int max(Player player) {
+		int bonus = Math.min(com.olympus.data.PlayerOlympusData.get(player).bonusSlots(), ConfigManager.get().general.laurelMaxBonusSlots);
+		return max() + Math.max(0, bonus);
 	}
 
 	public static boolean bypasses(Player player) {
@@ -52,7 +59,7 @@ public final class GodItemLimit {
 
 	/** May this player gain one more god item right now? */
 	public static boolean canTakeAnother(Player player) {
-		return bypasses(player) || count(player) < max();
+		return bypasses(player) || count(player) < max(player);
 	}
 
 	public static void deny(Player player) {
@@ -62,7 +69,7 @@ public final class GodItemLimit {
 		long now = sp.level().getGameTime();
 		if (now - LAST_MESSAGE.getOrDefault(sp.getUUID(), 0L) >= 40) {
 			LAST_MESSAGE.put(sp.getUUID(), now);
-			sp.displayClientMessage(Component.translatable("olympus.message.limit", max()).withStyle(ChatFormatting.GOLD), true);
+			sp.displayClientMessage(Component.translatable("olympus.message.limit", max(sp)).withStyle(ChatFormatting.GOLD), true);
 		}
 	}
 
@@ -71,7 +78,7 @@ public final class GodItemLimit {
 		if (bypasses(player)) {
 			return;
 		}
-		int over = count(player) - max();
+		int over = count(player) - max(player);
 		if (over <= 0) {
 			return;
 		}

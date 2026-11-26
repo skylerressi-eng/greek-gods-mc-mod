@@ -33,6 +33,10 @@ public final class GodTooltip {
 			lines.add(at, Component.translatable("olympus.hint.ascension_core").withStyle(ChatFormatting.GRAY));
 			return;
 		}
+		if (stack.is(ModItems.LAUREL_OF_OLYMPUS)) {
+			lines.add(at, Component.translatable("olympus.hint.laurel", ConfigManager.get().general.laurelMaxBonusSlots).withStyle(ChatFormatting.GOLD));
+			return;
+		}
 		if (stack.is(ModItems.GOD_SWAPPER)) {
 			lines.add(at, Component.translatable("olympus.hint.god_swapper").withStyle(ChatFormatting.GRAY));
 			return;

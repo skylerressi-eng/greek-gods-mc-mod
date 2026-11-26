@@ -47,6 +47,10 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 		t.add(ModItems.BLESSING_CORE, "Blessing Core");
 		t.add(ModItems.ASCENSION_CORE, "Ascension Core");
 		t.add(ModItems.GOD_SWAPPER, "God Swapper");
+		t.add(ModItems.LAUREL_OF_OLYMPUS, "Laurel of Olympus");
+		t.add("olympus.hint.laurel", "Right-click: permanently carry one more god item (max +%s)");
+		t.add("olympus.message.laurel_used", "The gods honor you: you may now carry %s relics");
+		t.add("olympus.message.laurel_maxed", "The gods' favor is already yours: you carry up to %s relics");
 		t.add(ModItems.GORGONEION_BANNER_PATTERN, "Banner Pattern");
 		t.add("item.olympus.gorgoneion_banner_pattern.desc", "Gorgoneion");
 		t.add(ModItems.THUNDERBOLT_BANNER_PATTERN, "Banner Pattern");
@@ -203,7 +207,7 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 		t.add("olympus.level.ascended", "Ascended");
 
 		// ─── Messages ───
-		t.add("olympus.claim.title", "You have been claimed by %s!");
+		t.add("olympus.claim.title", "%s claims you!");
 		t.add("olympus.claim.chat", "⚡ %s has claimed you as their champion. Wield the %s well.");
 		t.add("olympus.claim.broadcast", "%s has been claimed by %s.");
 		t.add("olympus.message.cooldown", "%s recharges in %s");

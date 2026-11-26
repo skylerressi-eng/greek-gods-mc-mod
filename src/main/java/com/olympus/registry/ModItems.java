@@ -62,6 +62,8 @@ public final class ModItems {
 		new Item.Properties().rarity(Rarity.EPIC).fireResistant().component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
 	public static final Item GOD_SWAPPER = register("god_swapper", com.olympus.item.GodSwapperItem::new,
 		new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant().component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
+	public static final Item LAUREL_OF_OLYMPUS = register("laurel_of_olympus", com.olympus.item.LaurelItem::new,
+		new Item.Properties().stacksTo(16).rarity(Rarity.EPIC).fireResistant().component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
 	public static final Item GORGONEION_BANNER_PATTERN = register("gorgoneion_banner_pattern", Item::new,
 		new Item.Properties().stacksTo(1).rarity(Rarity.RARE).component(DataComponents.PROVIDES_BANNER_PATTERNS, ModKeys.PATTERN_ITEM_GORGONEION));
 	public static final Item THUNDERBOLT_BANNER_PATTERN = register("thunderbolt_banner_pattern", Item::new,

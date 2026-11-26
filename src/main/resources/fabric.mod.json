@@ -23,7 +23,11 @@
 		]
 	},
 	"mixins": [
-		"olympus.mixins.json"
+		"olympus.mixins.json",
+		{
+			"config": "olympus.client.mixins.json",
+			"environment": "client"
+		}
 	],
 	"depends": {
 		"fabricloader": ">=0.20.1",

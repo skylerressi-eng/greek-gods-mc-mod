@@ -64,6 +64,12 @@ public class OlympusRecipeProvider extends FabricRecipeProvider {
 					.unlockedBy(getHasName(Items.TOTEM_OF_UNDYING), has(Items.TOTEM_OF_UNDYING))
 					.save(output);
 
+				shaped(RecipeCategory.MISC, ModItems.LAUREL_OF_OLYMPUS)
+					.pattern("DBD").pattern("ESE").pattern("DBD")
+					.define('D', Items.DIAMOND_BLOCK).define('B', ModItems.OLYMPIAN_BRONZE_BLOCK)
+					.define('E', Items.ENCHANTED_GOLDEN_APPLE).define('S', Items.NETHER_STAR)
+					.unlockedBy(getHasName(Items.NETHER_STAR), has(Items.NETHER_STAR)).save(output);
+
 				// Upgrades (smithing table): core + god item + Block of Olympian Bronze
 				upgrade("blessed_upgrade", ModItems.BLESSING_CORE, 0, 1);
 				upgrade("ascended_upgrade", ModItems.ASCENSION_CORE, 1, 2);
