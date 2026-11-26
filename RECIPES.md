@@ -63,12 +63,12 @@ The core is used up. Enchantments, name and legendary data are kept.
 ## Craftable god items
 
 ### Caduceus (crafting)
+No End items needed.
 ```
-P S P     P = Phantom Membrane (wings)
-E B E     S = Shulker Shell (winged cap)
-R · R     E = Eye of Ender (the serpents' eyes), B = Olympian Bronze Block, R = Blaze Rod
+P H P     P = Phantom Membrane (wings)
+E B E     H = Heavy Core (winged cap, from Ominous Vaults)
+R B R     E = Eye of Ender (serpents' eyes), B = Olympian Bronze Block (×2), R = Breeze Rod (Hermes' wind)
 ```
-*(symmetric layout: the 2 blaze rods form the staff's forked foot)*
 
 ### Thyrsus (crafting)
 ```
