@@ -59,6 +59,9 @@ public final class BossCore {
 		this.bar = new ServerBossEvent(boss.getDisplayName(), color, BossEvent.BossBarOverlay.NOTCHED_10);
 		this.bar.setDarkenScreen(true);
 		this.bar.setPlayBossMusic(true);
+		// The SCALE attribute enlarges the model, but the hitbox is sized before attributes exist:
+		// recompute it so you can hit the whole body (runs on both server and client).
+		boss.refreshDimensions();
 	}
 
 	public BossCore attack(String name, Consumer<LivingEntity> telegraph, Consumer<LivingEntity> execute) {

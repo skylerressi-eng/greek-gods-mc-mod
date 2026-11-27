@@ -307,6 +307,19 @@ public class OlympusGameTests {
 	}
 
 	@GameTest
+	public void bossHitboxesMatchTheirSize(GameTestHelper helper) {
+		for (var type : java.util.List.of(com.olympus.registry.ModEntities.TYPHON, com.olympus.registry.ModEntities.CETUS, com.olympus.registry.ModEntities.CERBERUS,
+			com.olympus.registry.ModEntities.MEDUSA, com.olympus.registry.ModEntities.COLCHIAN_DRAGON, com.olympus.registry.ModEntities.KRONOS)) {
+			var boss = type.create(helper.getLevel(), net.minecraft.world.entity.EntitySpawnReason.EVENT);
+			float expected = type.getHeight() * boss.getScale();
+			System.out.println("HITBOX " + type.getDescriptionId() + " scale=" + boss.getScale() + " height=" + boss.getBbHeight() + " expected=" + expected);
+			helper.assertTrue(boss.getScale() > 1.01f && Math.abs(boss.getBbHeight() - expected) < 0.01f,
+				type.getDescriptionId() + " hitbox " + boss.getBbHeight() + " but model is " + expected + " tall");
+		}
+		helper.succeed();
+	}
+
+	@GameTest
 	public void creativePlayersKeepEveryRelic(GameTestHelper helper) {
 		ServerPlayer player = helper.makeMockServerPlayerInLevel();
 		player.setGameMode(net.minecraft.world.level.GameType.CREATIVE);
