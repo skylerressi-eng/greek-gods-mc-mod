@@ -307,6 +307,7 @@
   "olympus.message.spear_armed": "Your next throw will shake the earth",
   "olympus.message.swapper_howto": "Hold the God Swapper in your main hand and your starter relic in your offhand, then hold right-click",
   "olympus.message.volley_ready": "Volley ready! Your next shot fires a spread of silver arrows",
+  "olympus.message.waypoint_blocked": "Your waypoint is blocked",
   "olympus.message.waypoint_dimension": "Your waypoint is in another dimension",
   "olympus.message.waypoint_set": "Waypoint marked. Press again to return here",
   "olympus.tooltip.cooldown": "Cooldown: %s",

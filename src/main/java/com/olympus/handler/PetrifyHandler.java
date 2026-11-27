@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.Blocks;
 /** Head of Medusa: petrified creatures can't move, jump or attack. Players get a shorter stun and immunity after. */
 public final class PetrifyHandler {
 	private static final Identifier STONE = Olympus.id("petrified");
+	private static final String STONE_TAG = "olympus.petrified";
 	private record Stone(long until, ServerLevel level, boolean wasNoAi) {
 	}
 
@@ -80,6 +81,9 @@ public final class PetrifyHandler {
 		addModifier(target.getAttribute(Attributes.JUMP_STRENGTH));
 		if (target instanceof Mob mob) {
 			mob.setNoAi(true);
+			if (!wasNoAi) {
+				mob.addTag(STONE_TAG); // NoAI is saved: if the chunk unloads mid-stun, undo it on reload
+			}
 		}
 		target.setDeltaMovement(0, Math.min(0, target.getDeltaMovement().y), 0);
 		target.hurtMarked = true;
@@ -97,7 +101,10 @@ public final class PetrifyHandler {
 
 	private static void release(LivingEntity entity, Stone stone) {
 		if (ROOTED.containsKey(entity.getUUID())) {
-			if (entity instanceof Mob mob) mob.setNoAi(stone.wasNoAi());
+			if (entity instanceof Mob mob) {
+				mob.setNoAi(stone.wasNoAi());
+				mob.removeTag(STONE_TAG);
+			}
 			return; // still rooted by a Vine Snare; the root releases the attributes
 		}
 		var speed = entity.getAttribute(Attributes.MOVEMENT_SPEED);
@@ -106,10 +113,18 @@ public final class PetrifyHandler {
 		if (jump != null) jump.removeModifier(STONE);
 		if (entity instanceof Mob mob) {
 			mob.setNoAi(stone.wasNoAi());
+			mob.removeTag(STONE_TAG);
 		}
 	}
 
 	public static void register() {
+		// A mob saved while petrified (chunk unloaded, server stopped) wakes up when it loads again.
+		net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> {
+			if (entity instanceof Mob mob && mob.getTags().contains(STONE_TAG) && !isPetrified(mob)) {
+				mob.removeTag(STONE_TAG);
+				mob.setNoAi(false);
+			}
+		});
 		// Petrified attackers can't deal damage.
 		ServerLivingEntityEvents.ALLOW_DAMAGE.register((victim, source, amount) ->
 			!(source.getEntity() != null && source.getDirectEntity() == source.getEntity() && isPetrified(source.getEntity())));

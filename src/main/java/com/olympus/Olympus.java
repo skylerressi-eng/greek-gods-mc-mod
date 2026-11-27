@@ -91,6 +91,18 @@ public class Olympus implements ModInitializer {
 			com.olympus.handler.CraftedRelicHandler.forget(player.getUUID());
 			com.olympus.limit.GodItemLimit.forget(player.getUUID());
 		});
+		// Foxes, dolphins, allays and piglins have their own pickup rules: whatever mob ends up
+		// holding a relic spits it out, so a despawning mob can never take one with it.
+		net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents.EQUIPMENT_CHANGE.register((entity, slot, from, to) -> {
+			if (entity instanceof net.minecraft.world.entity.Mob mob && GodItem.is(to) && mob.level() instanceof net.minecraft.server.level.ServerLevel level) {
+				ItemStack relic = to.copy();
+				mob.setItemSlot(slot, ItemStack.EMPTY);
+				var dropped = mob.spawnAtLocation(level, relic);
+				if (dropped != null) {
+					dropped.setPickUpDelay(40);
+				}
+			}
+		});
 		EntityTrackingEvents.START_TRACKING.register(HelmHandler::onStartTracking);
 
 		ServerTickEvents.END_SERVER_TICK.register(Olympus::tick);

@@ -189,6 +189,7 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 		t.add("olympus.message.soul_harvest", "Soul Harvest: your victims will rise to serve you");
 		t.add("olympus.message.waypoint_set", "Waypoint marked. Press again to return here");
 		t.add("olympus.message.waypoint_dimension", "Your waypoint is in another dimension");
+		t.add("olympus.message.waypoint_blocked", "Your waypoint is blocked");
 		t.add("olympus.message.spear_armed", "Your next throw will shake the earth");
 		t.add("olympus.message.hammer_mode", "Forge Hammer: %s mining");
 		t.add("olympus.message.legendary_duplicate", "A false %s crumbles to dust: only one exists");

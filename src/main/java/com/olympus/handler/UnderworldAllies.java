@@ -62,8 +62,8 @@ public final class UnderworldAllies {
 		skeleton.addTag(TAG);
 		skeleton.setPersistenceRequired();
 		skeleton.setCustomName(net.minecraft.network.chat.Component.translatable("entity.olympus.underworld_warrior").withStyle(net.minecraft.ChatFormatting.DARK_PURPLE));
+		ALLIES.put(skeleton.getUUID(), new Ally(owner.getUUID(), level.getGameTime() + ticks, level)); // before spawning: see ENTITY_LOAD
 		level.addFreshEntity(skeleton);
-		ALLIES.put(skeleton.getUUID(), new Ally(owner.getUUID(), level.getGameTime() + ticks, level));
 		MirrorHandler.charmAlly(skeleton, owner, ticks);
 		Fx.burst(level, ModParticles.SHADE, pos.add(0, 1, 0), 30, 0.4, 0.05);
 		Fx.sound(level, pos, net.minecraft.sounds.SoundEvents.SKELETON_AMBIENT, 1.0f, 0.6f);
@@ -88,6 +88,15 @@ public final class UnderworldAllies {
 	}
 
 	public static void register() {
+		// Allies and boss minions saved in an unloaded chunk would come back as ordinary hostile
+		// mobs with nobody controlling them: they crumble when they load instead.
+		net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> {
+			if (entity.getTags().contains(TAG) && !ALLIES.containsKey(entity.getUUID())) {
+				entity.discard();
+			} else if (entity.getTags().contains(com.olympus.entity.BossCore.MINION_TAG) && com.olympus.event.EventManager.current().isEmpty()) {
+				entity.discard();
+			}
+		});
 		// Allies never die normally: they crumble (no loot, no XP).
 		ServerLivingEntityEvents.ALLOW_DEATH.register((entity, source, amount) -> {
 			if (entity.getTags().contains(TAG) || entity.getTags().contains(com.olympus.entity.BossCore.MINION_TAG)) {

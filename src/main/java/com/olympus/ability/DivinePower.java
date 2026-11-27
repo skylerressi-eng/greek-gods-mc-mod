@@ -304,14 +304,17 @@ public final class DivinePower {
 	}
 
 	// ─── Hermes: Caduceus Waypoint ───
-	private static final Map<UUID, net.minecraft.core.GlobalPos> WAYPOINTS = new ConcurrentHashMap<>();
+	private record Waypoint(net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> dimension, net.minecraft.world.phys.Vec3 pos) {
+	}
+
+	private static final Map<UUID, Waypoint> WAYPOINTS = new ConcurrentHashMap<>();
 	private static final Map<UUID, Long> WAYPOINT_UNTIL = new ConcurrentHashMap<>();
 
 	private static boolean waypoint(ServerPlayer player, ServerLevel level) {
 		long now = level.getGameTime();
 		var mark = WAYPOINTS.get(player.getUUID());
 		if (mark == null || now > WAYPOINT_UNTIL.getOrDefault(player.getUUID(), 0L)) {
-			WAYPOINTS.put(player.getUUID(), net.minecraft.core.GlobalPos.of(level.dimension(), player.blockPosition()));
+			WAYPOINTS.put(player.getUUID(), new Waypoint(level.dimension(), player.position()));
 			WAYPOINT_UNTIL.put(player.getUUID(), now + cfg().caduceus.waypointWindowSeconds * 20L);
 			Fx.pillar(level, ModParticles.WIND_WISP, player.position(), 3, 20);
 			player.displayClientMessage(Component.translatable("olympus.message.waypoint_set").withStyle(God.HERMES.style()), true);
@@ -322,8 +325,13 @@ public final class DivinePower {
 			player.displayClientMessage(Component.translatable("olympus.message.waypoint_dimension").withStyle(ChatFormatting.GRAY), true);
 			return false;
 		}
+		var dest = mark.pos();
+		if (!level.noCollision(player, player.getBoundingBox().move(dest.subtract(player.position())))) {
+			player.displayClientMessage(Component.translatable("olympus.message.waypoint_blocked").withStyle(ChatFormatting.RED), true);
+			return false; // someone walled it off: no suffocation trap
+		}
 		Fx.burst(level, ModParticles.WIND_WISP, player.position().add(0, 1, 0), 30, 0.4, 0.1);
-		player.teleportTo(mark.pos().getX() + 0.5, mark.pos().getY(), mark.pos().getZ() + 0.5);
+		player.teleportTo(dest.x, dest.y, dest.z);
 		player.resetFallDistance();
 		Fx.burst(level, ModParticles.WIND_WISP, player.position().add(0, 1, 0), 30, 0.4, 0.1);
 		Fx.sound(player, ModSounds.TALARIA_JUMP, 1.2f, 0.7f);
@@ -365,7 +373,7 @@ public final class DivinePower {
 
 	private static boolean vineSnare(ServerPlayer player, ServerLevel level, UpgradeLevel lvl) {
 		int ticks = lvl.durationTicks(cfg().thyrsus.snareSeconds);
-		for (LivingEntity e : Targets.around(player, lvl.radius(cfg().thyrsus.snareRadius), e -> Targets.canHarm(player, e))) {
+		for (LivingEntity e : Targets.around(player, lvl.radius(cfg().thyrsus.snareRadius), e -> Targets.canHarm(player, e) && !Targets.isBoss(e))) {
 			com.olympus.handler.PetrifyHandler.root(e, level, ticks); // can't move or jump, can still swing
 			level.sendParticles(ModParticles.GRAIN_LEAF, e.getX(), e.getY() + 0.3, e.getZ(), 15, 0.3, 0.2, 0.3, 0.01);
 		}

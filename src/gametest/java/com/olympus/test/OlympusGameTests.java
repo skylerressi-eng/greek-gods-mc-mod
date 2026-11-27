@@ -288,6 +288,25 @@ public class OlympusGameTests {
 	}
 
 	@GameTest
+	public void mobsCantKeepRelics(GameTestHelper helper) {
+		var fox = helper.spawn(net.minecraft.world.entity.EntityType.FOX, new BlockPos(1, 2, 1));
+		fox.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND, new ItemStack(ModItems.AEGIS));
+		helper.succeedWhen(() -> {
+			helper.assertTrue(fox.getMainHandItem().isEmpty(), "fox still holds the relic");
+			helper.assertTrue(!helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, fox.getBoundingBox().inflate(4),
+				e -> e.getItem().is(ModItems.AEGIS)).isEmpty(), "relic wasn't dropped");
+		});
+	}
+
+	@GameTest
+	public void petrifiedMobsWakeUp(GameTestHelper helper) {
+		var zombie = helper.spawn(net.minecraft.world.entity.EntityType.ZOMBIE, new BlockPos(1, 2, 1));
+		com.olympus.handler.PetrifyHandler.petrifyBy(zombie, helper.getLevel(), 10);
+		helper.assertTrue(zombie.isNoAi() && zombie.getTags().contains("olympus.petrified"), "not petrified");
+		helper.succeedWhen(() -> helper.assertTrue(!zombie.isNoAi() && !zombie.getTags().contains("olympus.petrified"), "still stone"));
+	}
+
+	@GameTest
 	public void creativePlayersKeepEveryRelic(GameTestHelper helper) {
 		ServerPlayer player = helper.makeMockServerPlayerInLevel();
 		player.setGameMode(net.minecraft.world.level.GameType.CREATIVE);
