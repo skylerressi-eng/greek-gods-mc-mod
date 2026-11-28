@@ -16,7 +16,20 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Slot.class)
-public abstract class SlotMixin {
+public abstract class SlotMixin implements com.olympus.util.StorageSlot {
+	@org.spongepowered.asm.mixin.Unique
+	private boolean olympus$storage;
+
+	@Override
+	public boolean olympus$isStorage() {
+		return olympus$storage;
+	}
+
+	@Override
+	public void olympus$setStorage(boolean storage) {
+		olympus$storage = storage;
+	}
+
 	@Shadow
 	@Final
 	public Container container;
@@ -24,10 +37,10 @@ public abstract class SlotMixin {
 	@Shadow
 	public abstract ItemStack getItem();
 
-	/** No hiding relics in the ender chest. */
+	/** No hiding relics in the ender chest or any storage container (chests, barrels, hoppers, furnaces...). */
 	@Inject(method = "mayPlace", at = @At("HEAD"), cancellable = true)
 	private void olympus$noEnderChest(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-		if (container instanceof PlayerEnderChestContainer && GodItem.is(stack)) {
+		if ((container instanceof PlayerEnderChestContainer || olympus$storage) && GodItem.is(stack)) {
 			cir.setReturnValue(false);
 		}
 	}

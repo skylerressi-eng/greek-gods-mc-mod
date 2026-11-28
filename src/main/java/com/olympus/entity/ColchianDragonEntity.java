@@ -48,6 +48,46 @@ public class ColchianDragonEntity extends Zoglin implements OlympusBoss {
 				p.hurtServer((ServerLevel) level(), core.bossDamage(), 6f);
 			}
 		});
+
+		// Burrow: dives underground and erupts beneath you.
+		core.attack("burrow", t -> core.warnCircle(t.position(), 3.5, ParticleTypes.CRIT), t -> {
+			Vec3 at = t.position();
+			var dirt = new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK, net.minecraft.world.level.block.Blocks.DIRT.defaultBlockState());
+			Fx.burst((ServerLevel) level(), dirt, position().add(0, 0.5, 0), 60, 1.2, 0.1);
+			setInvisible(true);
+			core.schedule(20, () -> {
+				teleportTo(at.x, at.y, at.z);
+				setInvisible(false);
+				for (Player p : core.playersNear(at, 3.5)) {
+					p.hurtServer((ServerLevel) level(), core.bossDamage(), 11f);
+					p.setDeltaMovement(p.getDeltaMovement().add(0, 1.1, 0));
+					p.hurtMarked = true;
+				}
+				Fx.burst((ServerLevel) level(), dirt, at.add(0, 0.5, 0), 80, 1.5, 0.3);
+				Fx.sound(this, net.minecraft.sounds.SoundEvents.RAVAGER_ROAR, 2f, 0.8f);
+			});
+		});
+		// ULTIMATE: Sleepless Rampage, three charges in a row.
+		core.rageAttack("sleepless_rampage", t -> core.warnCircle(position(), 4, ParticleTypes.ANGRY_VILLAGER), t -> {
+			for (int c = 0; c < 3; c++) {
+				core.schedule(c * 20 + 1, () -> {
+					LivingEntity target = core.nearestPlayer((ServerLevel) level(), 30);
+					if (target == null) return;
+					Vec3 dir = target.position().subtract(position()).multiply(1, 0, 1).normalize();
+					setDeltaMovement(dir.scale(2.4).add(0, 0.2, 0));
+					hurtMarked = true;
+					Fx.sound(this, net.minecraft.sounds.SoundEvents.HOGLIN_ATTACK, 2f, 0.6f);
+					core.schedule(7, () -> {
+						for (Player p : core.playersNear(position(), 3.5)) {
+							p.hurtServer((ServerLevel) level(), core.bossDamage(), 9f);
+							p.knockback(2.0, -dir.x, -dir.z);
+							p.hurtMarked = true;
+						}
+						Fx.burst((ServerLevel) level(), ParticleTypes.EXPLOSION, position().add(0, 1, 0), 3, 0.5, 0);
+					});
+				});
+			}
+		});
 	}
 
 	private final BossCore core;

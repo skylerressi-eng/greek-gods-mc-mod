@@ -6,7 +6,7 @@ A Fabric mod for **Minecraft 1.21.11** (Java 21). The gods of Olympus claim ever
 
 ## How it plays
 1. **Claimed on first join.** A random god claims you ("You have been claimed by Zeus!") and gives you their starter relic.
-2. **Carry at most 3 god items** (Laurels of Olympus raise it to 5). They drop when you die (others can take them), never break, glow on the ground, never despawn, and survive fire, lava and explosions (the void still destroys them). No ender chests, shulker boxes or bundles.
+2. **Carry at most 3 god items** (Laurels of Olympus raise it to 5). They drop when you die (others can take them), never break, glow on the ground, never despawn, and survive fire, lava and explosions (the void still destroys them). They can't be stored: no chests, barrels, ender chests, shulker boxes, hoppers, furnaces, donkey/boat chests, pots, shelves or bundles (crafting, smithing and anvils still work).
 3. **Upgrade** in a smithing table: Blessing Core → **Blessed ★** (-25% cooldowns, unlocks the Divine Power on **R**), then Ascension Core → **Ascended ★★** (-50% cooldowns, +25% durations and radii, gold name).
 4. **Reroll** your god with the God Swapper: hold it, starter relic in offhand, hold right-click 3 s.
 5. **Craft** stronger relics: each one consumes its god's starter relic.
@@ -69,16 +69,16 @@ Every relic looks like its vanilla base item (Talaria = gold leather boots, Gobl
 See **[RECIPES.md](RECIPES.md)**. All recipes are datapack JSON (`data/olympus/recipe/`), so a datapack can change any of them.
 
 ## Events
-| Event | Boss | Where | Legendary |
-|---|---|---|---|
-| Wrath of Zeus | Typhon | anywhere (also starts by itself in thunderstorms) | Thunderbolt of Zeus |
-| Rise of the Deep | Cetus | deep ocean only | Trident of Poseidon |
-| Gates of the Underworld | Cerberus | Nether only | Bident of Hades |
-| Gorgon's Lair | Medusa (look away when she glares!) | anywhere | Head of Medusa |
-| Quest for the Fleece | Colchian Dragon | anywhere | Golden Fleece |
-| Titanomachy | Kronos | anywhere | Scythe of Kronos (+ Ascension Core) |
+| Event | Boss | Where | Attacks | Rage ultimate (below 50%) | Legendary |
+|---|---|---|---|---|---|
+| Wrath of Zeus | Typhon | anywhere (also starts by itself in thunderstorms) | Lightning Ring, Storm Pull, Thunder Slam, Chain Lightning | **Eye of the Storm**: rings of lightning roll outward | Thunderbolt of Zeus |
+| Rise of the Deep | Cetus | deep ocean only | Tidal Charge, Whirlpool, Call of the Drowned, Tidal Wave | **Maelstrom**: a whirlpool drags everyone in for 4s | Trident of Poseidon |
+| Gates of the Underworld | Cerberus | Nether only | Hellfire Breath, Triple Bite, Howl, Pounce | **Three Heads of Hellfire**: three fire streams spin around him | Bident of Hades |
+| Gorgon's Lair | Medusa | anywhere | Petrifying Gaze (look away!), Serpent Volley, Stone Snakes, Venom Rain | **Gorgon's Ambush**: teleports behind the farthest hero | Head of Medusa |
+| Quest for the Fleece | Colchian Dragon | anywhere | Ground Slam, Venom Breath, Tail Sweep, Burrow | **Sleepless Rampage**: three charges in a row | Golden Fleece |
+| Titanomachy | Kronos | anywhere | Time Stop, Scythe Sweep, Echoes, Titan Meteors | **Time Rewind**: snaps everyone back 3s and heals | Scythe of Kronos (+ Ascension Core) |
 
-Bosses have boss bars, scale their health with nearby players, telegraph every attack, never break blocks, and teleport to players who try to cheese them. Kronos also drops an Ascension Core for the top fighter.
+Bosses have boss bars, scale their health with nearby players, call out every attack on screen before it lands (dodge the warning circles!), **enrage at half health** (red bar, roar, faster, attack more often, unlock their ultimate), never repeat the same attack twice in a row, never break blocks, and teleport to players who try to cheese them. Kronos also drops an Ascension Core for the top fighter.
 
 ## Commands (op level 2)
 | Command | |

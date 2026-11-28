@@ -4,16 +4,20 @@
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 		"AbstractArrowMixin",
+		"AbstractContainerMenuMixin",
 		"BlockMixin",
 		"BundleContentsMixin",
+		"DecoratedPotBlockMixin",
 		"ItemEntityMixin",
 		"ItemMixin",
 		"LivingEntityMixin",
 		"MaceItemMixin",
 		"MobMixin",
+		"ShelfBlockMixin",
 		"ShulkerBoxBlockEntityMixin",
 		"ShulkerBoxSlotMixin",
 		"SlotMixin",
+		"StorageBlocksMixin",
 		"ThrownTridentMixin"
 	],
 	"injectors": {

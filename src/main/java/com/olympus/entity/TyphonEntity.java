@@ -46,6 +46,35 @@ public class TyphonEntity extends Blaze implements OlympusBoss {
 			}
 			core.lightning(t.position(), 6f);
 		});
+
+		// Chain Lightning: a bolt that jumps from player to player.
+		core.attack("chain_lightning", t -> Fx.burst((ServerLevel) level(), ModParticles.STORM_SPARK, t.position().add(0, 1, 0), 15, 0.4, 0.1), t -> {
+			java.util.Set<Player> hit = new java.util.HashSet<>();
+			LivingEntity current = t;
+			for (int hop = 0; hop < 4 && current != null; hop++) {
+				final LivingEntity strike = current;
+				core.schedule(hop * 5 + 1, () -> core.lightning(strike.position(), 7f));
+				if (strike instanceof Player sp) hit.add(sp);
+				LivingEntity next = null;
+				double best = 10 * 10;
+				for (Player p : core.playersNear(strike.position(), 10)) {
+					if (!hit.contains(p) && p.distanceToSqr(strike) < best) {
+						best = p.distanceToSqr(strike);
+						next = p;
+					}
+				}
+				if (next != null) Fx.line((ServerLevel) level(), ModParticles.STORM_SPARK, strike.position().add(0, 1, 0), next.position().add(0, 1, 0), 0.3);
+				current = next;
+			}
+		});
+		// ULTIMATE: Eye of the Storm, rings of lightning rolling outward.
+		core.rageAttack("eye_of_the_storm", t -> {
+			core.warnCircle(position(), 3, ModParticles.STORM_SPARK);
+			Fx.pillar((ServerLevel) level(), ModParticles.STORM_SPARK, position(), 12, 30);
+		}, t -> {
+			core.expandingRings(position(), 6, 3.0, 9f);
+			Fx.sound(this, net.minecraft.sounds.SoundEvents.LIGHTNING_BOLT_THUNDER, 3f, 0.6f);
+		});
 	}
 
 	private final BossCore core;

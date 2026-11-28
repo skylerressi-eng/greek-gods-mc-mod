@@ -48,6 +48,50 @@ public class CerberusEntity extends Hoglin implements OlympusBoss {
 			core.summonMinions(EntityType.WITHER_SKELETON, 2);
 			Fx.sound(this, net.minecraft.sounds.SoundEvents.RAVAGER_ROAR, 3f, 0.5f);
 		});
+
+		// Pounce: leaps onto where you stand and slams down.
+		core.attack("pounce", t -> core.warnCircle(t.position(), 3.5, ParticleTypes.FLAME), t -> {
+			Vec3 land = t.position();
+			Vec3 to = land.subtract(position());
+			setDeltaMovement(to.x * 0.18, 0.9, to.z * 0.18);
+			hurtMarked = true;
+			core.schedule(18, () -> {
+				for (Player p : core.playersNear(position(), 4)) {
+					p.hurtServer((ServerLevel) level(), core.bossDamage(), 12f);
+					p.igniteForSeconds(4);
+					p.setDeltaMovement(p.getDeltaMovement().add(0, 0.7, 0));
+					p.hurtMarked = true;
+				}
+				Fx.shockwave((ServerLevel) level(), ParticleTypes.FLAME, position(), 4);
+				Fx.sound(this, net.minecraft.sounds.SoundEvents.MACE_SMASH_GROUND_HEAVY, 2f, 0.7f);
+			});
+		});
+		// ULTIMATE: Three Heads, three streams of hellfire sweeping around him.
+		core.rageAttack("three_heads", t -> {
+			for (int k = 0; k < 3; k++) {
+				double a = Math.PI * 2 * k / 3;
+				for (int d = 2; d <= 8; d += 3) core.warnCircle(position().add(Math.cos(a) * d, 0, Math.sin(a) * d), 0.8, ParticleTypes.FLAME);
+			}
+		}, t -> {
+			for (int pulse = 0; pulse < 12; pulse++) {
+				final double base = pulse * Math.PI / 9;
+				core.schedule(pulse * 4 + 1, () -> {
+					for (int k = 0; k < 3; k++) {
+						double a = base + Math.PI * 2 * k / 3;
+						Vec3 dir = new Vec3(Math.cos(a), 0, Math.sin(a));
+						for (int d = 1; d <= 9; d++) ((ServerLevel) level()).sendParticles(ParticleTypes.FLAME, getX() + dir.x * d, getY() + 1, getZ() + dir.z * d, 3, 0.2, 0.2, 0.2, 0.02);
+						for (Player p : core.playersNear(position(), 10)) {
+							Vec3 to = p.position().subtract(position()).multiply(1, 0, 1).normalize();
+							if (to.dot(dir) > 0.93) {
+								p.hurtServer((ServerLevel) level(), core.bossDamage(), 5f);
+								p.igniteForSeconds(4);
+							}
+						}
+					}
+				});
+			}
+			Fx.sound(this, net.minecraft.sounds.SoundEvents.BLAZE_SHOOT, 3f, 0.5f);
+		});
 	}
 
 	private final BossCore core;

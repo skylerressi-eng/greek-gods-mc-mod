@@ -48,6 +48,36 @@ public class MedusaEntity extends Witch implements OlympusBoss {
 			}
 		}).attack("stone_snakes", t -> core.warnCircle(position(), 3, ModParticles.TITAN_DUST),
 			t -> core.summonMinions(EntityType.SILVERFISH, 4));
+
+		// Venom Rain: poison pools burst under every hero.
+		core.attack("venom_rain", t -> {
+			for (Player p : core.playersNear(position(), 24)) core.warnCircle(p.position(), 2.5, ParticleTypes.ITEM_SLIME);
+		}, t -> {
+			for (Player p : core.playersNear(position(), 24)) {
+				core.delayedBlast(p.position(), 2.5, 7f, 20, ParticleTypes.ITEM_SLIME, ParticleTypes.ITEM_SLIME,
+					v -> v.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 1), this));
+			}
+		});
+		// ULTIMATE: Gorgon's Ambush. She vanishes and strikes from behind the farthest hero.
+		core.rageAttack("gorgons_ambush", t -> Fx.burst((ServerLevel) level(), ModParticles.TITAN_DUST, position().add(0, 1, 0), 30, 0.6, 0.05), t -> {
+			Player far = null;
+			for (Player p : core.playersNear(position(), 28)) if (far == null || p.distanceToSqr(this) > far.distanceToSqr(this)) far = p;
+			if (far == null) return;
+			Vec3 behind = far.position().subtract(far.getLookAngle().multiply(1, 0, 1).normalize().scale(2.5));
+			Fx.burst((ServerLevel) level(), ModParticles.TITAN_DUST, position().add(0, 1, 0), 40, 0.6, 0.1);
+			teleportTo(behind.x, far.getY(), behind.z);
+			Fx.burst((ServerLevel) level(), ModParticles.TITAN_DUST, position().add(0, 1, 0), 40, 0.6, 0.1);
+			Fx.sound(this, net.minecraft.sounds.SoundEvents.ENDERMAN_TELEPORT, 2f, 0.6f);
+			core.schedule(10, () -> {
+				for (Player p : core.playersNear(position(), 7)) {
+					p.hurtServer((ServerLevel) level(), core.bossDamage(), 9f);
+					p.addEffect(new MobEffectInstance(MobEffects.POISON, 120, 1), this);
+					Vec3 toMedusa = getEyePosition().subtract(p.getEyePosition()).normalize();
+					if (p.getLookAngle().dot(toMedusa) > 0.6) com.olympus.handler.PetrifyHandler.petrifyBy(p, (ServerLevel) level(), 40);
+				}
+				Fx.shockwave((ServerLevel) level(), ParticleTypes.ITEM_SLIME, position(), 7);
+			});
+		});
 	}
 
 	private final BossCore core;

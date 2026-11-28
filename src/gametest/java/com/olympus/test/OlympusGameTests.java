@@ -320,6 +320,82 @@ public class OlympusGameTests {
 	}
 
 	@GameTest
+	public void relicsStayOutOfStorage(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+		StringBuilder leaks = new StringBuilder();
+		java.util.Map<String, net.minecraft.world.Container> stores = new java.util.LinkedHashMap<>();
+		stores.put("ender_chest", player.getEnderChestInventory());
+		helper.setBlock(new BlockPos(1, 2, 1), net.minecraft.world.level.block.Blocks.CHEST);
+		stores.put("chest", (net.minecraft.world.Container) helper.getBlockEntity(new BlockPos(1, 2, 1), net.minecraft.world.level.block.entity.ChestBlockEntity.class));
+		helper.setBlock(new BlockPos(2, 2, 1), net.minecraft.world.level.block.Blocks.BARREL);
+		stores.put("barrel", (net.minecraft.world.Container) helper.getBlockEntity(new BlockPos(2, 2, 1), net.minecraft.world.level.block.entity.BarrelBlockEntity.class));
+		for (var mode : new net.minecraft.world.level.GameType[]{net.minecraft.world.level.GameType.SURVIVAL, net.minecraft.world.level.GameType.CREATIVE}) {
+		player.setGameMode(mode);
+		for (var store : stores.entrySet()) {
+			for (net.minecraft.world.inventory.ClickType click : new net.minecraft.world.inventory.ClickType[]{
+				net.minecraft.world.inventory.ClickType.PICKUP, net.minecraft.world.inventory.ClickType.QUICK_MOVE, net.minecraft.world.inventory.ClickType.SWAP}) {
+				player.getInventory().clearContent();
+				store.getValue().clearContent();
+				player.getInventory().setItem(0, new ItemStack(ModItems.AEGIS));
+				var menu = net.minecraft.world.inventory.ChestMenu.threeRows(1, player.getInventory(), store.getValue());
+				player.containerMenu = menu;
+				int playerHotbar0 = 27 + 27; // chest 27 slots, then 27 main inventory, then hotbar
+				switch (click) {
+					case PICKUP -> {
+						menu.clicked(playerHotbar0, 0, net.minecraft.world.inventory.ClickType.PICKUP, player);
+						menu.clicked(0, 0, net.minecraft.world.inventory.ClickType.PICKUP, player);
+					}
+					case QUICK_MOVE -> menu.clicked(playerHotbar0, 0, net.minecraft.world.inventory.ClickType.QUICK_MOVE, player);
+					case SWAP -> menu.clicked(0, 0, net.minecraft.world.inventory.ClickType.SWAP, player);
+					default -> { }
+				}
+				if (!store.getValue().isEmpty()) {
+					leaks.append(mode).append(':').append(store.getKey()).append('/').append(click).append(' ');
+				}
+			}
+		}
+		}
+		player.containerMenu = player.inventoryMenu;
+		System.out.println("STORAGE leaks: " + leaks);
+		helper.assertTrue(leaks.isEmpty(), "relic got into: " + leaks);
+		helper.succeed();
+	}
+
+	@GameTest(maxTicks = 400)
+	public void everyBossAttackRuns(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+		player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.RESISTANCE, 2000, 4));
+		var types = java.util.List.of(com.olympus.registry.ModEntities.TYPHON, com.olympus.registry.ModEntities.CETUS, com.olympus.registry.ModEntities.CERBERUS,
+			com.olympus.registry.ModEntities.MEDUSA, com.olympus.registry.ModEntities.COLCHIAN_DRAGON, com.olympus.registry.ModEntities.KRONOS);
+		int total = 0;
+		for (var type : types) {
+			var boss = (net.minecraft.world.entity.Mob) type.create(helper.getLevel(), net.minecraft.world.entity.EntitySpawnReason.EVENT);
+			var pos = helper.absoluteVec(new net.minecraft.world.phys.Vec3(2, 2, 2));
+			boss.snapTo(pos.x, pos.y, pos.z, 0, 0);
+			helper.getLevel().addFreshEntity(boss);
+			player.snapTo(pos.x + 4, pos.y, pos.z);
+			var core = ((com.olympus.entity.OlympusBoss) boss).core();
+			helper.assertTrue(core.attackNames().size() >= 5, type.getDescriptionId() + " has only " + core.attackNames());
+			for (String attack : core.attackNames()) {
+				player.setHealth(player.getMaxHealth());
+				core.forceAttack(attack, player);
+				core.flushScheduled(200);
+				total++;
+			}
+			// Rage at half health
+			boss.setHealth(boss.getMaxHealth() * 0.4f);
+			boss.tickCount = 1;
+			core.tick(helper.getLevel());
+			helper.assertTrue(core.enraged(), type.getDescriptionId() + " did not enrage");
+			boss.discard();
+		}
+		System.out.println("BOSSATTACKS ran " + total);
+		helper.succeed();
+	}
+
+	@GameTest
 	public void creativePlayersKeepEveryRelic(GameTestHelper helper) {
 		ServerPlayer player = helper.makeMockServerPlayerInLevel();
 		player.setGameMode(net.minecraft.world.level.GameType.CREATIVE);

@@ -45,6 +45,39 @@ public class KronosEntity extends WitherSkeleton implements OlympusBoss {
 			Fx.shockwave((ServerLevel) level(), ParticleTypes.SWEEP_ATTACK, position().add(0, 1, 0), 4);
 		}).attack("echoes", t -> core.warnCircle(position(), 3, ModParticles.TITAN_DUST),
 			t -> core.summonMinions(EntityType.WITHER_SKELETON, 3));
+
+		// Titan Meteors: the sky falls in burning circles.
+		core.attack("titan_meteors", t -> Fx.pillar((ServerLevel) level(), ModParticles.TITAN_DUST, position(), 10, 30), t -> {
+			var rnd = getRandom();
+			java.util.List<Player> players = core.playersNear(position(), 28);
+			for (Player p : players) core.delayedBlast(p.position(), 2.5, 10f, 30, ModParticles.TITAN_DUST, ParticleTypes.EXPLOSION, null);
+			for (int i = 0; i < 6; i++) {
+				Vec3 at = t.position().add(rnd.nextGaussian() * 6, 0, rnd.nextGaussian() * 6);
+				core.delayedBlast(at, 2.5, 10f, 25 + rnd.nextInt(30), ModParticles.TITAN_DUST, ParticleTypes.EXPLOSION, null);
+			}
+		});
+		// ULTIMATE: Rewind. Time snaps back 3 seconds: everyone returns to where they stood, and Kronos heals.
+		core.rageAttack("time_rewind", t -> Fx.sphere((ServerLevel) level(), ModParticles.TITAN_DUST, position().add(0, 2, 0), 5, 80), t -> {
+			java.util.Map<Player, Vec3> then = new java.util.HashMap<>();
+			for (Player p : core.playersNear(position(), 28)) then.put(p, p.position());
+			for (int tick = 10; tick < 60; tick += 10) {
+				core.schedule(tick, () -> {
+					then.forEach((p, pos) -> Fx.burst((ServerLevel) level(), ModParticles.TITAN_DUST, pos.add(0, 1, 0), 6, 0.3, 0.01));
+					Fx.sound(this, net.minecraft.sounds.SoundEvents.NOTE_BLOCK_HAT.value(), 2f, 0.5f);
+				});
+			}
+			core.schedule(60, () -> {
+				then.forEach((p, pos) -> {
+					if (p.isAlive() && p.level() == level() && p instanceof net.minecraft.server.level.ServerPlayer sp) {
+						Fx.line((ServerLevel) level(), ModParticles.TITAN_DUST, sp.position().add(0, 1, 0), pos.add(0, 1, 0), 0.5);
+						sp.teleportTo(pos.x, pos.y, pos.z);
+						sp.resetFallDistance();
+					}
+				});
+				heal(getMaxHealth() * 0.05f * Math.max(1, then.size()));
+				Fx.sound(this, net.minecraft.sounds.SoundEvents.BELL_RESONATE, 3f, 1.5f);
+			});
+		});
 	}
 
 	private final BossCore core;

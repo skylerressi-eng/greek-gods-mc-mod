@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerBossEvent;
@@ -47,6 +48,13 @@ public final class BossCore {
 	private final ServerBossEvent bar;
 	private final Map<UUID, Float> damage = new HashMap<>();
 	private final List<Attack> attacks = new ArrayList<>();
+	/** Ultimate attacks unlocked in the rage phase (below half health). */
+	private final List<Attack> rageAttacks = new ArrayList<>();
+	private boolean enraged;
+	private Attack last;
+	/** Delayed follow-ups (waves, aftershocks, rewinds): ticks left → action. */
+	private final List<Object[]> scheduled = new ArrayList<>();
+	private static final net.minecraft.resources.Identifier RAGE_SPEED = com.olympus.Olympus.id("boss_rage_speed");
 	private int cooldown = 60;
 	private Attack pending;
 	private LivingEntity pendingTarget;
@@ -67,6 +75,60 @@ public final class BossCore {
 	public BossCore attack(String name, Consumer<LivingEntity> telegraph, Consumer<LivingEntity> execute) {
 		attacks.add(new Attack(name, telegraph, execute));
 		return this;
+	}
+
+	/** An ultimate only used once the boss is enraged (below half health). */
+	public BossCore rageAttack(String name, Consumer<LivingEntity> telegraph, Consumer<LivingEntity> execute) {
+		rageAttacks.add(new Attack(name, telegraph, execute));
+		return this;
+	}
+
+	/** Runs {@code action} after {@code ticks} ticks (if the boss is still alive). */
+	public void schedule(int ticks, Runnable action) {
+		scheduled.add(new Object[]{ticks, action});
+	}
+
+	/** All attack names (normal + rage). */
+	public List<String> attackNames() {
+		List<String> names = new ArrayList<>();
+		for (Attack a : attacks) names.add(a.name());
+		for (Attack a : rageAttacks) names.add(a.name());
+		return names;
+	}
+
+	/** Runs one attack right now on {@code target} (tests and debugging). */
+	public void forceAttack(String name, LivingEntity target) {
+		for (List<Attack> list : List.of(attacks, rageAttacks)) {
+			for (Attack a : list) {
+				if (a.name().equals(name)) {
+					a.telegraph().accept(target);
+					a.execute().accept(target);
+					return;
+				}
+			}
+		}
+		throw new IllegalArgumentException("No attack " + name);
+	}
+
+	/** Runs every pending follow-up now, as if {@code ticks} ticks had passed. */
+	public void flushScheduled(int ticks) {
+		for (int i = 0; i < ticks && !scheduled.isEmpty(); i++) {
+			List<Object[]> due = new ArrayList<>();
+			for (Object[] task : new ArrayList<>(scheduled)) {
+				task[0] = (Integer) task[0] - 1;
+				if ((Integer) task[0] <= 0) due.add(task);
+			}
+			scheduled.removeAll(due);
+			for (Object[] task : due) ((Runnable) task[1]).run();
+		}
+	}
+
+	public boolean enraged() {
+		return enraged;
+	}
+
+	public Mob boss() {
+		return boss;
 	}
 
 	public Map<UUID, Float> damageDealt() {
@@ -121,6 +183,24 @@ public final class BossCore {
 			antiCheese(level);
 		}
 
+		// Delayed follow-ups
+		if (!scheduled.isEmpty()) {
+			List<Object[]> due = new ArrayList<>();
+			for (Object[] task : scheduled) {
+				task[0] = (Integer) task[0] - 1;
+				if ((Integer) task[0] <= 0) due.add(task);
+			}
+			scheduled.removeAll(due);
+			for (Object[] task : due) {
+				if (boss.isAlive()) ((Runnable) task[1]).run();
+			}
+		}
+
+		// Rage phase at half health
+		if (!enraged && boss.getHealth() <= boss.getMaxHealth() * 0.5f) {
+			enrage(level);
+		}
+
 		if (pending != null) {
 			if (--telegraphLeft % 5 == 0 && pendingTarget != null && pendingTarget.isAlive()) {
 				pending.telegraph().accept(pendingTarget);
@@ -130,21 +210,97 @@ public final class BossCore {
 					pending.execute().accept(pendingTarget);
 				}
 				pending = null;
-				cooldown = 50 + boss.getRandom().nextInt(40);
+				cooldown = enraged ? 30 + boss.getRandom().nextInt(25) : 50 + boss.getRandom().nextInt(40);
 			}
 			return;
 		}
 		if (--cooldown <= 0 && !attacks.isEmpty()) {
 			LivingEntity target = nearestPlayer(level, 32);
 			if (target != null) {
-				pending = attacks.get(boss.getRandom().nextInt(attacks.size()));
+				List<Attack> pool = new ArrayList<>(attacks);
+				if (enraged) {
+					pool.addAll(rageAttacks);
+					pool.addAll(rageAttacks); // ultimates come up often once enraged
+				}
+				if (pool.size() > 1 && last != null) pool.removeIf(a -> a == last); // never the same attack twice in a row
+				pending = pool.get(boss.getRandom().nextInt(pool.size()));
+				last = pending;
 				pendingTarget = target;
 				telegraphLeft = TELEGRAPH_TICKS;
+				announce(pending, rageAttacks.contains(pending));
 				pending.telegraph().accept(target);
 			} else {
 				cooldown = 20;
 			}
 		}
+	}
+
+	/** Shows the incoming attack's name to everyone fighting, so it can be dodged. */
+	private void announce(Attack attack, boolean ultimate) {
+		Component name = Component.translatable("olympus.boss_attack." + attack.name())
+			.withStyle(ultimate ? net.minecraft.ChatFormatting.DARK_RED : net.minecraft.ChatFormatting.GOLD, net.minecraft.ChatFormatting.BOLD);
+		Component line = Component.literal("⚠ ").withStyle(net.minecraft.ChatFormatting.RED).append(name);
+		for (ServerPlayer p : bar.getPlayers()) {
+			p.displayClientMessage(line, true);
+		}
+	}
+
+	private void enrage(ServerLevel level) {
+		enraged = true;
+		bar.setColor(BossEvent.BossBarColor.RED);
+		var speed = boss.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED);
+		if (speed != null && !speed.hasModifier(RAGE_SPEED)) {
+			speed.addTransientModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(RAGE_SPEED, 0.3,
+				net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+		}
+		for (ServerPlayer p : bar.getPlayers()) {
+			p.connection.send(new net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket(5, 40, 15));
+			p.connection.send(new net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket(Component.empty()));
+			p.connection.send(new net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket(
+				Component.translatable("olympus.boss.enraged", boss.getDisplayName()).withStyle(net.minecraft.ChatFormatting.DARK_RED, net.minecraft.ChatFormatting.BOLD)));
+		}
+		// A roar that throws everyone close back.
+		for (Player p : playersNear(boss.position(), 7)) {
+			Vec3 away = p.position().subtract(boss.position()).normalize();
+			p.knockback(1.6, -away.x, -away.z);
+			p.hurtMarked = true;
+		}
+		Fx.shockwave(level, ParticleTypes.FLAME, boss.position().add(0, 0.3, 0), 7);
+		Fx.sphere(level, ModParticles.DIVINE_GLINT, boss.position().add(0, boss.getBbHeight() / 2, 0), boss.getBbWidth() + 1.5, 120);
+		Fx.sound(boss, net.minecraft.sounds.SoundEvents.ENDER_DRAGON_GROWL, 3f, 0.7f);
+		cooldown = 20;
+	}
+
+	/** A ring of lightning that expands outward in waves: stand in the gaps or get out. */
+	public void expandingRings(Vec3 center, int waves, double spacing, float damage) {
+		for (int w = 1; w <= waves; w++) {
+			final double r = w * spacing;
+			schedule(w * 8, () -> {
+				int points = (int) Math.max(6, r * 2.2);
+				for (int i = 0; i < points; i++) {
+					double a = Math.PI * 2 * i / points;
+					Vec3 at = center.add(Math.cos(a) * r, 0, Math.sin(a) * r);
+					if (i % 3 == 0) lightning(at, damage);
+					else for (Player p : playersNear(at, 1.4)) p.hurtServer((ServerLevel) boss.level(), bossDamage(), damage * 0.6f);
+				}
+				Fx.ring((ServerLevel) boss.level(), ModParticles.STORM_SPARK, center.add(0, 0.2, 0), r, points * 2, 0.0);
+			});
+		}
+	}
+
+	/** Damages players standing in a circle after a delay (meteors, eruptions, venom pools). */
+	public void delayedBlast(Vec3 at, double radius, float damage, int delay, ParticleOptions warn, ParticleOptions boom,
+		Consumer<Player> extra) {
+		warnCircle(at, radius, warn);
+		schedule(delay / 2, () -> warnCircle(at, radius, warn));
+		schedule(delay, () -> {
+			for (Player p : playersNear(at, radius)) {
+				p.hurtServer((ServerLevel) boss.level(), bossDamage(), damage);
+				if (extra != null) extra.accept(p);
+			}
+			Fx.burst((ServerLevel) boss.level(), boom, at.add(0, 0.5, 0), 25, radius * 0.4, 0.05);
+			Fx.sound((ServerLevel) boss.level(), at, net.minecraft.sounds.SoundEvents.GENERIC_EXPLODE.value(), 0.8f, 1.2f);
+		});
 	}
 
 	private void updateViewers(ServerLevel level) {
