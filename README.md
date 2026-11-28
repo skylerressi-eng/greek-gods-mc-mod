@@ -92,6 +92,14 @@ Bosses have boss bars, scale their health with nearby players, call out every at
 | `/olympus legendaries reset <id>` | Let a lost legendary drop again |
 | `/olympus reload` | Reload `config/olympus.json` |
 
+## Trading (everyone)
+Trade legendaries (or any god item) safely, for free or for a price:
+1. Hold the relic in your main hand.
+2. `/trade offer <player>` (a gift) or `/trade offer <player> <item> <count>`, e.g. `/trade offer Steve minecraft:diamond 32`.
+3. They click **[ACCEPT]** or **[DECLINE]** in chat (or type `/trade accept` / `/trade decline`). Offers expire after 60s; `/trade cancel` withdraws yours.
+
+Everything is re-checked at the moment of accepting (you still have that exact relic, they can pay and have a free relic slot), and the swap happens in one step: no scams, no dupes. Legendary trades are announced to the server.
+
 ## Allies (everyone)
 Group buffs (Lyre, Battle Wisdom, War Cry, Wild Party, Feast) only reach **allies**, and your powers never hurt them. Allies are players on your `/team`, plus anyone you add:
 | Command | |

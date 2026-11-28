@@ -73,6 +73,7 @@ public class Olympus implements ModInitializer {
 		CommandRegistrationCallback.EVENT.register((dispatcher, context, selection) -> {
 			OlympusCommand.register(dispatcher);
 			com.olympus.command.AllyCommand.register(dispatcher);
+			com.olympus.trade.TradeCommand.register(dispatcher, context);
 		});
 
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
@@ -90,6 +91,7 @@ public class Olympus implements ModInitializer {
 			com.olympus.handler.LegendaryHandler.forget(player.getUUID());
 			com.olympus.handler.CraftedRelicHandler.forget(player.getUUID());
 			com.olympus.limit.GodItemLimit.forget(player.getUUID());
+			com.olympus.trade.TradeManager.forget(player.getUUID());
 		});
 		// Foxes, dolphins, allays and piglins have their own pickup rules: whatever mob ends up
 		// holding a relic spits it out, so a despawning mob can never take one with it.
@@ -121,6 +123,7 @@ public class Olympus implements ModInitializer {
 		}
 		if (server.getTickCount() % 20 == 0) {
 			MirrorHandler.tick(server);
+			com.olympus.trade.TradeManager.tick(server);
 			com.olympus.handler.CombatHandler.tick(server);
 			com.olympus.handler.UnderworldAllies.tick(server);
 			com.olympus.event.EventManager.tick(server);

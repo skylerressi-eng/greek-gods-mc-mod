@@ -396,6 +396,68 @@ public class OlympusGameTests {
 	}
 
 	@GameTest
+	public void legendaryTrading(GameTestHelper helper) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
+		var general = com.olympus.config.ConfigManager.get().general;
+		boolean opsIgnore = general.opsIgnoreLimit;
+		general.opsIgnoreLimit = false;
+		try {
+			ServerPlayer seller = helper.makeMockServerPlayerInLevel();
+			ServerPlayer buyer = helper.makeMockServerPlayerInLevel();
+			for (ServerPlayer p : new ServerPlayer[]{seller, buyer}) {
+				p.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+				p.getInventory().clearContent();
+			}
+			ItemStack bolt = new ItemStack(ModItems.THUNDERBOLT_OF_ZEUS);
+			java.util.UUID instance = java.util.UUID.randomUUID();
+			bolt.set(com.olympus.registry.ModComponents.LEGENDARY, new com.olympus.registry.ModComponents.Legendary(instance, "Seller"));
+			seller.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, bolt);
+
+			// The command parses and creates an offer
+			var dispatcher = helper.getLevel().getServer().getCommands().getDispatcher();
+			buyer.addTag("trade_buyer"); // both mock players share a name, so pick the buyer by tag
+			int r = dispatcher.execute("trade offer @a[tag=trade_buyer,limit=1] minecraft:diamond 10",
+				seller.createCommandSourceStack().withPermission(net.minecraft.server.permissions.PermissionSet.ALL_PERMISSIONS));
+			helper.assertTrue(r == 1 && com.olympus.trade.TradeManager.offers().containsKey(buyer.getUUID()), "/trade offer didn't work");
+			dispatcher.execute("trade decline", buyer.createCommandSourceStack().withPermission(net.minecraft.server.permissions.PermissionSet.NO_PERMISSIONS));
+			helper.assertTrue(!com.olympus.trade.TradeManager.offers().containsKey(buyer.getUUID()), "/trade decline didn't work");
+
+			// Can't afford
+			helper.assertTrue(com.olympus.trade.TradeManager.offer(seller, buyer, net.minecraft.world.item.Items.DIAMOND, 10) == null, "offer refused");
+			helper.assertTrue(com.olympus.trade.TradeManager.accept(buyer) != null, "accepted without paying");
+			helper.assertTrue(seller.getMainHandItem().is(ModItems.THUNDERBOLT_OF_ZEUS), "relic moved on a failed trade");
+
+			// Paid trade
+			buyer.getInventory().add(new ItemStack(net.minecraft.world.item.Items.DIAMOND, 15));
+			com.olympus.trade.TradeManager.offer(seller, buyer, net.minecraft.world.item.Items.DIAMOND, 10);
+			helper.assertTrue(com.olympus.trade.TradeManager.accept(buyer) == null, "paid trade failed");
+			helper.assertTrue(!seller.getInventory().contains(s -> s.is(ModItems.THUNDERBOLT_OF_ZEUS)), "seller kept the relic (dupe!)");
+			helper.assertTrue(buyer.getInventory().contains(s -> s.is(ModItems.THUNDERBOLT_OF_ZEUS)
+				&& instance.equals(s.get(com.olympus.registry.ModComponents.LEGENDARY).instance())), "buyer didn't get the same legendary");
+			helper.assertTrue(buyer.getInventory().countItem(net.minecraft.world.item.Items.DIAMOND) == 5, "buyer paid wrong amount");
+			helper.assertTrue(seller.getInventory().countItem(net.minecraft.world.item.Items.DIAMOND) == 10, "seller wasn't paid");
+			// Accepting again does nothing
+			helper.assertTrue(com.olympus.trade.TradeManager.accept(buyer) != null, "double accept");
+
+			// Seller no longer has it
+			seller.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(ModItems.HARPE));
+			com.olympus.trade.TradeManager.offer(seller, buyer, null, 0);
+			seller.getInventory().clearContent();
+			helper.assertTrue(com.olympus.trade.TradeManager.accept(buyer) != null, "trade went through without the relic");
+
+			// Buyer at the relic limit
+			seller.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(ModItems.HARPE));
+			buyer.getInventory().add(new ItemStack(ModItems.AEGIS));
+			buyer.getInventory().add(new ItemStack(ModItems.TALARIA));
+			com.olympus.trade.TradeManager.offer(seller, buyer, null, 0);
+			helper.assertTrue(com.olympus.trade.TradeManager.accept(buyer) != null, "buyer went over the relic limit");
+			helper.assertTrue(seller.getMainHandItem().is(ModItems.HARPE), "seller lost the relic on a refused trade");
+		} finally {
+			general.opsIgnoreLimit = opsIgnore;
+		}
+		helper.succeed();
+	}
+
+	@GameTest
 	public void creativePlayersKeepEveryRelic(GameTestHelper helper) {
 		ServerPlayer player = helper.makeMockServerPlayerInLevel();
 		player.setGameMode(net.minecraft.world.level.GameType.CREATIVE);
