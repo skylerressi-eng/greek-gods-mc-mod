@@ -1,5 +1,7 @@
 package com.olympus.handler;
 
+import net.minecraft.world.phys.Vec3;
+
 import com.olympus.Olympus;
 import com.olympus.config.ConfigManager;
 import com.olympus.fx.Fx;
@@ -34,6 +36,7 @@ public final class PetrifyHandler {
 
 	private static final Map<UUID, Stone> PETRIFIED = new ConcurrentHashMap<>();
 	private static final Map<UUID, Long> IMMUNE_UNTIL = new ConcurrentHashMap<>();
+	private static final Map<UUID, Long> LAST_BLOCK_FX = new ConcurrentHashMap<>();
 
 	private PetrifyHandler() {
 	}
@@ -63,9 +66,40 @@ public final class PetrifyHandler {
 		return petrifyBy(target, level, ticks, null);
 	}
 
+	/**
+	 * A raised shield facing the gaze reflects it (as Perseus did). Plays the block effect.
+	 * @return true if the target's shield blocked it
+	 */
+	public static boolean shieldBlocks(LivingEntity target, Entity source) {
+		if (source == null || !target.isBlocking()) {
+			return false;
+		}
+		Vec3 toSource = source.position().subtract(target.position()).multiply(1, 0, 1);
+		Vec3 facing = target.getViewVector(1.0f).multiply(1, 0, 1);
+		if (toSource.lengthSqr() < 1.0E-4 || facing.lengthSqr() < 1.0E-4 || toSource.normalize().dot(facing.normalize()) <= 0) {
+			return false;
+		}
+		long now = target.level().getGameTime();
+		if (now - LAST_BLOCK_FX.getOrDefault(target.getUUID(), -100L) < 10) {
+			return true; // still blocked, effects already shown
+		}
+		LAST_BLOCK_FX.put(target.getUUID(), now);
+		Fx.sound(target, net.minecraft.sounds.SoundEvents.SHIELD_BLOCK.value(), 1.2f, 0.8f);
+		if (target.level() instanceof ServerLevel level) {
+			level.sendParticles(ParticleTypes.ENCHANTED_HIT, target.getX(), target.getEyeY() - 0.3, target.getZ(), 15, 0.3, 0.3, 0.3, 0.1);
+		}
+		if (target instanceof ServerPlayer sp) {
+			sp.displayClientMessage(Component.translatable("olympus.message.gaze_blocked").withStyle(net.minecraft.ChatFormatting.AQUA), true);
+		}
+		if (source instanceof ServerPlayer caster) {
+			caster.displayClientMessage(Component.translatable("olympus.message.gaze_blocked_caster", target.getDisplayName()).withStyle(net.minecraft.ChatFormatting.GRAY), true);
+		}
+		return true;
+	}
+
 	/** Petrify from any source (players with the Head of Medusa, or Medusa herself). */
 	public static boolean petrifyBy(LivingEntity target, ServerLevel level, int ticks, Entity source) {
-		if (Targets.isBoss(target) || isPetrified(target)) {
+		if (Targets.isBoss(target) || isPetrified(target) || shieldBlocks(target, source)) {
 			return false;
 		}
 		long now = level.getGameTime();
@@ -184,5 +218,6 @@ public final class PetrifyHandler {
 		}
 		long now = server.overworld().getGameTime();
 		IMMUNE_UNTIL.values().removeIf(t -> now >= t);
+		LAST_BLOCK_FX.values().removeIf(t -> now - t > 200);
 	}
 }

@@ -46,7 +46,7 @@ Every relic looks like its vanilla base item (Talaria = gold leather boots, Gobl
 | **Thunderbolt of Zeus** | Throw it: 5 lightning strikes rain around the impact, then it returns to your hand. | **Skybreaker**: Launch about 15 blocks into the sky and land in a ring of lightning. No fall damage. |
 | **Trident of Poseidon** | Release to Riptide anywhere, even on dry land, with a wave that throws enemies back. Sneak to throw: Channeling is always on. | **Earthshaker**: Every enemy within 10 blocks is hurled into the air. |
 | **Bident of Hades** | Right-click: 3 skeleton warriors rise to fight for you for 30s. | **Soul Harvest**: For 15s, everything you kill rises as a skeleton ally. |
-| **Head of Medusa** | Look at a creature and right-click: it turns to stone for 4s (shorter on players) and takes 4 hearts when the stone breaks. Wear it on your head. | **Gorgon's Gaze**: Petrifies everything in a 10-block cone in front of you for 3s. |
+| **Head of Medusa** | Look at a creature and right-click: it turns to stone for 4s (shorter on players) and takes 4 hearts when the stone breaks. A raised shield blocks it. Worn on your head: +1 heart, and **Sneak + R** stares (plain R too if nothing else answers). | **Gorgon's Gaze**: Petrifies everything in a 10-block cone in front of you for 3s. |
 | **Golden Fleece** | While worn: constant Regeneration and immunity to fire. | **Undying**: Once every 10 minutes, a killing blow leaves you standing instead. |
 | **Scythe of Kronos** | Right-click: time freezes for everything within 15 blocks (Slowness IV, Mining Fatigue III) for 6s. | **Rewind**: Return to where you were 5 seconds ago, with the health you had then. |
 

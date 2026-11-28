@@ -800,6 +800,18 @@ public class OlympusGameTests {
 	}
 
 	@GameTest
+	public void medusaHeadWornAndShields(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+		player.getInventory().clearContent();
+		var mods = new ItemStack(ModItems.HEAD_OF_MEDUSA).get(net.minecraft.core.component.DataComponents.ATTRIBUTE_MODIFIERS);
+		helper.assertTrue(mods != null && mods.modifiers().stream().anyMatch(m -> m.attribute().is(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH)
+			&& m.modifier().amount() == 2.0 && m.slot() == net.minecraft.world.entity.EquipmentSlotGroup.HEAD), "no +1 heart on the head");
+
+		helper.succeed();
+	}
+
+	@GameTest
 	public void ambrosiaFullyHeals(GameTestHelper helper) {
 		ServerPlayer player = helper.makeMockServerPlayerInLevel();
 		player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);

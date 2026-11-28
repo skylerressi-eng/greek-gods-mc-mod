@@ -65,6 +65,22 @@ public final class DivinePower {
 		}
 		LAST_PRESS.put(player.getUUID(), now);
 
+		// Head of Medusa worn: Sneak + R = Stone Stare. Plain R does it too unless something
+		// better answers (a Blessed relic in hand, or the Head's own Blessed Gorgon's Gaze).
+		ItemStack head = player.getItemBySlot(EquipmentSlot.HEAD);
+		if (head.getItem() instanceof com.olympus.item.relic.HeadOfMedusaItem medusa) {
+			boolean handRelic = false;
+			for (ItemStack hand : new ItemStack[]{player.getMainHandItem(), player.getOffhandItem()}) {
+				if (hand.getItem() instanceof GodItem g && !g.blessedIsPassive() && GodItem.level(hand).atLeast(UpgradeLevel.BLESSED)) {
+					handRelic = true;
+				}
+			}
+			if (player.isShiftKeyDown() || (!handRelic && !GodItem.level(head).atLeast(UpgradeLevel.BLESSED))) {
+				medusa.stareWhileWorn(player, head);
+				return;
+			}
+		}
+
 		List<ItemStack> candidates = new ArrayList<>();
 		candidates.add(player.getMainHandItem());
 		candidates.add(player.getOffhandItem());

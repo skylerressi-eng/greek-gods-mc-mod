@@ -21,6 +21,19 @@ public class HeadOfMedusaItem extends CharmItem {
 		super(properties, God.ATHENA, false);
 	}
 
+	/** Stone Stare while wearing the Head (Divine Power key). @return true if it fired. */
+	public boolean stareWhileWorn(ServerPlayer player, ItemStack stack) {
+		if (!com.olympus.ability.Cooldowns.checkReady(player, stack, com.olympus.ability.Cooldowns.Kind.PRIMARY)) {
+			return false;
+		}
+		if (activate(player.level(), player, stack, com.olympus.god.GodItem.level(stack))) {
+			com.olympus.ability.Cooldowns.start(player, stack, com.olympus.ability.Cooldowns.Kind.PRIMARY, primaryCooldownSeconds());
+			return true;
+		}
+		player.displayClientMessage(net.minecraft.network.chat.Component.translatable("olympus.message.charm_nothing").withStyle(net.minecraft.ChatFormatting.GRAY), true);
+		return false;
+	}
+
 	@Override
 	public int primaryCooldownSeconds() {
 		return ConfigManager.get().headOfMedusa.cooldownSeconds;
@@ -42,6 +55,9 @@ public class HeadOfMedusaItem extends CharmItem {
 			return false;
 		}
 		Fx.line(level, ModParticles.TITAN_DUST, eye.subtract(0, 0.2, 0), target.getEyePosition(), 0.4);
+		if (PetrifyHandler.shieldBlocks(target, player)) {
+			return true; // reflected: the stare is spent
+		}
 		return PetrifyHandler.petrify(target, player, upgrade.durationTicks(ConfigManager.get().headOfMedusa.petrifySeconds));
 	}
 }

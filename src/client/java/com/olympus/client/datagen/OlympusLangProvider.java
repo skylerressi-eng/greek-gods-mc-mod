@@ -146,7 +146,7 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 			"Right-click: %s skeleton warriors rise to fight for you for %ss.",
 			"Soul Harvest", "For %ss, everything you kill rises as a skeleton ally.");
 		relic(t, ModItems.HEAD_OF_MEDUSA, "Head of Medusa",
-			"Look at a creature and right-click: it turns to stone for %ss (shorter on players) and takes 4 hearts when the stone breaks. Wear it on your head.",
+			"Look at a creature and right-click: it turns to stone for %ss (shorter on players) and takes 4 hearts when the stone breaks. A raised shield blocks it. Worn: +1 heart, press R (or Sneak + R) to stare.",
 			"Gorgon's Gaze", "Petrifies everything in a %s-block cone in front of you for %ss.");
 		relic(t, ModItems.GOLDEN_FLEECE, "Golden Fleece",
 			"While worn: constant Regeneration and immunity to fire.",
@@ -245,6 +245,8 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 		t.add("olympus.message.waypoint_dimension", "Your waypoint is in another dimension");
 		t.add("olympus.message.no_drop", "Relics can't be thrown away. Use /trade to give one to someone.");
 		t.add("olympus.message.gaze_left", "MEDUSA'S GAZE: look away! (%ss)");
+		t.add("olympus.message.gaze_blocked", "Your shield reflected the gaze!");
+		t.add("olympus.message.gaze_blocked_caster", "%s blocked the gaze with a shield");
 		t.add("olympus.message.waypoint_blocked", "Your waypoint is blocked");
 		t.add("olympus.message.spear_armed", "Your next throw will shake the earth");
 		t.add("olympus.message.hammer_mode", "Forge Hammer: %s mining");

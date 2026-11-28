@@ -166,7 +166,13 @@ public final class ModItems {
 		GodProperties.base().attributes(net.minecraft.world.item.TridentItem.createAttributes())
 			.component(DataComponents.WEAPON, new net.minecraft.world.item.component.Weapon(1)).enchantable(15));
 	public static final Item HEAD_OF_MEDUSA = legendary("head_of_medusa", com.olympus.item.relic.HeadOfMedusaItem::new,
-		GodProperties.base().component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.HEAD).setSwappable(false).build()));
+		GodProperties.base().component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.HEAD).setSwappable(false).build())
+			.attributes(net.minecraft.world.item.component.ItemAttributeModifiers.builder()
+				.add(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH,
+					new net.minecraft.world.entity.ai.attributes.AttributeModifier(com.olympus.Olympus.id("medusa_head_health"), 2.0,
+						net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE),
+					net.minecraft.world.entity.EquipmentSlotGroup.HEAD)
+				.build()));
 	public static final Item GOLDEN_FLEECE = legendary("golden_fleece",
 		p -> new SimpleRelicItem(p, God.ARES, false, () -> 0, () -> ConfigManager.get().goldenFleece.cheatDeathCooldownSeconds).passiveBlessed(),
 		GodProperties.unbreakable(GodProperties.base()
