@@ -284,8 +284,6 @@ public class OlympusConfig {
 		public int ambrosiaStrengthSeconds = 30;
 		public int ambrosiaFireResistanceSeconds = 180;
 		public int ambrosiaCooldownSeconds = 30;
-		/** Hoplite full set: attackers take this share of their melee damage back. */
-		public double hopliteReflect = 0.15;
 		public int nectarResistanceSeconds = 30;
 		public int sunArrowFireSeconds = 5;
 		public int sunArrowLightSeconds = 5;
@@ -343,6 +341,8 @@ public class OlympusConfig {
 	}
 
 	public static class HeadOfMedusa {
+		/** Damage taken when the stone breaks (4 hearts). 0 = none. */
+		public double shatterDamage = 8.0;
 		public double range = 20.0;
 		public int petrifySeconds = 4;
 		/** Petrify on players lasts this fraction as long (stun-lock protection). */

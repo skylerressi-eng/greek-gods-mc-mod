@@ -91,15 +91,6 @@ public final class CraftedRelicHandler {
 			if (taken > 0 && source.getDirectEntity() instanceof AbstractArrow arrow) {
 				onSunArrowHit(arrow, victim);
 			}
-			// Hoplite full set: the phalanx strikes back at melee attackers.
-			if (taken > 0 && victim instanceof Player defender && isFullHoplite(defender)
-				&& source.getDirectEntity() instanceof LivingEntity attacker && source.getEntity() == attacker && attacker != defender
-				&& victim.level() instanceof ServerLevel level) {
-				float reflect = (float) (taken * ConfigManager.get().consumables.hopliteReflect);
-				if (reflect > 0 && (!(attacker instanceof Player) || ConfigManager.get().general.abilitiesAffectPlayers)) {
-					attacker.hurtServer(level, level.damageSources().thorns(defender), reflect);
-				}
-			}
 			if (taken <= 0 || !(source.getDirectEntity() instanceof ServerPlayer player) || source.getEntity() != player) {
 				return;
 			}

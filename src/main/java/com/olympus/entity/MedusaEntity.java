@@ -34,12 +34,25 @@ public class MedusaEntity extends Witch implements OlympusBoss {
 			}
 			Fx.burst((ServerLevel) level(), ModParticles.TITAN_DUST, getEyePosition(), 10, 0.3, 0.02);
 		}, t -> {
-			for (Player p : core.playersNear(position(), 24)) {
-				Vec3 toMedusa = getEyePosition().subtract(p.getEyePosition()).normalize();
-				if (p.getLookAngle().dot(toMedusa) > 0.8) {
-					com.olympus.handler.PetrifyHandler.petrifyBy(p, (ServerLevel) level(), 50);
-				}
+			// Her eyes blaze for 4 seconds: anyone who looks at her during it turns to stone.
+			for (int tick = 0; tick <= 80; tick += 2) {
+				final int at = tick;
+				core.schedule(tick + 1, () -> {
+					ServerLevel sl = (ServerLevel) level();
+					sl.sendParticles(ParticleTypes.GLOW, getEyePosition().x, getEyePosition().y, getEyePosition().z, 3, 0.25, 0.1, 0.25, 0.01);
+					for (Player p : core.playersNear(position(), 24)) {
+						if (at % 20 == 0 && p instanceof net.minecraft.server.level.ServerPlayer sp) {
+							sp.displayClientMessage(net.minecraft.network.chat.Component.translatable("olympus.message.gaze_left", (80 - at) / 20)
+								.withStyle(net.minecraft.ChatFormatting.DARK_GREEN, net.minecraft.ChatFormatting.BOLD), true);
+						}
+						Vec3 toMedusa = getEyePosition().subtract(p.getEyePosition()).normalize();
+						if (p.getLookAngle().dot(toMedusa) > 0.8 && p.hasLineOfSight(this)) {
+							com.olympus.handler.PetrifyHandler.petrifyBy(p, sl, 50, this);
+						}
+					}
+				});
 			}
+			Fx.sound(this, net.minecraft.sounds.SoundEvents.ELDER_GUARDIAN_CURSE, 2f, 0.8f);
 		}).attack("serpent_volley", t -> core.warnCircle(t.position(), 2, ParticleTypes.ITEM_SLIME), t -> {
 			for (Player p : core.playersNear(position(), 14)) {
 				Fx.line((ServerLevel) level(), ParticleTypes.ITEM_SLIME, getEyePosition(), p.getEyePosition(), 0.5);

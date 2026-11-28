@@ -29,7 +29,7 @@ import net.minecraft.world.level.block.Blocks;
 public final class PetrifyHandler {
 	private static final Identifier STONE = Olympus.id("petrified");
 	private static final String STONE_TAG = "olympus.petrified";
-	private record Stone(long until, ServerLevel level, boolean wasNoAi) {
+	private record Stone(long until, ServerLevel level, boolean wasNoAi, UUID source) {
 	}
 
 	private static final Map<UUID, Stone> PETRIFIED = new ConcurrentHashMap<>();
@@ -44,7 +44,7 @@ public final class PetrifyHandler {
 	public static void root(LivingEntity target, ServerLevel level, int ticks) {
 		Stone existing = ROOTED.get(target.getUUID());
 		long until = level.getGameTime() + ticks;
-		ROOTED.put(target.getUUID(), new Stone(existing != null ? Math.max(existing.until(), until) : until, level, false));
+		ROOTED.put(target.getUUID(), new Stone(existing != null ? Math.max(existing.until(), until) : until, level, false, null));
 		addModifier(target.getAttribute(Attributes.MOVEMENT_SPEED));
 		addModifier(target.getAttribute(Attributes.JUMP_STRENGTH));
 		target.setDeltaMovement(0, Math.min(0, target.getDeltaMovement().y), 0);
@@ -56,11 +56,15 @@ public final class PetrifyHandler {
 	}
 
 	public static boolean petrify(LivingEntity target, ServerPlayer source, int ticks) {
-		return petrifyBy(target, source.level(), ticks);
+		return petrifyBy(target, source.level(), ticks, source);
+	}
+
+	public static boolean petrifyBy(LivingEntity target, ServerLevel level, int ticks) {
+		return petrifyBy(target, level, ticks, null);
 	}
 
 	/** Petrify from any source (players with the Head of Medusa, or Medusa herself). */
-	public static boolean petrifyBy(LivingEntity target, ServerLevel level, int ticks) {
+	public static boolean petrifyBy(LivingEntity target, ServerLevel level, int ticks, Entity source) {
 		if (Targets.isBoss(target) || isPetrified(target)) {
 			return false;
 		}
@@ -76,7 +80,7 @@ public final class PetrifyHandler {
 			}
 		}
 		boolean wasNoAi = target instanceof Mob mob && mob.isNoAi();
-		PETRIFIED.put(target.getUUID(), new Stone(now + ticks, level, wasNoAi));
+		PETRIFIED.put(target.getUUID(), new Stone(now + ticks, level, wasNoAi, source == null ? null : source.getUUID()));
 		addModifier(target.getAttribute(Attributes.MOVEMENT_SPEED));
 		addModifier(target.getAttribute(Attributes.JUMP_STRENGTH));
 		if (target instanceof Mob mob) {
@@ -117,6 +121,20 @@ public final class PetrifyHandler {
 		}
 	}
 
+	/** Breaking free of the stone hurts: 4 hearts by default (headOfMedusa.shatterDamage). */
+	private static void shatter(LivingEntity living, Stone stone) {
+		float damage = (float) ConfigManager.get().headOfMedusa.shatterDamage;
+		if (damage <= 0) {
+			return;
+		}
+		ServerLevel level = stone.level();
+		Entity source = stone.source() == null ? null : level.getEntity(stone.source());
+		living.hurtServer(level, level.damageSources().indirectMagic(source, source), damage);
+		level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.STONE.defaultBlockState()),
+			living.getX(), living.getY() + living.getBbHeight() / 2, living.getZ(), 60, 0.35, 0.6, 0.35, 0.15);
+		Fx.sound(living, net.minecraft.sounds.SoundEvents.STONE_BREAK, 1.5f, 0.7f);
+	}
+
 	public static void register() {
 		// A mob saved while petrified (chunk unloaded, server stopped) wakes up when it loads again.
 		net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> {
@@ -142,6 +160,7 @@ public final class PetrifyHandler {
 			if (e.getValue().level().getGameTime() >= e.getValue().until()) {
 				release(living, e.getValue());
 				it.remove();
+				shatter(living, e.getValue());
 			} else if (e.getValue().level().getGameTime() % 5 == 0) {
 				e.getValue().level().sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.STONE.defaultBlockState()),
 					living.getX(), living.getY() + 0.2, living.getZ(), 3, 0.2, 0.1, 0.2, 0.0);

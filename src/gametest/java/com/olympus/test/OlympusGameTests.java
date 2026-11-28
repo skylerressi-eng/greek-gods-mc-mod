@@ -772,6 +772,34 @@ public class OlympusGameTests {
 	}
 
 	@GameTest
+	public void stoneShattersForFourHearts(GameTestHelper helper) {
+		var zombie = helper.spawn(net.minecraft.world.entity.EntityType.ZOMBIE, new BlockPos(1, 2, 1));
+		zombie.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(40);
+		zombie.setHealth(40);
+		com.olympus.handler.PetrifyHandler.petrifyBy(zombie, helper.getLevel(), 10);
+		helper.runAfterDelay(15, () -> {
+			helper.assertFalse(com.olympus.handler.PetrifyHandler.isPetrified(zombie), "still stone");
+			helper.assertTrue(zombie.getHealth() <= 32.01f, "no shatter damage: " + zombie.getHealth());
+			helper.succeed();
+		});
+	}
+
+	@GameTest
+	public void hopliteHasNoThorns(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+		player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, new ItemStack(ModItems.HOPLITE_HELMET));
+		player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.CHEST, new ItemStack(ModItems.HOPLITE_CHESTPLATE));
+		player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.LEGS, new ItemStack(ModItems.HOPLITE_LEGGINGS));
+		player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.FEET, new ItemStack(ModItems.HOPLITE_BOOTS));
+		var zombie = helper.spawn(net.minecraft.world.entity.EntityType.ZOMBIE, new BlockPos(1, 2, 1));
+		float before = zombie.getHealth();
+		player.hurtServer(helper.getLevel(), helper.getLevel().damageSources().mobAttack(zombie), 6f);
+		helper.assertTrue(zombie.getHealth() == before, "attacker took thorns damage");
+		helper.succeed();
+	}
+
+	@GameTest
 	public void ambrosiaFullyHeals(GameTestHelper helper) {
 		ServerPlayer player = helper.makeMockServerPlayerInLevel();
 		player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);

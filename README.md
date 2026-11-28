@@ -46,7 +46,7 @@ Every relic looks like its vanilla base item (Talaria = gold leather boots, Gobl
 | **Thunderbolt of Zeus** | Throw it: 5 lightning strikes rain around the impact, then it returns to your hand. | **Skybreaker**: Launch about 15 blocks into the sky and land in a ring of lightning. No fall damage. |
 | **Trident of Poseidon** | Release to Riptide anywhere, even on dry land, with a wave that throws enemies back. Sneak to throw: Channeling is always on. | **Earthshaker**: Every enemy within 10 blocks is hurled into the air. |
 | **Bident of Hades** | Right-click: 3 skeleton warriors rise to fight for you for 30s. | **Soul Harvest**: For 15s, everything you kill rises as a skeleton ally. |
-| **Head of Medusa** | Look at a creature and right-click: it turns to stone for 4s (shorter on players). Wear it on your head. | **Gorgon's Gaze**: Petrifies everything in a 10-block cone in front of you for 3s. |
+| **Head of Medusa** | Look at a creature and right-click: it turns to stone for 4s (shorter on players) and takes 4 hearts when the stone breaks. Wear it on your head. | **Gorgon's Gaze**: Petrifies everything in a 10-block cone in front of you for 3s. |
 | **Golden Fleece** | While worn: constant Regeneration and immunity to fire. | **Undying**: Once every 10 minutes, a killing blow leaves you standing instead. |
 | **Scythe of Kronos** | Right-click: time freezes for everything within 15 blocks (Slowness IV, Mining Fatigue III) for 6s. | **Rewind**: Return to where you were 5 seconds ago, with the health you had then. |
 
@@ -61,7 +61,7 @@ Every relic looks like its vanilla base item (Talaria = gold leather boots, Gobl
 | Ambrosia | Full heal, clears harmful effects, Regeneration III, Absorption IV, Resistance II, Strength, Fire Resistance, full hunger (30 s cooldown) |
 | Nectar | Clears all harmful effects, Resistance I |
 | Sun Arrows | Set targets on fire and light up where they land |
-| Hoplite Armor | Netherite armor with a bonus per piece (helmet: no Blindness/Darkness, breastplate: +2 hearts, greaves: +10% speed, sandals: half fall damage). Full set: Resistance I below half health, extra knockback resistance, melee attackers take 15% back |
+| Hoplite Armor | Netherite armor with a bonus per piece (helmet: no Blindness/Darkness, breastplate: +2 hearts, greaves: +10% speed, sandals: half fall damage). Full set: Resistance I below half health, extra knockback resistance |
 | Gorgoneion / Thunderbolt Banner Patterns | Banner and shield designs for the loom |
 | Codex of Olympus | The in-game guide |
 
@@ -74,7 +74,7 @@ See **[RECIPES.md](RECIPES.md)**. All recipes are datapack JSON (`data/olympus/r
 | Wrath of Zeus | Typhon | anywhere (also starts by itself in thunderstorms) | Lightning Ring, Storm Pull, Thunder Slam, Chain Lightning | **Eye of the Storm**: rings of lightning roll outward | Thunderbolt of Zeus |
 | Rise of the Deep | Cetus | deep ocean only | Tidal Charge, Whirlpool, Call of the Drowned, Tidal Wave | **Maelstrom**: a whirlpool drags everyone in for 4s | Trident of Poseidon |
 | Gates of the Underworld | Cerberus | Nether only | Hellfire Breath, Triple Bite, Howl, Pounce | **Three Heads of Hellfire**: three fire streams spin around him | Bident of Hades |
-| Gorgon's Lair | Medusa | anywhere | Petrifying Gaze (look away!), Serpent Volley, Stone Snakes, Venom Rain | **Gorgon's Ambush**: teleports behind the farthest hero | Head of Medusa |
+| Gorgon's Lair | Medusa | anywhere | Petrifying Gaze (4s: look at her and you turn to stone, then take 4 hearts), Serpent Volley, Stone Snakes, Venom Rain | **Gorgon's Ambush**: teleports behind the farthest hero | Head of Medusa |
 | Quest for the Fleece | Colchian Dragon | anywhere | Ground Slam, Venom Breath, Tail Sweep, Burrow | **Sleepless Rampage**: three charges in a row | Golden Fleece |
 | Titanomachy | Kronos | anywhere | Time Stop, Scythe Sweep, Echoes, Titan Meteors | **Time Rewind**: snaps everyone back 3s and heals | Scythe of Kronos (+ Ascension Core) |
 

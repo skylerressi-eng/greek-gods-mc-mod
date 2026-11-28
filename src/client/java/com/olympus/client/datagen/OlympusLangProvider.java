@@ -55,7 +55,7 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 		t.add("olympus.hint.hoplite_chestplate", "+2 hearts");
 		t.add("olympus.hint.hoplite_leggings", "+10%% movement speed");
 		t.add("olympus.hint.hoplite_boots", "Half fall damage");
-		t.add("olympus.hint.hoplite_set", "Full set: Resistance I below half health, extra knockback resistance, melee attackers take 15%% back");
+		t.add("olympus.hint.hoplite_set", "Full set: Resistance I below half health, extra knockback resistance");
 		t.add("olympus.hint.laurel", "Right-click: permanently carry one more god item (max +%s)");
 		t.add("olympus.message.laurel_used", "The gods honor you: you may now carry %s relics");
 		t.add("olympus.message.laurel_maxed", "The gods' favor is already yours: you carry up to %s relics");
@@ -146,7 +146,7 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 			"Right-click: %s skeleton warriors rise to fight for you for %ss.",
 			"Soul Harvest", "For %ss, everything you kill rises as a skeleton ally.");
 		relic(t, ModItems.HEAD_OF_MEDUSA, "Head of Medusa",
-			"Look at a creature and right-click: it turns to stone for %ss (shorter on players). Wear it on your head.",
+			"Look at a creature and right-click: it turns to stone for %ss (shorter on players) and takes 4 hearts when the stone breaks. Wear it on your head.",
 			"Gorgon's Gaze", "Petrifies everything in a %s-block cone in front of you for %ss.");
 		relic(t, ModItems.GOLDEN_FLEECE, "Golden Fleece",
 			"While worn: constant Regeneration and immunity to fire.",
@@ -244,6 +244,7 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 		t.add("olympus.message.waypoint_set", "Waypoint marked. Press again to return here");
 		t.add("olympus.message.waypoint_dimension", "Your waypoint is in another dimension");
 		t.add("olympus.message.no_drop", "Relics can't be thrown away. Use /trade to give one to someone.");
+		t.add("olympus.message.gaze_left", "MEDUSA'S GAZE: look away! (%ss)");
 		t.add("olympus.message.waypoint_blocked", "Your waypoint is blocked");
 		t.add("olympus.message.spear_armed", "Your next throw will shake the earth");
 		t.add("olympus.message.hammer_mode", "Forge Hammer: %s mining");
