@@ -55,7 +55,7 @@ public class OlympusLangProvider extends FabricLanguageProvider {
 		t.add("olympus.hint.hoplite_chestplate", "+2 hearts");
 		t.add("olympus.hint.hoplite_leggings", "+10%% movement speed");
 		t.add("olympus.hint.hoplite_boots", "Half fall damage");
-		t.add("olympus.hint.hoplite_set", "Full set: Resistance I, extra knockback resistance, melee attackers take 15%% back");
+		t.add("olympus.hint.hoplite_set", "Full set: Resistance I below half health, extra knockback resistance, melee attackers take 15%% back");
 		t.add("olympus.hint.laurel", "Right-click: permanently carry one more god item (max +%s)");
 		t.add("olympus.message.laurel_used", "The gods honor you: you may now carry %s relics");
 		t.add("olympus.message.laurel_maxed", "The gods' favor is already yours: you carry up to %s relics");

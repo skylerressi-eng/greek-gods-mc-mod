@@ -719,6 +719,24 @@ public class OlympusGameTests {
 	}
 
 	@GameTest
+	public void hopliteResistanceOnlyWhenLow(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+		player.removeAllEffects();
+		player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, new ItemStack(ModItems.HOPLITE_HELMET));
+		player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.CHEST, new ItemStack(ModItems.HOPLITE_CHESTPLATE));
+		player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.LEGS, new ItemStack(ModItems.HOPLITE_LEGGINGS));
+		player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.FEET, new ItemStack(ModItems.HOPLITE_BOOTS));
+		player.setHealth(player.getMaxHealth());
+		com.olympus.handler.CraftedRelicHandler.tick(helper.getLevel().getServer());
+		helper.assertFalse(player.hasEffect(net.minecraft.world.effect.MobEffects.RESISTANCE), "Resistance at full health");
+		player.setHealth(player.getMaxHealth() * 0.4f);
+		com.olympus.handler.CraftedRelicHandler.tick(helper.getLevel().getServer());
+		helper.assertTrue(player.hasEffect(net.minecraft.world.effect.MobEffects.RESISTANCE), "no Resistance below half health");
+		helper.succeed();
+	}
+
+	@GameTest
 	public void ambrosiaFullyHeals(GameTestHelper helper) {
 		ServerPlayer player = helper.makeMockServerPlayerInLevel();
 		player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);

@@ -170,6 +170,10 @@ public final class CraftedRelicHandler {
 				player.removeEffect(MobEffects.BLINDNESS);
 				player.removeEffect(MobEffects.DARKNESS);
 			}
+			// Hoplite last stand: full set gives Resistance I only while below half health (checked every tick).
+			if (player.getHealth() < player.getMaxHealth() * 0.5f && isFullHoplite(player)) {
+				player.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 10, 0, true, false, true));
+			}
 			// Hoplite set bonus, checked once a second.
 			if (player.tickCount % 20 == 0) {
 				boolean full = player.getItemBySlot(EquipmentSlot.HEAD).is(ModItems.HOPLITE_HELMET)
@@ -178,7 +182,6 @@ public final class CraftedRelicHandler {
 					&& player.getItemBySlot(EquipmentSlot.FEET).is(ModItems.HOPLITE_BOOTS);
 				var kb = player.getAttribute(Attributes.KNOCKBACK_RESISTANCE);
 				if (full) {
-					player.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 60, 0, true, false, true));
 					if (kb != null && !kb.hasModifier(HOPLITE_KB)) {
 						kb.addTransientModifier(new AttributeModifier(HOPLITE_KB, ConfigManager.get().hoplite.extraKnockbackResistance, AttributeModifier.Operation.ADD_VALUE));
 					}

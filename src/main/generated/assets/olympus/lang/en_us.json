@@ -309,7 +309,7 @@
   "olympus.hint.hoplite_chestplate": "+2 hearts",
   "olympus.hint.hoplite_helmet": "Immune to Blindness and Darkness",
   "olympus.hint.hoplite_leggings": "+10%% movement speed",
-  "olympus.hint.hoplite_set": "Full set: Resistance I, extra knockback resistance, melee attackers take 15%% back",
+  "olympus.hint.hoplite_set": "Full set: Resistance I below half health, extra knockback resistance, melee attackers take 15%% back",
   "olympus.hint.laurel": "Right-click: permanently carry one more god item (max +%s)",
   "olympus.hint.nectar": "Clears every harmful effect and grants Resistance I",
   "olympus.hint.sun_arrow": "Sets targets on fire and lights up where it lands",
