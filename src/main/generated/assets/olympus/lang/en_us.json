@@ -332,6 +332,7 @@
   "olympus.message.mirror_charmed": "You are enchanted by %s and cannot bring yourself to strike them!",
   "olympus.message.needs_blessing": "%s must be Blessed ★ to use its Divine Power",
   "olympus.message.no_divine_power": "Hold or wear a Blessed god item to use Divine Power",
+  "olympus.message.no_drop": "Relics can't be thrown away. Use /trade to give one to someone.",
   "olympus.message.owl_reveal": "Athena's owl reveals %s creatures",
   "olympus.message.petrified": "You have been turned to stone!",
   "olympus.message.soul_harvest": "Soul Harvest: your victims will rise to serve you",

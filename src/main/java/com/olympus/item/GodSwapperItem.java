@@ -107,9 +107,6 @@ public class GodSwapperItem extends Item {
 			}
 		}
 		newRelic.set(DataComponents.ENCHANTMENTS, kept.toImmutable());
-		if (oldRelic.has(DataComponents.CUSTOM_NAME)) {
-			newRelic.set(DataComponents.CUSTOM_NAME, oldRelic.get(DataComponents.CUSTOM_NAME));
-		}
 		com.olympus.item.relic.AegisItem.applyEmblem(newRelic, player.level().registryAccess());
 		player.setItemInHand(InteractionHand.OFF_HAND, newRelic);
 

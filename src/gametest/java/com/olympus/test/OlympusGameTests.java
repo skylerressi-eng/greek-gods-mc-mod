@@ -737,6 +737,41 @@ public class OlympusGameTests {
 	}
 
 	@GameTest
+	public void relicsCantBeTossedOrRenamed(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+		player.getInventory().clearContent();
+		player.getInventory().setItem(0, new ItemStack(ModItems.AEGIS));
+		player.getInventory().setSelectedSlot(0);
+		// Q key
+		player.drop(true);
+		helper.assertTrue(player.getInventory().getItem(0).is(ModItems.AEGIS), "Q dropped the relic");
+		// Q on a slot in the inventory screen, and clicking outside the window
+		var menu = player.inventoryMenu;
+		int hotbar0 = 36;
+		menu.clicked(hotbar0, 0, net.minecraft.world.inventory.ClickType.THROW, player);
+		helper.assertTrue(player.getInventory().getItem(0).is(ModItems.AEGIS), "THROW click dropped the relic");
+		menu.clicked(hotbar0, 0, net.minecraft.world.inventory.ClickType.PICKUP, player);
+		menu.clicked(net.minecraft.world.inventory.AbstractContainerMenu.SLOT_CLICKED_OUTSIDE, 0, net.minecraft.world.inventory.ClickType.PICKUP, player);
+		helper.assertTrue(menu.getCarried().is(ModItems.AEGIS), "clicking outside dropped the relic");
+		menu.clicked(hotbar0, 0, net.minecraft.world.inventory.ClickType.PICKUP, player);
+		helper.assertTrue(player.getInventory().getItem(0).is(ModItems.AEGIS), "relic not back in slot");
+		var dropped = helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, player.getBoundingBox().inflate(5), e -> e.getItem().is(ModItems.AEGIS));
+		helper.assertTrue(dropped.isEmpty(), "a relic was dropped: " + dropped);
+		// Anvil rename
+		var anvil = new net.minecraft.world.inventory.AnvilMenu(2, player.getInventory());
+		anvil.getSlot(0).set(new ItemStack(ModItems.HARPE));
+		anvil.setItemName("My Sword");
+		anvil.createResult();
+		helper.assertTrue(anvil.getSlot(2).getItem().isEmpty(), "anvil offered a renamed relic");
+		// Old names are stripped
+		ItemStack named = new ItemStack(ModItems.TALARIA);
+		named.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, Component.literal("Zoom"));
+		player.getInventory().setItem(5, named);
+		helper.succeedWhen(() -> helper.assertFalse(player.getInventory().getItem(5).has(net.minecraft.core.component.DataComponents.CUSTOM_NAME), "old custom name kept"));
+	}
+
+	@GameTest
 	public void ambrosiaFullyHeals(GameTestHelper helper) {
 		ServerPlayer player = helper.makeMockServerPlayerInLevel();
 		player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);

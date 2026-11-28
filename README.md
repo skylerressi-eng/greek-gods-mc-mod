@@ -6,7 +6,7 @@ A Fabric mod for **Minecraft 1.21.11** (Java 21). The gods of Olympus claim ever
 
 ## How it plays
 1. **Claimed on first join.** A random god claims you ("You have been claimed by Zeus!") and gives you their starter relic.
-2. **Carry at most 3 god items** (Laurels of Olympus raise it to 5). They drop when you die (others can take them), never break, glow on the ground, never despawn, and survive fire, lava and explosions (the void still destroys them). They can't be stored: no chests, barrels, ender chests, shulker boxes, hoppers, furnaces, donkey/boat chests, pots, shelves or bundles (crafting, smithing and anvils still work).
+2. **Carry at most 3 god items** (Laurels of Olympus raise it to 5). They only leave you when you die (others can take them) or through `/trade`, never break, glow on the ground, never despawn, and survive fire, lava and explosions (the void still destroys them). They can't be thrown away (Q or dragging out of the inventory), renamed, put in item frames or armor stands, or stored: no chests, barrels, ender chests, shulker boxes, hoppers, furnaces, donkey/boat chests, pots, shelves or bundles (crafting, smithing and anvils still work).
 3. **Upgrade** in a smithing table: Blessing Core → **Blessed ★** (-25% cooldowns, unlocks the Divine Power on **R**), then Ascension Core → **Ascended ★★** (-50% cooldowns, +25% durations and radii, gold name).
 4. **Reroll** your god with the God Swapper: hold it, starter relic in offhand, hold right-click 3 s.
 5. **Craft** stronger relics: each one consumes its god's starter relic.

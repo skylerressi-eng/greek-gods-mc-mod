@@ -3,7 +3,8 @@
 	"package": "com.olympus.client.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"AvatarRendererMixin"
+		"AvatarRendererMixin",
+		"LocalPlayerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

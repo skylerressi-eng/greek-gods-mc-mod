@@ -24,6 +24,26 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  */
 @Mixin(AbstractContainerMenu.class)
 public abstract class AbstractContainerMenuMixin {
+	/** No throwing relics out of an inventory screen (Q on a slot, or clicking outside the window). */
+	@Inject(method = "doClick", at = @At("HEAD"), cancellable = true)
+	private void olympus$noRelicToss(int slotId, int button, net.minecraft.world.inventory.ClickType type, net.minecraft.world.entity.player.Player player,
+		org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
+		if (player.getAbilities().instabuild) {
+			return;
+		}
+		AbstractContainerMenu self = (AbstractContainerMenu) (Object) this;
+		boolean toss = (type == net.minecraft.world.inventory.ClickType.THROW && slotId >= 0 && slotId < self.slots.size()
+			&& com.olympus.god.GodItem.is(self.slots.get(slotId).getItem()))
+			|| (slotId == AbstractContainerMenu.SLOT_CLICKED_OUTSIDE && type == net.minecraft.world.inventory.ClickType.PICKUP
+			&& com.olympus.god.GodItem.is(self.getCarried()));
+		if (toss) {
+			ci.cancel();
+			if (player instanceof net.minecraft.server.level.ServerPlayer sp) {
+				sp.displayClientMessage(net.minecraft.network.chat.Component.translatable("olympus.message.no_drop").withStyle(net.minecraft.ChatFormatting.RED), true);
+			}
+		}
+	}
+
 	@Inject(method = "addSlot", at = @At("HEAD"))
 	private void olympus$markStorage(Slot slot, CallbackInfoReturnable<Slot> cir) {
 		Object self = this;

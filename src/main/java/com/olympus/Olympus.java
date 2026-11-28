@@ -143,6 +143,7 @@ public class Olympus implements ModInitializer {
 			ItemStack stack = inventory.getItem(i);
 			if (GodItem.is(stack)) {
 				Cooldowns.syncOverlay(player, stack);
+				stack.remove(net.minecraft.core.component.DataComponents.CUSTOM_NAME); // relics can't be renamed
 			}
 		}
 	}
